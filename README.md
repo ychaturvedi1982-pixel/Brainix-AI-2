@@ -18,11 +18,3 @@ View your app in AI Studio: https://ai.studio/apps/f891a7a4-4964-44c2-89c1-51ecb
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
-# Brainix-AI
-
-AI Studio से बना एक AI Application
-
-## Description
-यह एक advanced AI application है जो कुछ भी कर सकता है।
-
-## Installation
