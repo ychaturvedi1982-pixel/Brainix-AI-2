@@ -42,7 +42,7 @@ async function startServer() {
   app.post("/api/chat", async (req, res) => {
     let modelName = "gemini-3.5-flash";
     try {
-      const { messages, model, systemInstruction, temperature } = req.body;
+      const { messages, model, systemInstruction, temperature, searchGrounding } = req.body;
 
       if (!messages || !Array.isArray(messages)) {
         res.status(400).json({ error: "Missing or invalid 'messages' array in request body." });
@@ -88,6 +88,7 @@ async function startServer() {
       
       const lastMessageText = messages && messages.length > 0 ? messages[messages.length - 1].text : "";
       const needsSearch = 
+        !!searchGrounding ||
         String(lastMessageText).toLowerCase().match(/(weather|forecast|temperature|temp|climate|rain|wind|live|current|search|google|news|today|latest|coordinates|lucknow|delhi|mumbai|jaipur|varanasi)/gi) ||
         String(systemInstruction).toLowerCase().includes("weather") ||
         String(systemInstruction).toLowerCase().includes("search");

@@ -106,6 +106,7 @@ export default function App() {
   });
   const [activePromptTab, setActivePromptTab] = useState<"weather" | "coding" | "writing" | "mind">("weather");
   const [temperature, setTemperature] = useState<number>(0.75);
+  const [isLiveSearchEnabled, setIsLiveSearchEnabled] = useState<boolean>(true);
 
   // Intro Screen Timeout
   useEffect(() => {
@@ -515,7 +516,8 @@ export default function App() {
           messages: historyContextPayload,
           model: currentChat.model,
           systemInstruction: currentChat.systemInstruction,
-          temperature: temperature
+          temperature: temperature,
+          searchGrounding: isLiveSearchEnabled
         }),
         signal: controller.signal
       });
@@ -1553,6 +1555,33 @@ export default function App() {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* Quick controls bar: Live Web Search Grounding Toggle, Auto-Resilience status */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1 text-xs pb-1 select-none">
+              <div id="live-search-controls-row" className="flex flex-wrap items-center gap-2.5">
+                <button
+                  id="toggle-live-search-btn"
+                  onClick={() => setIsLiveSearchEnabled(!isLiveSearchEnabled)}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-medium cursor-pointer transition-all duration-150 ${
+                    isLiveSearchEnabled
+                      ? "bg-emerald-500/10 dark:bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-semibold shadow-xs"
+                      : "bg-zinc-150 dark:bg-zinc-800/60 border-zinc-200 dark:border-zinc-850 text-zinc-500 dark:text-zinc-500 font-normal"
+                  }`}
+                  title={isLiveSearchEnabled ? "Live web search (Google Search) is ON. Any question will use Google's live indexes." : "Click to connect Google Search live"}
+                >
+                  <div className={`w-1.5 h-1.5 rounded-full ${isLiveSearchEnabled ? "bg-emerald-500 animate-pulse" : "bg-zinc-450 dark:bg-zinc-600"}`} />
+                  <span>🌐 Live Search (Google Search): <strong className="uppercase">{isLiveSearchEnabled ? "ON" : "OFF"}</strong></span>
+                </button>
+                
+                <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono text-zinc-500 dark:text-zinc-500 select-none bg-zinc-100 dark:bg-zinc-800/40 px-2 py-0.5 rounded border border-zinc-200/40 dark:border-zinc-800/40">
+                  ⚡ Anti-Quota Fallback Active
+                </span>
+              </div>
+              
+              <div id="additional-metadata-badge" className="flex items-center gap-2 text-[10px] font-mono text-zinc-400 dark:text-zinc-505">
+                <span>Temp: <strong>{temperature}</strong></span>
+              </div>
+            </div>
 
             <div className="relative flex items-center bg-zinc-100 dark:bg-[#2f2f2f] border border-zinc-200/50 dark:border-zinc-800 rounded-2xl p-2 shadow-xs group focus-within:ring-1 focus-within:ring-zinc-400 dark:focus-within:ring-zinc-600 transition-all duration-150">
               
