@@ -1,7 +1,7 @@
 {
   "name": "Brainix AI",
   "description": "The ultimate full-stack AI model client with Live Siri-like Voice Companion, interactive Prompt Tab Grid, dynamic real-time web weather search grounding, image capture audits, and calibration parameters tuning laboratory.",
-  "requestFramePermissions": ["microphone"],
+  "requestFramePermissions": ["camera", "microphone"],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
   ]

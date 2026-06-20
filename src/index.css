@@ -1,1 +1,136 @@
 @import "tailwindcss";
+
+@variant dark (:where(.dark, .dark *) &);
+
+@keyframes fluidBgLight {
+  0% { background-image: radial-gradient(circle at bottom, rgba(56, 189, 248, 0.15) 0%, rgba(255, 255, 255, 0) 70%); }
+  25% { background-image: radial-gradient(circle at bottom, rgba(167, 139, 250, 0.15) 0%, rgba(255, 255, 255, 0) 70%); }
+  50% { background-image: radial-gradient(circle at bottom, rgba(52, 211, 153, 0.15) 0%, rgba(255, 255, 255, 0) 70%); }
+  75% { background-image: radial-gradient(circle at bottom, rgba(251, 146, 60, 0.15) 0%, rgba(255, 255, 255, 0) 70%); }
+  100% { background-image: radial-gradient(circle at bottom, rgba(56, 189, 248, 0.15) 0%, rgba(255, 255, 255, 0) 70%); }
+}
+
+@keyframes fluidBgDark {
+  0% { background-image: radial-gradient(circle at bottom, rgba(56, 189, 248, 0.1) 0%, rgba(23, 23, 23, 0) 70%); }
+  25% { background-image: radial-gradient(circle at bottom, rgba(167, 139, 250, 0.1) 0%, rgba(23, 23, 23, 0) 70%); }
+  50% { background-image: radial-gradient(circle at bottom, rgba(52, 211, 153, 0.1) 0%, rgba(23, 23, 23, 0) 70%); }
+  75% { background-image: radial-gradient(circle at bottom, rgba(251, 146, 60, 0.1) 0%, rgba(23, 23, 23, 0) 70%); }
+  100% { background-image: radial-gradient(circle at bottom, rgba(56, 189, 248, 0.1) 0%, rgba(23, 23, 23, 0) 70%); }
+}
+
+.fluid-gradient-light {
+  background-color: #ffffff;
+  animation: fluidBgLight 10s ease-in-out infinite;
+  background-size: 100% 100%;
+}
+
+.fluid-gradient-dark {
+  background-color: #171717;
+  animation: fluidBgDark 10s ease-in-out infinite;
+  background-size: 100% 100%;
+}
+
+/* Extra decorative animations for the colorful centerpiece */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ChatGPT-style premium authentic loader animations */
+@keyframes chatgpt-bloom-breath {
+  0% {
+    transform: scale(0.65) rotate(-45deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05) rotate(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes chatgpt-loading-spin {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(0.92) rotate(180deg);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+@keyframes chatgpt-bloom-instant {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes chatgpt-pulse-subtle {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.94);
+    opacity: 0.88;
+  }
+}
+
+.animate-gpt-bloom {
+  animation: chatgpt-bloom-breath 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-chatgpt-loader {
+  animation: chatgpt-bloom-breath 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+             chatgpt-loading-spin 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: 0s, 0.9s;
+}
+
+.animate-chatgpt-opening {
+  animation: chatgpt-bloom-instant 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+             chatgpt-pulse-subtle 2s ease-in-out infinite;
+  animation-delay: 0s, 0.9s;
+}
+
+@keyframes gpt-intro-bloom {
+  0% {
+    transform: scale(0.35) rotate(-180deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.04) rotate(10deg);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(0.98) rotate(-2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.animate-gpt-intro {
+  animation: gpt-intro-bloom 0.5s cubic-bezier(0.19, 1, 0.22, 1) forwards,
+             chatgpt-pulse-subtle 1.5s ease-in-out infinite;
+  animation-delay: 0s, 0.5s;
+}
+
+.gemini-sparkle-glow {
+  background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, rgba(168,85,247,0) 70%);
+}

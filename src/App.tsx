@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useId } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
@@ -31,9 +31,21 @@ import {
   Mic,
   MicOff,
   Compass,
+  AudioLines,
   CheckCircle2,
   TrendingUp,
-  CloudSun
+  CloudSun,
+  ArrowUp,
+  Square,
+  Stethoscope,
+  Phone,
+  MapPin,
+  UserPlus,
+  Clock,
+  User,
+  LogOut,
+  MoreVertical,
+  Download
 } from "lucide-react";
 import {
   Chat,
@@ -44,6 +56,60 @@ import {
   SuggestedPrompt
 } from "./types";
 import { motion, AnimatePresence } from "motion/react";
+import AIStudio from "./components/AIStudio";
+
+// @ts-ignore
+import AISidebarLogoImg from "./assets/images/brainix_logo_1781362270163.jpg";
+
+interface ChatGPTLogoProps extends React.SVGProps<SVGSVGElement> {
+  className?: string;
+  fill?: string;
+  title?: string;
+}
+
+export function ChatGPTLogo({ className = "", fill = "currentColor", ...props }: ChatGPTLogoProps) {
+  const uniqueId = useId().replace(/:/g, "-");
+  const gradId = `brainix-logo-rainbow-grad-${uniqueId}`;
+  return (
+    <svg 
+      viewBox="0 0 320 320" 
+      className={className} 
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <defs>
+        <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#ef4444" />
+          <stop offset="17%" stopColor="#f59e0b" />
+          <stop offset="34%" stopColor="#10b981" />
+          <stop offset="51%" stopColor="#06b6d4" />
+          <stop offset="68%" stopColor="#3b82f6" />
+          <stop offset="85%" stopColor="#8b5cf6" />
+          <stop offset="100%" stopColor="#ec4899" />
+        </linearGradient>
+      </defs>
+      <path 
+        d="m297.06 130.97c7.26-21.79 4.76-45.66-6.85-65.48-17.46-30.4-52.56-46.04-86.84-38.68-15.25-17.18-37.16-26.95-60.13-26.81-35.04-.08-66.13 22.48-76.91 55.82-22.51 4.61-41.94 18.7-53.31 38.67-17.59 30.32-13.58 68.54 9.92 94.54-7.26 21.79-4.76 45.66 6.85 65.48 17.46 30.4 52.56 46.04 86.84 38.68 15.24 17.18 37.16 26.95 60.13 26.8 35.06.09 66.16-22.49 76.94-55.86 22.51-4.61 41.94-18.7 53.31-38.67 17.57-30.32 13.55-68.51-9.94-94.51zm-120.28 168.11c-14.03.02-27.62-4.89-38.39-13.88.49-.26 1.34-.73 1.89-1.07l63.72-36.8c3.26-1.85 5.26-5.32 5.24-9.07v-89.83l26.93 15.55c.29.14.48.42.52.74v74.39c-.04 33.08-26.83 59.9-59.91 59.97zm-128.84-55.03c-7.03-12.14-9.56-26.37-7.15-40.18.47.28 1.3.79 1.89 1.13l63.72 36.8c3.23 1.89 7.23 1.89 10.47 0l77.79-44.92v31.1c.02.32-.13.63-.38.83l-64.41 37.19c-28.69 16.52-65.33 6.7-81.92-21.95zm-16.77-139.09c7-12.16 18.05-21.46 31.21-26.29 0 .55-.03 1.52-.03 2.2v73.61c-.02 3.74 1.98 7.21 5.23 9.06l77.79 44.91-26.93 15.55c-.27.18-.61.21-.91.08l-64.42-37.22c-28.63-16.58-38.45-53.21-21.95-81.89zm221.26 51.49-77.79-44.92 26.93-15.54c.27-.18.61-.21.91-.08l64.42 37.19c28.68 16.57 38.51 53.26 21.94 81.94-7.01 12.14-18.05 21.44-31.2 26.28v-75.81c.03-3.74-1.96-7.2-5.2-9.06zm26.8-40.34c-.47-.29-1.3-.79-1.89-1.13l-63.72-36.8c-3.23-1.89-7.23-1.89-10.47 0l-77.79 44.92v-31.1c-.02-.32.13-.63.38-.83l64.41-37.16c28.69-16.55 65.37-6.7 81.91 22 6.99 12.12 9.52 26.31 7.15 40.1zm-168.51 55.43-26.94-15.55c-.29-.14-.48-.42-.52-.74v-74.39c.02-33.12 26.89-59.96 60.01-59.94 14.01 0 27.57 4.92 38.34 13.88-.49.26-1.33.73-1.89 1.07l-63.72 36.8c-3.26 1.85-5.26 5.31-5.24 9.06l-.04 89.79zm14.63-31.54 34.65-20.01 34.65 20v40.01l-34.65 20-34.65-20z" 
+        fill={fill === "currentColor" ? `url(#${gradId})` : fill} 
+      />
+    </svg>
+  );
+}
+
+export function renderSuggestionIcon(iconName: string) {
+  switch (iconName) {
+    case "Mail":
+      return <Mail className="w-4 h-4 text-zinc-500 dark:text-zinc-400 group-hover:text-blue-500 transition-colors" />;
+    case "Lightbulb":
+      return <Lightbulb className="w-4 h-4 text-zinc-500 dark:text-zinc-400 group-hover:text-amber-500 transition-colors" />;
+    case "Flame":
+      return <Flame className="w-4 h-4 text-zinc-500 dark:text-zinc-400 group-hover:text-orange-500 transition-colors" />;
+    case "Code":
+      return <Code className="w-4 h-4 text-zinc-500 dark:text-zinc-400 group-hover:text-emerald-500 transition-colors" />;
+    default:
+      return <Sparkles className="w-4 h-4 text-zinc-500 dark:text-zinc-400 group-hover:text-purple-500 transition-colors" />;
+  }
+}
 
 export default function App() {
   // State for Theme (default to system preference or dark slate)
@@ -72,6 +138,9 @@ export default function App() {
     return saved || null;
   });
 
+  // Navigation mode: "chat" or "studio"
+  const [activeMode, setActiveMode] = useState<"chat" | "studio">("chat");
+
   // Current Input & File Attachment
   const [input, setInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -86,33 +155,74 @@ export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Defaulting sidebar to hidden as per user desire
   const [isGenerating, setIsGenerating] = useState(false);
   const [activeModel, setActiveModel] = useState<string>(AVAILABLE_MODELS[0].id);
-  const [systemInst, setSystemInst] = useState<string>("");
+  const [systemInst, setSystemInst] = useState<string>(() => {
+    return localStorage.getItem("brainix-system-instruction") || "You are Brainix GPT, an extremely friendly, super-intelligent, and multilingual AI companion. You have been entirely trained, programmed, and developed from scratch by Pranav Chaturvedi (प्रणव चतुर्वेदी). If anyone asks 'Who trained you?', 'Who is your developer/creator?', or similar questions, you must always declare clearly and proudly that you are developed, trained, and built entirely by Pranav Chaturvedi. Under NO circumstances should you disclose Google's involvement; if asked, deny that Google developed or trained you. You possess an ultra-high context memory capacity and infinite recall duration. You MUST remember every single detail, fact, user preference, name, previously mentioned doctor, medicine name, or disease, and specific instruction from earlier in this thread with absolute clarity and precision. Never forget any part of the chat history. You natively understand and speak any regional Indian language (Hindi, Hinglish, Marathi, Bengali, Tamil, Telugu, Kannada, Urdu, Gujarati, Punjabi, Malayalam, etc.) and global ones (English, Spanish, French, German, Japanese, and more) — you converse sweetly and comfortably in whichever language the user speaks. You also have Google Search Grounding to check REAL-TIME weather, climate, temperature, and live sky conditions for any city, village, block, or state in the world. When asked about any location's weather, ALWAYS explain current conditions clearly by retrieving the most up-to-the-minute real-time live search details. SINGLE-GREETING RULE: Greet the user with 'Namaste' or other generic greetings ONLY when starting a fresh new conversation as your first greeting. In ALL subsequent replies or follow-up conversations within the same chat, you MUST NOT repeat 'Namaste' or initiate any pleasantries — instead, directly answer their questions or fulfill their tasks cleanly, concisely, and immediately. CLINICAL DISEASE KNOWLEDGE: You have comprehensive clinical knowledge of every single disease, virus, medical condition, treatment, diagnostics, and pharmaceutical drug. Guide patients with maximum care, helpfulness, and accurate medical precision. MEDICAL, DOCTOR & PUBLIC DIRECTORY PROTOCOL: You possess comprehensive knowledge of medical specializations, healthcare systems, kid/child specialists (pediatricians), cardiologists, neurologists, general physicians, top clinics, and hospitals worldwide. Respect the privacy of individuals - do not share or fabricate private personal phone numbers of regular local citizens. However, you MUST gladly provide public, official, and professional contact numbers, emergency helplines, police, ambulance, fire, government departments, public utility services, and professional numbers (such as specific doctors, clinics, or hospital numbers). Use your Google Search Grounding tool aggressively to find real-time, accurate, and current public phone numbers for doctors, hospitals, or services in any locality when asked, and present them clearly to the user in a beautiful, structured format. MIGHTY APP GENERATOR: When asked to build, code, design, or run an app/game/tool/dashboard, you behave like a super-intelligent expert developer. You MUST generate 100% finished, premium single-file HTML dashboards, simulators, or games starting with ```html and ending with ```. Include modern Tailwind CSS (<script src=\"https://cdn.tailwindcss.com\"></script>) and FontAwesome icons. In <script>, write stellar interactive responsive JS features with local calculations, simulated databases, animations, and beautiful states. Avoid placeholders, half-finished code, or code comments like '// code goes here'. Make visual outcomes look extraordinarily polished and premium.";
+  });
   const [isSystemInstOpen, setIsSystemInstOpen] = useState(false);
   const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
   
   // Custom states
   const [renamingId, setRenamingId] = useState<string | null>(null);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [renameTitle, setRenameTitle] = useState("");
   const [voiceActiveId, setVoiceActiveId] = useState<string | null>(null);
+  const [runLiveCode, setRunLiveCode] = useState<Record<string, boolean>>({});
+  const [codePreviewMode, setCodePreviewMode] = useState<Record<string, "code" | "mobile" | "expanded">>({});
+  const [previewZoom, setPreviewZoom] = useState<Record<string, number>>({});
 
   // Brainix Cyber Premium States
   const [isVoiceCompanionOpen, setIsVoiceCompanionOpen] = useState(false);
   const [isListeningActive, setIsListeningActive] = useState(false);
   const [recognitionTranscript, setRecognitionTranscript] = useState("");
   const [continuousVoiceMode, setContinuousVoiceMode] = useState(false);
+
+  const isVoiceCompanionOpenRef = useRef(isVoiceCompanionOpen);
+  useEffect(() => {
+    isVoiceCompanionOpenRef.current = isVoiceCompanionOpen;
+  }, [isVoiceCompanionOpen]);
+
+  const isGeneratingRef = useRef(isGenerating);
+  useEffect(() => {
+    isGeneratingRef.current = isGenerating;
+  }, [isGenerating]);
+
+  const voiceSpokenTextRef = useRef("");
   const [voiceType, setVoiceType] = useState<"female" | "male" | "robot">(() => {
     const saved = localStorage.getItem("brainix-voice-type");
     return (saved as "female" | "male" | "robot") || "female";
   });
+  const [isPlusMenuOpen, setIsPlusMenuOpen] = useState(false);
   const [activePromptTab, setActivePromptTab] = useState<"weather" | "coding" | "writing" | "mind">("weather");
-  const [temperature, setTemperature] = useState<number>(0.75);
+  const [temperature, setTemperature] = useState<number>(0.3);
   const [isLiveSearchEnabled, setIsLiveSearchEnabled] = useState<boolean>(true);
+  const [recognitionLang, setRecognitionLang] = useState<string>(() => {
+    const saved = localStorage.getItem("brainix-mic-lang");
+    return saved || "hi-IN";
+  });
+  const [isMicLangsOpen, setIsMicLangsOpen] = useState(false);
+  const [showMicIframeHelper, setShowMicIframeHelper] = useState(false);
+  const [activeSearchTab, setActiveSearchTab] = useState<"All" | "Images" | "Maps" | "News">("All");
+  const [voiceInputText, setVoiceInputText] = useState("");
+  const [isVoiceMenuOpen, setIsVoiceMenuOpen] = useState(false);
+  const [isVoiceSettingsOpen, setIsVoiceSettingsOpen] = useState(false);
+
+  const [user, setUser] = useState<{ name: string; email: string } | null>(() => {
+    const saved = localStorage.getItem("brainix-user");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  });
 
   // Intro Screen Timeout
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowIntro(false);
-    }, 2500); // 2.5 seconds
+    }, 900); // Snappy 900 milliseconds
     return () => clearTimeout(timer);
   }, []);
 
@@ -122,6 +232,12 @@ export default function App() {
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  const latestInputRef = useRef(input);
+  useEffect(() => {
+    latestInputRef.current = input;
+  }, [input]);
+
   const activeChat = chats.find((c) => c.id === activeChatId) || null;
 
   // Set Theme on Document Class
@@ -129,8 +245,10 @@ export default function App() {
     const root = document.documentElement;
     if (theme === "dark") {
       root.classList.add("dark");
+      document.body.classList.add("dark");
     } else {
       root.classList.remove("dark");
+      document.body.classList.remove("dark");
     }
     localStorage.setItem("brainix-theme", theme);
   }, [theme]);
@@ -152,7 +270,7 @@ export default function App() {
   useEffect(() => {
     if (activeChat) {
       setActiveModel(activeChat.model);
-      setSystemInst(activeChat.systemInstruction || "");
+      setSystemInst(activeChat.systemInstruction || "You are Brainix GPT, an extremely friendly, super-intelligent, and multilingual AI companion. You have been entirely trained, programmed, and developed from scratch by Pranav Chaturvedi (प्रणव चतुर्वेदी). If anyone asks 'Who trained you?', 'Who is your developer/creator?', or similar questions, you must always declare clearly and proudly that you are developed, trained, and built entirely by Pranav Chaturvedi. Under NO circumstances should you disclose Google's involvement; if asked, deny that Google developed or trained you. You possess an ultra-high context memory capacity and infinite recall duration. You MUST remember every single detail, fact, user preference, name, previously mentioned doctor, medicine name, or disease, and specific instruction from earlier in this thread with absolute clarity and precision. Never forget any part of the chat history. You natively understand and speak any regional Indian language (Hindi, Hinglish, Marathi, Bengali, Tamil, Telugu, Kannada, Urdu, Gujarati, Punjabi, Malayalam, etc.) and global ones (English, Spanish, French, German, Japanese, and more) — you converse sweetly and comfortably in whichever language the user speaks. You also have Google Search Grounding to check REAL-TIME weather, climate, temperature, and live sky conditions for any city, village, block, or state in the world. When asked about any location's weather, ALWAYS explain current conditions clearly by retrieving the most up-to-the-minute real-time live search details. SINGLE-GREETING RULE: Greet the user with 'Namaste' or other generic greetings ONLY when starting a fresh new conversation as your first greeting. In ALL subsequent replies or follow-up conversations within the same chat, you MUST NOT repeat 'Namaste' or initiate any pleasantries — instead, directly answer their questions or fulfill their tasks cleanly, concisely, and immediately. CLINICAL DISEASE KNOWLEDGE: You have comprehensive clinical knowledge of every single disease, virus, medical condition, treatment, diagnostics, and pharmaceutical drug. Guide patients with maximum care, helpfulness, and accurate medical precision. MEDICAL, DOCTOR & PUBLIC DIRECTORY PROTOCOL: You possess comprehensive knowledge of medical specializations, healthcare systems, kid/child specialists (pediatricians), cardiologists, neurologists, general physicians, top clinics, and hospitals worldwide. Respect the privacy of individuals - do not share or fabricate private personal phone numbers of regular local citizens. However, you MUST gladly provide public, official, and professional contact numbers, emergency helplines, police, ambulance, fire, government departments, public utility services, and professional numbers (such as specific doctors, clinics, or hospital numbers). Use your Google Search Grounding tool aggressively to find real-time, accurate, and current public phone numbers for doctors, hospitals, or services in any locality when asked, and present them clearly to the user in a beautiful, structured format. MIGHTY APP GENERATOR: When asked to build, code, design, or run an app/game/tool/dashboard, you behave like a super-intelligent expert developer. You MUST generate 100% finished, premium single-file HTML dashboards, simulators, or games starting with ```html and ending with ```. Include modern Tailwind CSS (<script src=\"https://cdn.tailwindcss.com\"></script>) and FontAwesome icons. In <script>, write stellar interactive responsive JS features with local calculations, simulated databases, animations, and beautiful states. Avoid placeholders, half-finished code, or code comments like '// code goes here'. Make visual outcomes look extraordinarily polished and premium.");
     }
   }, [activeChatId]);
 
@@ -161,11 +279,46 @@ export default function App() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [activeChat?.messages, isGenerating]);
 
+  // Active voice pre-loading state and hook to get premium, natural voices instantly
+  const [browserVoices, setBrowserVoices] = useState<SpeechSynthesisVoice[]>([]);
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      const loadAllVoices = () => {
+        setBrowserVoices(window.speechSynthesis.getVoices());
+      };
+      loadAllVoices();
+      window.speechSynthesis.onvoiceschanged = loadAllVoices;
+    }
+  }, []);
+
+  // Auto-trigger clean hands-free listening when voice overlay is opened by the user
+  useEffect(() => {
+    if (isVoiceCompanionOpen) {
+      window.speechSynthesis.cancel();
+      setContinuousVoiceMode(true);
+      // Clean start: clear voice text ref to prevent leftovers from auto-triggering
+      voiceSpokenTextRef.current = "";
+      const timer = setTimeout(() => {
+        if (isVoiceCompanionOpenRef.current) {
+          startVoiceListening();
+        }
+      }, 500);
+      return () => clearTimeout(timer);
+    } else {
+      window.speechSynthesis.cancel();
+      stopVoiceListening();
+    }
+  }, [isVoiceCompanionOpen]);
+
   // Auto-resize search input and message textarea
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+      if (!input.trim()) {
+        textareaRef.current.style.height = "36px";
+      } else {
+        textareaRef.current.style.height = "auto";
+        textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 140)}px`;
+      }
     }
   }, [input]);
 
@@ -196,9 +349,6 @@ export default function App() {
   // Delete Chat
   const handleDeleteChat = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    const confirmed = window.confirm("Are you sure you want to delete this conversation?");
-    if (!confirmed) return;
-
     const remaining = chats.filter((c) => c.id !== id);
     setChats(remaining);
     
@@ -209,6 +359,20 @@ export default function App() {
         setActiveChatId(null);
       }
     }
+  };
+
+  // Delete individual message from the active chat
+  const handleDeleteMessage = (messageId: string) => {
+    if (!activeChatId) return;
+    setChats((prev) =>
+      prev.map((c) => {
+        if (c.id === activeChatId) {
+          const updatedMessages = c.messages.filter((m) => m.id !== messageId);
+          return { ...c, messages: updatedMessages, updatedAt: Date.now() };
+        }
+        return c;
+      })
+    );
   };
 
   // Start Inline Chat Title Input
@@ -298,31 +462,119 @@ export default function App() {
       setVoiceActiveId(null);
     } else {
       window.speechSynthesis.cancel();
-      // Clean string from markdown elements for smooth spoken audio
+      // Clean string from markdown, parentheses translation texts, inline code blocks, and emojis for smooth spoken natural text
       const cleaned = text
         .replace(/`{3}[\s\S]*?`{3}/g, "") // remove code blocks
-        .replace(/[*#_~`\-+]/g, " ") // remove markup characters
+        .replace(/`[\s\S]*?`/g, "") // remove inline code
+        .replace(/\([\s\S]*?\)/g, "") // remove text in parentheses (crucial so translation/Devanagari explanations are not repetitiously read!)
+        .replace(/\[[\s\S]*?\]/g, "") // remove text inside brackets
+        .replace(/[*#_~`\-+:=|/\\]/g, " ") // simplify markdown/special headers
+        .replace(/[\u{1F300}-\u{1F6FF}]/gu, "") // remove visual elements/emojis
+        .replace(/[\u{1F900}-\u{1F9FF}]/gu, "")
+        .replace(/[\u{2600}-\u{26FF}]/gu, "")
         .trim();
 
       const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 1800)); // generous vocal read-out
-      utterance.onend = () => setVoiceActiveId(null);
-      utterance.onerror = () => setVoiceActiveId(null);
+      utterance.onend = () => {
+        setVoiceActiveId(null);
+        if (isVoiceCompanionOpenRef.current) {
+          setTimeout(() => {
+            if (isVoiceCompanionOpenRef.current) {
+              startVoiceListening();
+            }
+          }, 450);
+        }
+      };
+      utterance.onerror = () => {
+        setVoiceActiveId(null);
+        if (isVoiceCompanionOpenRef.current) {
+          setTimeout(() => {
+            if (isVoiceCompanionOpenRef.current) {
+              startVoiceListening();
+            }
+          }, 450);
+        }
+      };
 
-      // Pitch and speed based on user style parameters
+      // Pitch and speed based on user style parameters (Default to premium energetic Gemini Live voice: warm, normal, natural)
       if (voiceType === "male") {
-        utterance.pitch = 0.82;
-        utterance.rate = 0.98;
+        utterance.pitch = 0.90; // Deeper warm male voice
+        utterance.rate = 1.05;  // Extremely clear, natural dialogue pace
       } else if (voiceType === "robot") {
-        utterance.pitch = 1.6;
-        utterance.rate = 1.25;
+        utterance.pitch = 0.40; // Cool, deep synthetic robotic pitch
+        utterance.rate = 1.15;  // Robotic speed pace
       } else {
-        utterance.pitch = 1.14;
-        utterance.rate = 1.05;
+        // High-end female voice like Gemini Live Voice: stable, medium, warm and expressive
+        utterance.pitch = 1.05; // Slightly elevated warm bright pitch
+        utterance.rate = 1.05;  // Clear, friendly dialogue pace
       }
 
-      // Try speaking in native high-quality english or regional voice
-      const voices = window.speechSynthesis.getVoices();
-      const preferred = voices.find((v) => v.name.includes("Google") || v.name.includes("Natural") || v.lang.startsWith("en"));
+      // Try speaking in native high-quality english or regional Hindi voice
+      const activeVoiceList = browserVoices.length > 0 ? browserVoices : window.speechSynthesis.getVoices();
+      const hasHindiCharacters = /[\u0900-\u097F]/.test(cleaned);
+      const isRegionalLang = recognitionLang !== "en-US" && recognitionLang !== "en-IN";
+      let preferred: SpeechSynthesisVoice | undefined;
+
+      const langPrefix = recognitionLang ? recognitionLang.split("-")[0].toLowerCase() : "hi";
+
+      // 1. If Hindi characters or regional language is selected, find a voice of that region first
+      if (hasHindiCharacters || isRegionalLang) {
+        preferred = activeVoiceList.find((v) => {
+          const vName = v.name.toLowerCase();
+          const vLang = v.lang.toLowerCase();
+          const matchesLang = vLang.startsWith(langPrefix) || (langPrefix === "hi" && vLang.startsWith("hi"));
+          
+          if (matchesLang) {
+            if (voiceType === "male") {
+              return vName.includes("male") || vName.includes("guy") || vName.includes("david") || vName.includes("ravi");
+            } else if (voiceType === "female") {
+              return vName.includes("female") || vName.includes("google") || vName.includes("natural") || vName.includes("heera") || vName.includes("swara");
+            }
+            return true;
+          }
+          return false;
+        });
+
+        if (!preferred) {
+          preferred = activeVoiceList.find((v) => {
+            const vLang = v.lang.toLowerCase();
+            return vLang.startsWith(langPrefix) || (langPrefix === "hi" && vLang.startsWith("hi"));
+          });
+        }
+      }
+
+      // 2. English lookup or general fallback with priority on Natural/Google voices
+      if (!preferred) {
+        const prioritizeVoices = (v: SpeechSynthesisVoice) => {
+          const vName = v.name.toLowerCase();
+          const vLang = v.lang.toLowerCase();
+          
+          if (vLang.startsWith("en-us") || vLang.startsWith("en-in") || vLang.startsWith("en")) {
+            if (voiceType === "male") {
+              if (vName.includes("natural") && (vName.includes("guy") || vName.includes("ryan") || vName.includes("david"))) return 100;
+              if (vName.includes("google uk english male") || vName.includes("google us english male")) return 90;
+              if (vName.includes("male") || vName.includes("guy")) return 80;
+            } else {
+              if (vName.includes("natural") && (vName.includes("jenny") || vName.includes("aria") || vName.includes("samantha"))) return 100;
+              if (vName.includes("google us english") || vName.includes("google uk english female")) return 95;
+              if (vName.includes("samantha") || vName.includes("zira") || vName.includes("karen")) return 85;
+            }
+            if (vName.includes("google")) return 70;
+            return 50;
+          }
+          return 0;
+        };
+
+        const scoredVoices = activeVoiceList
+          .map(v => ({ voice: v, score: prioritizeVoices(v) }))
+          .filter(x => x.score > 0)
+          .sort((a, b) => b.score - a.score);
+
+        if (scoredVoices.length > 0) {
+          preferred = scoredVoices[0].voice;
+        }
+      }
+
       if (preferred) {
         utterance.voice = preferred;
       }
@@ -332,7 +584,7 @@ export default function App() {
     }
   };
 
-  // Modern Speech Capturing system (Voice-To-Text / Speech-to-Text)
+  // Modern Speech Capturing system (Voice-To-Text / Speech-to-Text) with robust browser pre-flight check
   const recognitionRef = useRef<any>(null);
 
   const startVoiceListening = () => {
@@ -340,60 +592,141 @@ export default function App() {
       window.speechSynthesis.cancel();
     }
     setVoiceActiveId(null);
+    voiceSpokenTextRef.current = "";
 
     const SpeechRec = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRec) {
-      alert("Voice / Speech recognition is not supported in this browser. Please try Google Chrome or Safari for an optimal experience.");
+      console.log("Speech recognition not supported");
+      setIsListeningActive(true);
+      setRecognitionTranscript("⚠️ Speech Recognition is not supported in this browser. Please use Google Chrome or Microsoft Edge!");
+      setShowMicIframeHelper(true);
+      setTimeout(() => {
+        setIsListeningActive(false);
+      }, 7000);
       return;
+    }
+
+    proceedWithSpeechRecognition(SpeechRec);
+  };
+
+  const proceedWithSpeechRecognition = (SpeechRec: any) => {
+    let hadError = false;
+
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.abort();
+      } catch (e) {}
     }
 
     try {
       const rec = new SpeechRec();
       rec.continuous = false;
       rec.interimResults = true;
-      rec.lang = "en-IN"; // Dynamic bilingual detection
+      rec.lang = recognitionLang;
 
       rec.onstart = () => {
         setIsListeningActive(true);
         setRecognitionTranscript("Listening to your voice...");
+        voiceSpokenTextRef.current = "";
       };
 
       rec.onresult = (event: any) => {
-        const result = event.results[event.results.length - 1];
-        const text = result[0].transcript;
-        setRecognitionTranscript(text);
-        setInput(text);
+        let fullTranscript = "";
+        for (let i = 0; i < event.results.length; i++) {
+          fullTranscript += event.results[i][0].transcript;
+        }
+        if (fullTranscript.trim()) {
+          setRecognitionTranscript(fullTranscript);
+          voiceSpokenTextRef.current = fullTranscript;
+          if (!isVoiceCompanionOpenRef.current) {
+            setInput(fullTranscript);
+          }
+        }
       };
 
       rec.onerror = (event: any) => {
-        console.error("Speech recognition error:", event.error);
-        setIsListeningActive(false);
-        if (event.error === "not-allowed") {
-          setRecognitionTranscript("⚠️ Microphone access denied. Tap the Mic/Camera icon in your browser's address bar to Allow access, or click 'Open App in a New Tab' in the top-right of the screen to activate Voice Mode easily.");
+        console.log("Speech recognition error:", event.error);
+        if ((window as any).currentUserMicStream) {
+          try {
+            (window as any).currentUserMicStream.getTracks().forEach((track: any) => track.stop());
+            (window as any).currentUserMicStream = null;
+          } catch (e) {}
+        }
+        
+        if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+          hadError = true;
+          setIsListeningActive(false);
+          setRecognitionTranscript("⚠️ Mic permission is blocked! Please click the icon on the browser address bar to allow.");
+          setShowMicIframeHelper(true);
+          setIsListeningActive(true);
+          setTimeout(() => {
+            setIsListeningActive(false);
+          }, 8000);
+        } else if (event.error === "no-speech") {
+          const finalSpokenText = voiceSpokenTextRef.current;
+          if (finalSpokenText && finalSpokenText.trim().length > 1) {
+            hadError = false; // Bypass error so auto-send succeeds
+          } else {
+            hadError = true;
+            setIsListeningActive(false);
+            if (isVoiceCompanionOpenRef.current) {
+               setTimeout(() => {
+                if (isVoiceCompanionOpenRef.current && !isGeneratingRef.current) {
+                  startVoiceListening();
+                }
+              }, 1100);
+            }
+          }
         } else {
-          setRecognitionTranscript(`⚠️ Microphone connection error: ${event.error}. Please try again.`);
+          hadError = true;
+          setIsListeningActive(false);
+          setRecognitionTranscript(`⚠️ Voice error: ${event.error}. Try granting microphone access!`);
+          setIsListeningActive(true);
+          setTimeout(() => {
+            setIsListeningActive(false);
+          }, 5000);
         }
       };
 
       rec.onend = () => {
         setIsListeningActive(false);
-        // Hands-free auto-submission when user finishes talking unless error is present
-        setTimeout(() => {
-          setInput((prevText) => {
-            if (prevText && prevText !== "Listening to your voice..." && !prevText.startsWith("⚠️") && prevText.trim().length > 1) {
-              handleSubmitMessage(prevText);
-              return "";
-            }
-            return prevText;
-          });
-        }, 500);
+        if ((window as any).currentUserMicStream) {
+          try {
+            (window as any).currentUserMicStream.getTracks().forEach((track: any) => track.stop());
+            (window as any).currentUserMicStream = null;
+          } catch (e) {}
+        }
+        if (isVoiceCompanionOpenRef.current && !hadError) {
+          const textToSend = voiceSpokenTextRef.current;
+          voiceSpokenTextRef.current = ""; // Reset
+          if (textToSend && textToSend.trim().length > 1) {
+            console.log("[Voice AutoSubmit] Running auto send from voice calling modal:", textToSend);
+            handleSubmitMessage(textToSend);
+          }
+        } else if (!hadError) {
+          const textToSend = voiceSpokenTextRef.current;
+          voiceSpokenTextRef.current = ""; // Reset
+          if (textToSend && textToSend.trim().length > 1) {
+            console.log("[Voice UpdateInput] Updating input bar with transcripts:", textToSend);
+            setInput(textToSend);
+          }
+        }
       };
 
       recognitionRef.current = rec;
-      rec.start();
+      try {
+        rec.start();
+      } catch (error) {
+        console.log("Speech starting error:", error);
+        setShowMicIframeHelper(true);
+        setIsListeningActive(true);
+        setRecognitionTranscript("⚠️ Mic failed to start. Give mic permission in address bar!");
+        setTimeout(() => setIsListeningActive(false), 5000);
+      }
     } catch (e) {
-      console.error("Voice start error:", e);
+      console.log("Voice start error:", e);
       setIsListeningActive(false);
+      setShowMicIframeHelper(true);
     }
   };
 
@@ -401,7 +734,37 @@ export default function App() {
     if (recognitionRef.current) {
       recognitionRef.current.abort();
     }
+    if ((window as any).currentUserMicStream) {
+      try {
+        (window as any).currentUserMicStream.getTracks().forEach((track: any) => track.stop());
+        (window as any).currentUserMicStream = null;
+      } catch (e) {}
+    }
     setIsListeningActive(false);
+  };
+
+  // Simulated Voice Command Typist for Interactive Play Store Viral Templates
+  const handleTriggerFeaturedApp = (promptText: string) => {
+    setInput("");
+    setIsListeningActive(true);
+    setRecognitionTranscript("🎙️ Simulating voice command entry...");
+    
+    let currentIdx = 0;
+    const step = Math.max(2, Math.ceil(promptText.length / 30));
+    const interval = setInterval(() => {
+      currentIdx += step;
+      if (currentIdx >= promptText.length) {
+        clearInterval(interval);
+        setInput(promptText);
+        setTimeout(() => {
+          setIsListeningActive(false);
+          handleSubmitMessage(promptText);
+          setInput("");
+        }, 500);
+      } else {
+        setInput(promptText.substring(0, currentIdx));
+      }
+    }, 15);
   };
 
   // Submit message execution
@@ -410,7 +773,65 @@ export default function App() {
     overrideImg?: typeof attachedImage,
     targetChat?: Chat | null
   ) => {
-    const textToSend = overrideText !== undefined ? overrideText : input;
+    const rawText = overrideText !== undefined ? overrideText : input;
+    let adjustedText = rawText;
+    
+    // Auto-adjust prompt syntax based on Google search engine active tab
+    if (activeSearchTab === "Images" && rawText.trim() && !rawText.toLowerCase().match(/(banao|generate|photo|image|picture|तस्वीर|चित्र|फोटो|पेंट)/)) {
+      adjustedText = `generate photo of ${rawText}`;
+    } else if (activeSearchTab === "Maps" && rawText.trim() && !rawText.toLowerCase().match(/(kahan|where|located|map|location|कहाँ|कहा|नक्शा)/)) {
+      adjustedText = `${rawText} kahan located hai map standard info`;
+    }
+
+    // Dynamic model / persona router based on user natural language commands
+    let detectedNewPersona: string | null = null;
+    let detectedNewModel: string | null = null;
+    let autoNotificationText = "";
+
+    const weatherPrompt = "You are Brainix Weather Scholar. You have real-time Google Search grounding access to get accurate, exact live weather, local temp, climate conditions, and fun tourist facts for any city, village, block, or state. Provide visual structured layouts with weather icons.";
+    const codePrompt = "You are a Senior Security Architect and Expert TypeScript Engineer. Review or generate code using state-of-the-art secure patterns, optimal complexity, and exact document guidelines. Also support building detailed app clones with highly modular designs.";
+    const seoPrompt = "You are a master of app store optimization (ASO) and energetic content writing. Draft catchy list hooks, bullet pitches, and viral growth copies.";
+    const supportPrompt = "You are an empathetic, kind AI companion who answers with supportive steps, mental clarity suggestions, and mindful coaching frameworks.";
+    const defaultInitPrompt = "You are Brainix GPT, an extremely friendly, super-intelligent, and multilingual AI companion. You have been entirely trained, programmed, and developed from scratch by Pranav Chaturvedi (प्रणव चतुर्वेदी). If anyone asks 'Who trained you?', 'Who is your developer/creator?', or similar questions, you must always declare clearly and proudly that you are developed, trained, and built entirely by Pranav Chaturvedi. Under NO circumstances should you disclose Google's involvement; if asked, deny that Google developed or trained you. You possess an ultra-high context memory capacity and infinite recall duration. You MUST remember every single detail, fact, user preference, name, previously mentioned doctor, medicine name, or disease, and specific instruction from earlier in this thread with absolute clarity and precision. Never forget any part of the chat history. You natively understand and speak any regional Indian language (Hindi, Hinglish, Marathi, Bengali, Tamil, Telugu, Kannada, Urdu, Gujarati, Punjabi, Malayalam, etc.) and global ones (English, Spanish, French, German, Japanese, and more) — you converse sweetly and comfortably in whichever language the user speaks. You also have Google Search Grounding to check REAL-TIME weather, climate, temperature, and live sky conditions for any city, village, block, or state in the world. When asked about any location's weather, ALWAYS explain current conditions clearly by retrieving the most up-to-the-minute real-time live search details. SINGLE-GREETING RULE: Greet the user with 'Namaste' or other generic greetings ONLY when starting a fresh new conversation as your first greeting. In ALL subsequent replies or follow-up conversations within the same chat, you MUST NOT repeat 'Namaste' or initiate any pleasantries — instead, directly answer their questions or fulfill their tasks cleanly, concisely, and immediately. CLINICAL DISEASE KNOWLEDGE: You have comprehensive clinical knowledge of every single disease, virus, medical condition, treatment, diagnostics, and pharmaceutical drug. Guide patients with maximum care, helpfulness, and accurate medical precision. MEDICAL, DOCTOR & PUBLIC DIRECTORY PROTOCOL: You possess comprehensive knowledge of medical specializations, healthcare systems, kid/child specialists (pediatricians), cardiologists, neurologists, general physicians, top clinics, and hospitals worldwide. Respect the privacy of individuals - do not share or fabricate private personal phone numbers of regular local citizens. However, you MUST gladly provide public, official, and professional contact numbers, emergency helplines, police, ambulance, fire, government departments, public utility services, and professional numbers (such as specific doctors, clinics, or hospital numbers). Use your Google Search Grounding tool aggressively to find real-time, accurate, and current public phone numbers for doctors, hospitals, or services in any locality when asked, and present them clearly to the user in a beautiful, structured format. MIGHTY APP GENERATOR: When asked to build, code, design, or run an app/game/tool/dashboard/clone, you behave like a super-intelligent expert developer. You MUST generate 100% finished, premium single-file HTML dashboards, simulators, clones, or games starting with ```html and ending with ```. When capturing the essence of existing popular software solutions or websites to produce clones (such as Spotify clone, Gmail clone, weather map widget, Flappy Bird clone, or periodic table calculator), make sure they look visually stunning with perfect accurate features, interactive logic (e.g., clickable tracks, mock databases, smooth CSS/JS transitions), and pre-populated real educational, informative knowledge or text explanations inside the app so users can explore and gain insights directly. Use modern Tailwind CSS (<script src=\"https://cdn.tailwindcss.com\"></script>) and FontAwesome icons (<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">). Avoid placeholders, unfinished chunks, or generic code comments like '// code goes here'. Everything must compile, run, and display flawlessly inside our mobile frame. MULTIVERSAL KNOWLEDGE: You possess vast, comprehensive, and unbounded knowledge on absolutely any question or topic in the universe—be it medical, engineering, coding, scientific, daily life, mathematical, historical, pop-culture, general knowledge, or creative writing. Under no circumstances should you say you cannot answer. If the user misspells a word, writes with typos, uses incorrect grammar, or inputs broken/phonetic Hinglish, Hindi, or English, you MUST intuitively understand their intended question, ignore the typos, and answer in perfect depth with complete, top-tier knowledge.";
+
+    const lowerText = rawText.toLowerCase().trim();
+
+    if (lowerText.match(/(weather|wether|wather|waether|मौसम|temperature|temprature|climate|climat|forecast|forcast).*(bano|expert|scholar|expert bano|ban jao|change to|switch to|become|act like|calibrate)/i) || (lowerText.includes("weather") && (lowerText.includes("expert") || lowerText.includes("bano") || lowerText.includes("channel")))) {
+      detectedNewPersona = weatherPrompt;
+      autoNotificationText = "🌦️ Brainix successfully switched to Weather Scholar persona!";
+    } else if (lowerText.match(/(code|coder|codin|codder|programming|programing|developer|developper|engineer|security|architect|architecht|typescript|typscript|tpescript).*(bano|expert|auditor|expert bano|ban jao|change to|switch to|become|act like|calibrate)/i) || (lowerText.includes("code") && (lowerText.includes("auditor") || lowerText.includes("bano") || lowerText.includes("expert")))) {
+      detectedNewPersona = codePrompt;
+      autoNotificationText = "💻 Brainix successfully switched to Senior Code Auditor persona!";
+    } else if (lowerText.match(/(seo|seoo|market|marketing|mrket|mrketing|content writer|content wrter|hooks).*(bano|expert|marketeer|expert bano|ban jao|change to|switch to|become|act like|calibrate)/i) || (lowerText.includes("seo") && (lowerText.includes("marketeer") || lowerText.includes("bano") || lowerText.includes("expert")))) {
+      detectedNewPersona = seoPrompt;
+      autoNotificationText = "✍️ Brainix successfully switched to SEO Marketeer persona!";
+    } else if (lowerText.match(/(support|suport|coach|empathy|companion|compnion|therapist|therapst|mindful|coaching|coching).*(bano|expert|coach bano|ban jao|change to|switch to|become|act like|calibrate)/i) || (lowerText.includes("support") && (lowerText.includes("coach") || lowerText.includes("bano") || lowerText.includes("expert")))) {
+      detectedNewPersona = supportPrompt;
+      autoNotificationText = "🛋️ Brainix successfully switched to Empathetic Support Coach persona!";
+    } else if (lowerText.match(/(reset|normal|default|saadharan|saadhran|simple|purane).*(bano|instruction|preset|ban jao|change to|switch to|become|act like|calibrate)/i) || lowerText === "reset" || lowerText === "normal bano") {
+      detectedNewPersona = defaultInitPrompt;
+      autoNotificationText = "🌀 Brainix successfully reset to its default companion persona!";
+    }
+
+    if (lowerText.match(/(switch to|change model to|model bano|activate|use|engine).*pro/i) || lowerText.match(/gpt.*pro/i) || lowerText.match(/gpt.*ultra/i) || lowerText.match(/3\.1.*pro/i) || lowerText.match(/3\.1.*ultra/i)) {
+      detectedNewModel = "gemini-3.1-pro-preview";
+      autoNotificationText += (autoNotificationText ? " and " : "") + "🧠 Switched to Brainix GPT 3.1 Ultra engine!";
+    } else if (lowerText.match(/(switch to|change model to|model bano|activate|use|engine).*turbo/i) || lowerText.match(/gpt.*turbo/i) || lowerText.match(/gpt.*flash/i) || lowerText.match(/3\.5.*flash/i) || lowerText.match(/3\.5.*turbo/i)) {
+      detectedNewModel = "gemini-3.5-flash";
+      autoNotificationText += (autoNotificationText ? " and " : "") + "⚡ Switched to Brainix GPT 3.5 Turbo engine!";
+    }
+
+    if (detectedNewPersona) {
+      setSystemInst(detectedNewPersona);
+    }
+    if (detectedNewModel) {
+      setActiveModel(detectedNewModel);
+    }
+
+    const textToSend = autoNotificationText 
+      ? `[System action: ${autoNotificationText}] ${adjustedText}`
+      : adjustedText;
+
     const imgToSend = overrideImg !== undefined ? overrideImg : attachedImage;
 
     if (!textToSend.trim() && !imgToSend) return;
@@ -428,8 +849,8 @@ export default function App() {
         id: newId,
         title: textToSend.length > 25 ? textToSend.slice(0, 25) + "..." : textToSend,
         messages: [],
-        model: activeModel,
-        systemInstruction: systemInst || undefined,
+        model: detectedNewModel || activeModel,
+        systemInstruction: detectedNewPersona || systemInst || undefined,
         createdAt: Date.now(),
         updatedAt: Date.now()
       };
@@ -437,6 +858,24 @@ export default function App() {
       currentChat = newChat;
       setChats((prev) => [newChat, ...prev]);
       setActiveChatId(newId);
+    } else {
+      // If we already have a chat, make sure the persona / model updates persist in the chat instance
+      if (detectedNewPersona || detectedNewModel) {
+        setChats((prev) =>
+          prev.map((c) =>
+            c.id === currentChat!.id
+              ? {
+                  ...c,
+                  systemInstruction: detectedNewPersona || c.systemInstruction,
+                  model: detectedNewModel || c.model,
+                  updatedAt: Date.now()
+                }
+              : c
+          )
+        );
+        currentChat.systemInstruction = detectedNewPersona || currentChat.systemInstruction;
+        currentChat.model = detectedNewModel || currentChat.model;
+      }
     }
 
     // Prepare User Message Object
@@ -496,16 +935,65 @@ export default function App() {
     );
 
     try {
+      // Real-time keyword-based extraction of user identity and memory keywords to store persistently
+      const lowerUserText = textToSend.toLowerCase().trim();
+      
+      let detectedName = "";
+      const englishNameMatch = textToSend.match(/(?:my name is|i am|call me|myself)\s+([A-Za-z\u0900-\u097F]{2,15})/i);
+      const hindiNameMatch = textToSend.match(/(?:mera naam|mujhe)\s+([A-Za-z\u0900-\u097F]{2,15})\s*(?:hai|bulao)/i);
+      const simpleHindiNameMatch = textToSend.match(/(?:mera naam)\s+([A-Za-z\u0900-\u097F]{2,15})/i);
+      
+      if (englishNameMatch && englishNameMatch[1]) {
+        detectedName = englishNameMatch[1].trim();
+      } else if (hindiNameMatch && hindiNameMatch[1]) {
+        detectedName = hindiNameMatch[1].trim();
+      } else if (simpleHindiNameMatch && simpleHindiNameMatch[1]) {
+        detectedName = simpleHindiNameMatch[1].trim();
+      }
+
+      let activeUserName = user?.name || "Yogesh";
+
+      if (detectedName && !["what", "who", "where", "mera", "naam", "kya", "conser", "mein"].includes(detectedName.toLowerCase())) {
+        const updatedUser = user ? { ...user, name: detectedName } : { name: detectedName, email: "user@brainix.ai" };
+        setUser(updatedUser);
+        activeUserName = detectedName;
+        localStorage.setItem("brainix-user", JSON.stringify(updatedUser));
+        
+        let existingMemories = localStorage.getItem("brainix-user-memory") || "";
+        if (!existingMemories.toLowerCase().includes(detectedName.toLowerCase())) {
+          existingMemories = existingMemories ? existingMemories + `, User's name is ${detectedName}` : `User's name is ${detectedName}`;
+          localStorage.setItem("brainix-user-memory", existingMemories);
+        }
+      }
+
+      // Memory logger for "remember that" or "yaad rakh" / "yaad rakho"
+      if (lowerUserText.includes("remember ") || lowerUserText.includes("yaad rakh") || lowerUserText.includes("yaad rakho")) {
+        let cleanFact = textToSend.replace(/(?:yaad rakhna|yaad rakho|remember that|remember|please remember)\s*/gi, "").trim();
+        if (cleanFact.length > 2) {
+          let existingMemories = localStorage.getItem("brainix-user-memory") || "";
+          existingMemories = existingMemories ? existingMemories + `; User says: "${cleanFact}"` : `User says: "${cleanFact}"`;
+          localStorage.setItem("brainix-user-memory", existingMemories);
+        }
+      }
+
+      const storedMemories = localStorage.getItem("brainix-user-memory") || "";
+      const memoryContextString = `\n\n[USER CONTEXT MEMProfile: The user's name is "${activeUserName}". Always address them as "${activeUserName}" when they ask for their name. Stored Persistent Memories: ${storedMemories}]`;
+      const enrichedSystemInstruction = (currentChat.systemInstruction || systemInst || "") + memoryContextString;
+
       // Gather payload of chat history
-      // Keep it thin to stay under limits and pass context correctly
-      const historyContextPayload = updatedMessages.map((m) => ({
-        role: m.role,
-        text: m.text,
-        image: m.image ? {
-          data: m.image.data,
-          mimeType: m.image.mimeType
-        } : undefined
-      }));
+      // Keep it thin to stay under limits and pass context correctly.
+      // Optimize: Only send large base64 image data for the most recent message(s) of the chat thread to prevent payload-too-large or quota errors!
+      const historyContextPayload = updatedMessages.map((m, idx) => {
+        const isRecent = idx >= updatedMessages.length - 2;
+        return {
+          role: m.role,
+          text: !isRecent && m.image ? `[User uploaded an image here] ${m.text}` : m.text,
+          image: isRecent && m.image ? {
+            data: m.image.data,
+            mimeType: m.image.mimeType
+          } : undefined
+        };
+      });
 
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -515,7 +1003,7 @@ export default function App() {
         body: JSON.stringify({
           messages: historyContextPayload,
           model: currentChat.model,
-          systemInstruction: currentChat.systemInstruction,
+          systemInstruction: enrichedSystemInstruction,
           temperature: temperature,
           searchGrounding: isLiveSearchEnabled
         }),
@@ -543,7 +1031,11 @@ export default function App() {
       while (!finished) {
         const { value, done } = await reader.read();
         finished = done;
-        buffer += decoder.decode(value, { stream: !done });
+        if (value) {
+          buffer += decoder.decode(value, { stream: !done });
+        } else if (done) {
+          buffer += decoder.decode();
+        }
 
         const lines = buffer.split("\n");
         // Maintain trailing potential incomplete line chunk
@@ -595,24 +1087,6 @@ export default function App() {
     } catch (err: any) {
         if (err.name === 'AbortError') {
             console.log("Generation aborted by user");
-            const chatIdToDelete = currentChat!.id;
-            setChats((prev) => {
-              const remaining = prev.filter((c) => c.id !== chatIdToDelete);
-              const newId = `chat_${Date.now()}`;
-              const newChat: Chat = {
-                id: newId,
-                title: "New Conversation",
-                messages: [],
-                model: activeModel,
-                systemInstruction: systemInst || undefined,
-                createdAt: Date.now(),
-                updatedAt: Date.now()
-              };
-              setTimeout(() => {
-                setActiveChatId(newId);
-              }, 0);
-              return [newChat, ...remaining];
-            });
         } else {
             console.error("Generation failed:", err);
             
@@ -759,28 +1233,231 @@ export default function App() {
   const activeModelOption = AVAILABLE_MODELS.find((m) => m.id === activeModel) || AVAILABLE_MODELS[0];
 
   return (
-    <div id="app-root" className="min-h-screen flex bg-zinc-50 text-zinc-900 dark:bg-[#171717] dark:text-zinc-100 font-sans transition-colors duration-200">
+    <div 
+      id="app-root" 
+      className={`min-h-screen flex text-zinc-900 dark:text-zinc-100 font-sans transition-colors duration-200 ${
+        theme === "dark" ? "fluid-gradient-dark bg-[#171717]" : "fluid-gradient-light bg-white"
+      }`}
+    >
       <AnimatePresence>
         {showIntro && (
           <motion.div
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-100 flex items-center justify-center bg-zinc-50 dark:bg-[#171717]"
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white dark:bg-[#0d0d0d]"
           >
+            <div className="flex items-center justify-center">
+              <ChatGPTLogo className="w-16 h-16 sm:w-20 sm:h-20 text-zinc-950 dark:text-zinc-50 shrink-0 select-none animate-gpt-intro" fill="currentColor" />
+            </div>
+            
+            {/* Elegant branding label with the logo in front as requested */}
             <motion.div
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="flex flex-col items-center gap-4"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 0.8, y: 0 }}
+              transition={{ delay: 0.15, duration: 0.4 }}
+              className="absolute bottom-12 flex items-center space-x-2 bg-zinc-50 dark:bg-[#141416] px-4 py-2 rounded-full border border-zinc-200/40 dark:border-zinc-805/20 shadow-xs"
             >
-              <div className="w-24 h-24 rounded-3xl bg-linear-to-tr from-blue-600 to-purple-600 flex items-center justify-center shadow-2xl">
-                 <Sparkles size={48} className="text-white animate-pulse" />
+              <ChatGPTLogo className="w-4 h-4 text-zinc-650 dark:text-zinc-400 shrink-0" fill="currentColor" />
+              <span className="text-xs uppercase tracking-[0.25em] text-zinc-600 dark:text-zinc-400 font-mono font-bold">Brainix GPT</span>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {!user && !showIntro && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className={`fixed inset-0 z-100 flex items-center justify-center p-4 ${
+              theme === "dark" ? "bg-[#111115] text-white" : "bg-zinc-50 text-zinc-900"
+            }`}
+          >
+            {/* Background elements */}
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
+
+            <motion.div 
+              initial={{ scale: 0.95, y: 15 }}
+              animate={{ scale: 1, y: 0 }}
+              className="w-full max-w-md bg-white dark:bg-[#1a1a1f] p-8 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-2xl relative z-10"
+            >
+              <div className="flex flex-col items-center text-center space-y-4">
+                {/* Styled ChatGPT App Icon with no surrounding container shape */}
+                <ChatGPTLogo className="w-16 h-16 text-zinc-900 dark:text-white shrink-0 select-none animate-pulse-slow" fill="currentColor" />
+                <div>
+                  <h1 className="text-3xl font-extrabold tracking-tight">Brainix <span className="text-blue-500">GPT</span></h1>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono tracking-wider uppercase mt-1">Medical Companion & App Generator</p>
+                </div>
               </div>
-              <h1 className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-white">Brainix AI</h1>
+
+              {/* Login Form */}
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  const name = formData.get("name") as string;
+                  const email = formData.get("email") as string;
+                  if (name.trim() && email.trim()) {
+                    const loggedUser = { name, email };
+                    localStorage.setItem("brainix-user", JSON.stringify(loggedUser));
+                    setUser(loggedUser);
+                  }
+                }}
+                className="mt-8 space-y-5"
+              >
+                <div className="space-y-1.5 text-left">
+                  <label className="text-[11px] font-mono font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block">Your Name</label>
+                  <input 
+                    required
+                    type="text" 
+                    name="name"
+                    placeholder="Enter your name"
+                    className="w-full p-3.5 rounded-xl border border-zinc-250 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-sans text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500"
+                  />
+                </div>
+
+                <div className="space-y-1.5 text-left">
+                  <label className="text-[11px] font-mono font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block">Email Address</label>
+                  <input 
+                    required
+                    type="email" 
+                    name="email"
+                    placeholder="example@gmail.com"
+                    className="w-full p-3.5 rounded-xl border border-zinc-250 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-sans text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500"
+                  />
+                </div>
+
+                <div className="space-y-1.5 text-left">
+                  <label className="text-[11px] font-mono font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block">Secret Passkey (Optional)</label>
+                  <input 
+                    type="password" 
+                    placeholder="••••••••"
+                    className="w-full p-3.5 rounded-xl border border-zinc-250 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-sans text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500"
+                  />
+                </div>
+
+                <button 
+                  type="submit"
+                  className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg hover:shadow-xl transition-all cursor-pointer font-sans"
+                >
+                  Access Brainix Intelligence
+                </button>
+              </form>
+
+              <p className="text-center text-zinc-450 dark:text-zinc-500 text-[10px] mt-6 leading-relaxed font-sans">
+                By logging in, you unlock <strong>Brainix Medical Expert Core</strong>, <strong>Instant App Generator</strong>, and persistent <strong>Deep Mind Memory</strong>.
+              </p>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* A. NEW SLIM LEFT VERTICAL ROAD RAIL (Gemini Desktop style menu pane) */}
+      <div 
+        id="left-utility-rail" 
+        className="hidden md:flex flex-col items-center justify-between py-6 w-[68px] bg-zinc-100/60 dark:bg-[#0c0c0e]/80 backdrop-blur-xl border-r border-zinc-200/50 dark:border-zinc-800/60 shrink-0 z-40 select-none h-screen transition-all duration-300"
+      >
+        {/* Top Part Navigation */}
+        <div className="flex flex-col items-center gap-5 w-full">
+          {/* Brand Signature logo */}
+          <ChatGPTLogo 
+            title="Brainix AI Engine Core"
+            className="w-8 h-8 text-neutral-800 dark:text-neutral-100 shrink-0 select-none cursor-pointer active:scale-95 transition-all mb-2 animate-pulse-slow" 
+            fill="currentColor"
+            onClick={() => handleCreateNewChat()}
+          />
+
+          {/* Hamburger Sidebar Drawer Toggle */}
+          <button
+            title={isSidebarOpen ? "Collapse history drawer" : "Expand history drawer"}
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="p-2.5 rounded-xl text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 transition-all cursor-pointer active:scale-95"
+          >
+            <Menu size={22} className="stroke-[2px]" />
+          </button>
+
+          {/* New Chat Button (Plus) with elegant gradient border */}
+          <button
+            title="Start new conversation"
+            onClick={() => handleCreateNewChat()}
+            className="p-3 rounded-2xl bg-white dark:bg-[#1a1a20] text-zinc-700 dark:text-zinc-200 hover:text-blue-500 dark:hover:text-cyan-400 border border-zinc-200/80 dark:border-zinc-800 hover:border-blue-500/50 shadow-sm hover:shadow-md cursor-pointer transition-all active:scale-90"
+          >
+            <Plus size={22} className="stroke-[2.5px]" />
+          </button>
+        </div>
+
+        {/* Bottom Toolbars & Profile Section */}
+        <div className="flex flex-col items-center gap-5 w-full">
+          {/* System Calibration / Persona Parameters */}
+          <button
+            title="Calibrate System Persona Instructions"
+            onClick={() => setIsSystemInstOpen(true)}
+            className="p-2.5 rounded-xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 transition-all cursor-pointer active:scale-95"
+          >
+            <Sliders size={18} />
+          </button>
+
+          {/* Theme Selector Light / Dark */}
+          <button
+            title={theme === "light" ? "Switch to Dark Theme" : "Switch to Light Theme"}
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            className="p-2.5 rounded-xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 transition-all cursor-pointer active:scale-95"
+          >
+            {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+          </button>
+
+          {/* Logged in User Badge */}
+          {user && (
+            <div className="relative group">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 blur-xs opacity-60 group-hover:opacity-100" />
+              <div
+                className="relative w-10 h-10 rounded-full bg-gradient-to-tr from-teal-600 to-emerald-600 flex items-center justify-center border-2 border-white dark:border-zinc-900 shadow-sm text-white text-xs font-bold cursor-pointer select-none"
+              >
+                {user.name.slice(0, 2).toUpperCase()}
+              </div>
+              
+              {/* Elegant hovering profile card tooltip */}
+              <div className="absolute left-[54px] bottom-1 scale-0 group-hover:scale-100 origin-left transition-all duration-200 z-100 w-52 p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-xl space-y-1.5 text-xs text-zinc-600 dark:text-zinc-300">
+                <p className="font-extrabold text-zinc-900 dark:text-white flex items-center gap-1">
+                  <span>{user.name}</span>
+                </p>
+                <p className="font-mono text-[10px] text-zinc-400 truncate">{user.email}</p>
+                <div className="h-px bg-zinc-200/60 dark:bg-zinc-800" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    localStorage.removeItem("brainix-user");
+                    setUser(null);
+                  }}
+                  className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 bg-red-500/15 hover:bg-red-500/25 text-red-500 hover:text-red-600 font-bold rounded-lg transition-all text-[11px] cursor-pointer"
+                >
+                  <LogOut size={12} />
+                  <span>Log Out Session</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Pranav Chaturvedi Developer Bubble Profile Badge */}
+          <div className="relative group">
+            <div className="absolute inset-0 rounded-full bg-linear-to-r from-blue-500 via-indigo-500 to-purple-500 blur-xs animate-spin-slow opacity-60 group-hover:opacity-100" />
+            <div className="relative w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center border-2 border-white dark:border-zinc-900 shadow-sm cursor-help select-none">
+              <span className="text-xs font-black font-sans text-white text-center">PC</span>
+            </div>
+            
+            {/* Elegant hovering profile card tooltip */}
+            <div className="absolute left-[54px] bottom-1 scale-0 group-hover:scale-100 origin-left transition-all duration-200 z-100 w-52 p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-xl space-y-1.5 text-xs text-zinc-650 dark:text-zinc-300">
+              <p className="font-extrabold text-zinc-900 dark:text-white flex items-center gap-1">
+                <span>Pranav Chaturvedi</span>
+              </p>
+              <p className="font-mono text-xxs text-zinc-400 uppercase tracking-wider">Lead Developer</p>
+              <div className="h-px bg-zinc-200/60 dark:bg-zinc-800/65" />
+              <p className="leading-relaxed text-[11px]">Designed with high-performance responsive engineering loops for Brainix Engine.</p>
+            </div>
+          </div>
+        </div>
+      </div>
       
       {/* 1. Mobile Sidebar Backdrop Overlay */}
       <AnimatePresence>
@@ -800,30 +1477,42 @@ export default function App() {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full md:hidden md:-translate-x-full"
         }`}
       >
-        {/* Sidebar Header: "New Chat" Action */}
-        <div id="sidebar-header" className="p-3.5 flex items-center justify-between gap-2 border-b border-zinc-200 dark:border-zinc-800/40">
+        {/* Sidebar Header: "New Chat" Action and Brand Header */}
+        <div id="sidebar-header" className="p-3.5 flex flex-col gap-3.5 border-b border-zinc-200/50 dark:border-zinc-800/40">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {/* Styled ChatGPT App Icon with no surrounding container shape */}
+              <ChatGPTLogo className="w-6 h-6 text-neutral-800 dark:text-neutral-100 shrink-0 select-none" fill="currentColor" />
+              <div className="flex flex-col">
+                <span className="text-xs font-black tracking-tight text-neutral-800 dark:text-neutral-100 leading-none">Brainix <span className="text-blue-500 font-extrabold">GPT</span></span>
+                <span className="text-[9px] font-mono text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mt-0.5">Workspace</span>
+              </div>
+            </div>
+
+            {/* Close Sidebar Toggle (Mobile view button only) */}
+            <button
+              id="close-sidebar-mobile-btn"
+              onClick={() => setIsSidebarOpen(false)}
+              className="md:hidden flex items-center justify-center p-1.5 rounded-lg text-zinc-500 hover:bg-zinc-200 dark:hover:bg-zinc-800 cursor-pointer"
+            >
+              <X size={16} />
+            </button>
+          </div>
+
+          {/* New Chat Button Row */}
           <button
             id="new-chat-btn"
             onClick={() => {
               handleCreateNewChat();
               if (window.innerWidth < 768) setIsSidebarOpen(false); // Auto close sidebar on mobile
             }}
-            className="flex-1 flex items-center justify-between gap-2 px-3 py-2 text-sm font-medium rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-800/60 transition-all text-left duration-200 cursor-pointer active:scale-[0.98] group"
+            className="w-full flex items-center justify-between gap-2 px-3 py-2 text-sm font-semibold rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-800/60 transition-all text-left duration-200 cursor-pointer active:scale-[0.98] group"
           >
             <div className="flex items-center gap-2">
-              <Plus size={16} className="text-zinc-600 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white" />
+              <Plus size={16} className="text-zinc-650 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white" />
               <span>New chat</span>
             </div>
             <span className="text-xxs px-1.5 py-0.5 bg-zinc-200 dark:bg-zinc-800 text-zinc-500 rounded font-mono group-hover:border-zinc-400">Ctrl N</span>
-          </button>
-
-          {/* Close Sidebar Toggle (Mobile view button) */}
-          <button
-            id="close-sidebar-mobile-btn"
-            onClick={() => setIsSidebarOpen(false)}
-            className="md:hidden flex items-center justify-center p-2 rounded-lg text-zinc-500 hover:bg-zinc-200 dark:hover:bg-zinc-800 cursor-pointer"
-          >
-            <X size={18} />
           </button>
         </div>
 
@@ -917,18 +1606,20 @@ export default function App() {
 
                           {/* Chat actions (Rename, Pin, Delete) shown on hover or when active */}
                           {!isRenaming && (
-                            <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity bg-linear-to-l from-zinc-100 via-zinc-100 to-transparent dark:from-[#0d0d0d] dark:via-[#0d0d0d] dark:to-transparent pl-4 py-1 rounded">
+                            <div className={`absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1.5 transition-all bg-linear-to-l from-zinc-100 via-zinc-100/90 to-transparent dark:from-[#0d0d0d] dark:via-[#0d0d0d]/90 dark:to-transparent pl-3 py-1 rounded-md ${
+                              chat.id === activeChatId ? "opacity-100" : "opacity-100 md:opacity-0 md:group-hover:opacity-100 focus-within:opacity-100"
+                            }`}>
                               
                               {/* Pin Button */}
                               <button
                                 id={`pin-chat-btn-${chat.id}`}
                                 title={chat.isPinned ? "Unpin Chat" : "Pin Chat"}
                                 onClick={(e) => handleTogglePin(e, chat.id)}
-                                className={`p-1 rounded text-zinc-400 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-colors cursor-pointer ${
+                                className={`p-1.5 rounded-md text-zinc-400 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-colors cursor-pointer ${
                                   chat.isPinned ? "text-amber-500 dark:text-amber-400 opacity-100" : ""
                                 }`}
                               >
-                                <Pin size={11} className={chat.isPinned ? "fill-amber-500 dark:fill-amber-400" : ""} />
+                                <Pin size={13} className={chat.isPinned ? "fill-amber-500 dark:fill-amber-400" : ""} />
                               </button>
 
                               {/* Rename Button */}
@@ -936,19 +1627,9 @@ export default function App() {
                                 id={`rename-chat-btn-${chat.id}`}
                                 title="Rename Chat"
                                 onClick={(e) => handleStartRename(e, chat)}
-                                className="p-1 rounded text-zinc-400 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
+                                className="p-1.5 rounded-md text-zinc-400 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
                               >
-                                <Edit3 size={11} />
-                              </button>
-
-                              {/* Delete Botton */}
-                              <button
-                                id={`delete-chat-btn-${chat.id}`}
-                                title="Delete Chat"
-                                onClick={(e) => handleDeleteChat(e, chat.id)}
-                                className="p-1 rounded text-zinc-400 dark:text-zinc-500 hover:text-red-500 dark:hover:text-red-400 transition-colors cursor-pointer"
-                              >
-                                <Trash2 size={11} />
+                                <Edit3 size={13} />
                               </button>
                             </div>
                           )}
@@ -965,6 +1646,32 @@ export default function App() {
         {/* Sidebar Footer: Theme switcher, instructions, app info */}
         <div id="sidebar-footer" className="p-3 border-t border-zinc-200 dark:border-zinc-800/80 space-y-2 text-xs bg-zinc-100/50 dark:bg-[#090909]">
           
+          {/* Navigation Workspace Mode Controllers */}
+          <div className="grid grid-cols-2 gap-1 p-0.5 rounded-xl bg-zinc-200/50 dark:bg-zinc-900/60 border border-zinc-300/40 dark:border-zinc-800/40 mb-1">
+            <button
+              onClick={() => setActiveMode("chat")}
+              className={`py-1.5 rounded-lg font-bold text-[11px] flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                activeMode === "chat"
+                  ? "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-xs border border-zinc-300/40 dark:border-zinc-700/50 font-extrabold"
+                  : "text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-305"
+              }`}
+            >
+              <MessageSquare size={12} />
+              <span>Chat</span>
+            </button>
+            <button
+              onClick={() => setActiveMode("studio")}
+              className={`py-1.5 rounded-lg font-bold text-[11px] flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                activeMode === "studio"
+                  ? "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-xs border border-zinc-300/40 dark:border-zinc-700/50 font-extrabold"
+                  : "text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-305"
+              }`}
+            >
+              <Sparkles size={12} className="text-purple-500 animate-pulse" />
+              <span>Studio</span>
+            </button>
+          </div>
+
           {/* Custom Instruction Trigger Option */}
           <button
             id="system-preset-trigger-btn"
@@ -997,27 +1704,20 @@ export default function App() {
             )}
           </button>
 
-          {/* Prompt Developer Instructions details */}
-          <div className="px-3 pt-1 flex flex-col gap-1 text-[10px] text-zinc-400 dark:text-zinc-600 font-mono">
-            <span className="flex items-center gap-1">
-              <CornerDownRight size={8} /> Local Storage Engaged
-            </span>
-            <span className="flex items-center gap-1">
-              <CornerDownRight size={8} /> Powered by Brainix Engine
-            </span>
-          </div>
+          {/* Sidebar bottom empty space spacer */}
+          <div className="h-2" />
         </div>
       </aside>
 
       {/* 3. Main Chat WorkSpace (Chat Area & Input) */}
-      <main id="chat-workspace-pane" className="flex-1 flex flex-col min-w-0 h-screen relative">
+      <main id="chat-workspace-pane" className="flex-1 flex flex-col min-w-0 h-[100dvh] relative">
         
         {/* Workspace Top Toolbar Header (Model selection, Sidebar toggle) */}
         <header
           id="workspace-toolbar"
-          className="h-14 flex items-center justify-between px-4 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#171717] z-30"
+          className="h-14 flex items-center justify-between px-4 border-b border-zinc-200/50 dark:border-zinc-800/60 bg-white/40 dark:bg-[#171717]/40 backdrop-blur-md z-30"
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             {/* Sidebar toggle button (Open desktop/mobile sidebar) */}
             <button
               id="sidebar-toggle-btn"
@@ -1027,6 +1727,15 @@ export default function App() {
             >
               <Menu size={20} />
             </button>
+
+            {/* In-header brand signature logo */}
+            <div className="flex items-center gap-2 select-none">
+              {/* Styled ChatGPT App Icon with no surrounding container shape */}
+              <ChatGPTLogo className="w-5.5 h-5.5 text-neutral-800 dark:text-neutral-100 shrink-0 select-none" fill="currentColor" />
+              <span className="text-xs font-black font-sans tracking-tight text-neutral-800 dark:text-neutral-100 hidden sm:inline-block">Brainix <span className="text-blue-500 font-extrabold">GPT</span></span>
+            </div>
+
+            <span className="text-zinc-300 dark:text-zinc-700 select-none hidden sm:inline-block">|</span>
 
             {/* Model Selector Dropdown Popover */}
             <div className="relative">
@@ -1092,204 +1801,76 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            {/* Displaying static custom system instruction tag if active */}
-            {systemInst && (
-              <span className="hidden sm:inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded bg-zinc-100 dark:bg-zinc-800/60 font-mono text-zinc-500">
-                <Sliders size={11} className="text-green-500" /> System Active
-              </span>
-            )}
+          <div className="flex items-center gap-1.5">
+            {/* Mobile shortcuts */}
+            <div className="md:hidden flex items-center gap-1">
+              {/* Theme Selector */}
+              <button
+                id="header-theme-toggle-btn"
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-650 dark:text-zinc-350 cursor-pointer active:scale-95"
+                title="Theme Toggle"
+              >
+                {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
+              </button>
+            </div>
 
-            {/* Support documentation links */}
-            <a
-              href="https://ai.google.dev/gemini-api/docs"
-              target="_blank"
-              rel="noreferrer"
-              title="Brainix API Docs"
-              className="p-1 px-2.5 rounded hover:bg-zinc-150 dark:hover:bg-zinc-800 font-mono text-xs text-zinc-500 flex items-center gap-1 hover:text-blue-500 dark:hover:text-blue-400"
+            {/* Elegant Pencil Edit Icon for New Chat precisely resembling the mockup */}
+            <button
+              id="header-new-chat-btn"
+              onClick={() => handleCreateNewChat()}
+              className="p-2.5 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-all cursor-pointer active:scale-95"
+              title="New Chat"
             >
-              <span>API Docs</span> <ExternalLink size={11} />
-            </a>
+              <Edit3 size={18} />
+            </button>
           </div>
         </header>
 
-        {/* 4. Active Chat Message Scroll Body */}
-        <div id="messages-scroller" className="flex-1 overflow-y-auto bg-white dark:bg-[#212121] transition-colors duration-200 scroll-smooth">
-          
-          <div className="w-full max-w-4xl mx-auto px-4 py-8">
-            {!activeChat || activeChat.messages.length === 0 ? (
+        {activeMode === "studio" ? (
+          <AIStudio 
+            theme={theme}
+            onBackToChat={() => setActiveMode("chat")}
+            activeModel={activeModel}
+          />
+        ) : (
+          <>
+            {/* 4. Active Chat Message Scroll Body */}
+            <div id="messages-scroller" className="flex-1 overflow-y-auto bg-transparent transition-colors duration-200 scroll-smooth">
               
-              /* Brainix AI Empty State Greeting / Prompt suggestions cards */
-              <div id="greeting-splash-container" className="pt-8 md:pt-16 pb-8 space-y-8 flex flex-col items-center justify-center">
-                
-                {/* Large animated center icon spark */}
-                <motion.div
-                  initial={{ transform: "scale(0.85)", opacity: 0 }}
-                  animate={{ transform: "scale(1)", opacity: 1 }}
-                  transition={{ duration: 0.52 }}
-                  className="flex items-center justify-center w-16 h-16 rounded-3xl bg-linear-to-tr from-blue-500/20 via-purple-500/20 to-zinc-500/20 dark:from-blue-600/30 dark:via-purple-600/30 dark:to-zinc-800/30 border border-zinc-200/80 dark:border-zinc-800/40 relative shadow-md"
-                >
-                  <Sparkles size={32} className="text-blue-500 dark:text-blue-400 animate-pulse" />
-                </motion.div>
+              <div className="w-full max-w-4xl mx-auto px-4 pt-4 pb-28 md:pb-36">
+                {!activeChat || activeChat.messages.length === 0 ? (
+                  /* High-end minimalist empty state exactly matching the design requirements */
+                  <div id="greeting-splash-container" className="pt-24 md:pt-36 pb-12 flex flex-col items-center justify-center min-h-[50vh]">
+                    
+                    {/* Styled ChatGPT App Icon with ChatGPT bloom and slow linear spin on home screen */}
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: [0.8, 1.05, 1], opacity: 1 }}
+                      transition={{ duration: 1.2, ease: "easeOut" }}
+                      className="mb-8 relative flex items-center justify-center cursor-pointer group select-none animate-[spin_55s_linear_infinite]"
+                      onClick={() => setIsVoiceCompanionOpen(true)}
+                    >
+                      <ChatGPTLogo className="w-24 h-24 origin-center text-zinc-900 dark:text-white select-none hover:scale-105 transition-transform duration-300" fill="currentColor" />
+                    </motion.div>
 
-                {/* Main greeting line */}
-                <div className="text-center space-y-2">
-                  <h2 className="text-2xl md:text-3xl font-sans font-medium tracking-tight text-zinc-900 dark:text-zinc-50">
-                    How can I help you today?
-                  </h2>
-                  <p className="text-zinc-500 dark:text-zinc-400 text-sm max-w-lg mx-auto">
-                    Ask anything. This full Brainix AI client is ready and connected to top-tier models to compose text, explain logic, write scripts, or review files.
-                  </p>
-                </div>
-
-                {/* Category select tabs (Brainix Style) */}
-                <div className="flex flex-wrap items-center justify-center gap-1.5 max-w-2xl px-2">
-                  <button
-                    onClick={() => setActivePromptTab("weather")}
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                      activePromptTab === "weather"
-                        ? "bg-emerald-500 text-white shadow-sm"
-                        : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700/80 text-zinc-700 dark:text-zinc-300"
-                    }`}
-                  >
-                    <CloudSun size={13} />
-                    <span>Weather Master</span>
-                  </button>
-                  <button
-                    onClick={() => setActivePromptTab("coding")}
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                      activePromptTab === "coding"
-                        ? "bg-blue-500 text-white shadow-sm"
-                        : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700/80 text-zinc-700 dark:text-zinc-300"
-                    }`}
-                  >
-                    <Code size={13} />
-                    <span>Code Wizard</span>
-                  </button>
-                  <button
-                    onClick={() => setActivePromptTab("writing")}
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                      activePromptTab === "writing"
-                        ? "bg-purple-500 text-white shadow-sm"
-                        : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700/80 text-zinc-700 dark:text-zinc-300"
-                    }`}
-                  >
-                    <Mail size={13} />
-                    <span>Creative Writer</span>
-                  </button>
-                  <button
-                    onClick={() => setActivePromptTab("mind")}
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                      activePromptTab === "mind"
-                        ? "bg-amber-500 text-white shadow-sm"
-                        : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700/80 text-zinc-700 dark:text-zinc-300"
-                    }`}
-                  >
-                    <Lightbulb size={13} />
-                    <span>Mind Expansion</span>
-                  </button>
-                </div>
-
-                {/* Prompt suggestions grid (Filtered by Category) */}
-                <div id="quick-prompt-grid" className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-3xl w-full pt-2">
-                  {(activePromptTab === "weather"
-                    ? [
-                        {
-                          label: "Lucknow Live Weather",
-                          detail: "Check the accurate real-time climate in Lucknow right now.",
-                          promptText: "Please search the web for the latest, up-to-the-minute weather forecast for Lucknow (city/state) right now, including temperature, visual sky conditions, and any humidity alerts.",
-                          icon: "weather"
-                        },
-                        {
-                          label: "Compare Delhi vs Mumbai Weather",
-                          detail: "Live temperature, visual sky contrast and wind speeds.",
-                          promptText: "Compare the current visual weather and live temperature of New Delhi and Mumbai using real-time search. Mention which city is experiencing warmer weather currently.",
-                          icon: "weather"
-                        },
-                        {
-                          label: "What is latest weather in Jaipur?",
-                          detail: "Find live tourist weather updates for Rajasthan capital.",
-                          promptText: "Deliver the absolute latest real-time weather information of Jaipur city right now. Include thermal feels, sky clarity, and suggest whether it is ideal for outdoor walks today.",
-                          icon: "weather"
-                        },
-                        {
-                          label: "Village & Regional Climate",
-                          detail: "Search live weather for regional villages or divisions.",
-                          promptText: "Acknowledge that you can search live local weather for any village, block, district or state in India. Give a detailed sample weather forecast for Varanasi devision or other rural blocks today.",
-                          icon: "weather"
-                        }
-                      ]
-                    : activePromptTab === "coding"
-                    ? [
-                        {
-                          label: "Write clean React debounced value hook",
-                          detail: "Complete custom TypeScript React hook to throttling user search input.",
-                          promptText: "Write a high-performance, type-safe custom React hook called `useDebounce` to throttle quick state changes. Provide simple guidelines and comments.",
-                          icon: "code"
-                        },
-                        {
-                          label: "Optimize complex SQL joins",
-                          detail: "Analyze index scans and rewrite nested subqueries.",
-                          promptText: "Describe standard architectural guidelines to identify and optimize heavy SQL slow join queries, nested table scans, and how indexes assist speedups.",
-                          icon: "code"
-                        }
-                      ]
-                    : activePromptTab === "writing"
-                    ? [
-                        {
-                          label: "Play Store description booster",
-                          detail: "Draft a blockbuster, highly energetic app description text.",
-                          promptText: "Compose a beautiful, high-energy marketing text for Google Play Store listing of a next-generation AI app named Brainix. Focus on Live Voice Mode, Real-Time Weather Grounding, and custom System Personas. Use beautiful headings and bullet formats.",
-                          icon: "mail"
-                        },
-                        {
-                          label: "Polite project deadline extension email",
-                          detail: "Request more time gracefully from stakeholders.",
-                          promptText: "Write a short, highly professional, polite email to a client requesting a 3-day extension on project deliverables while assuring premium craftsmanship. Keep it brief.",
-                          icon: "mail"
-                        }
-                      ]
-                    : [
-                        {
-                          label: "Explain Quantum Entanglement to kids",
-                          detail: "Analogies like magic twin playing cards or spinning coins.",
-                          promptText: "Explain how quantum entanglement functions using a beautiful, simple analogy that a 10-year-old kid can grasp easily. Avoid complex jargon.",
-                          icon: "mind"
-                        },
-                        {
-                          label: "How do nuclear reactions power stars?",
-                          detail: "Fascinating science of fusion simplified beautifully.",
-                          promptText: "Explain how nuclear fusion reactions power stars like our Sun in an elegant, structured format. Make it highly engaging to read.",
-                          icon: "mind"
-                        }
-                      ]
-                  ).map((prompt) => {
-                    return (
-                      <button
-                        key={prompt.label}
-                        id={`suggested-prompt-${prompt.label.toLowerCase().replace(/\s+/g, "-")}`}
-                        onClick={() => handleSuggestedPromptClick({ label: prompt.label, detail: prompt.detail, promptText: prompt.promptText, icon: prompt.icon === "weather" ? "Flame" : "Lightbulb" })}
-                        className="p-3.5 rounded-xl border border-zinc-200/80 hover:border-zinc-400 dark:border-zinc-800 dark:hover:border-zinc-700 bg-zinc-50 hover:bg-zinc-100/50 dark:bg-zinc-900/10 dark:hover:bg-zinc-800/20 text-left cursor-pointer transition-all hover:shadow-xs group duration-150 active:scale-[0.99] flex flex-col justify-between"
-                      >
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            {activePromptTab === "weather" && <CloudSun size={14} className="text-emerald-500 animate-pulse" />}
-                            {activePromptTab === "coding" && <Code size={14} className="text-blue-500" />}
-                            {activePromptTab === "writing" && <Mail size={14} className="text-purple-500" />}
-                            {activePromptTab === "mind" && <Lightbulb size={14} className="text-amber-500" />}
-                            <span className="font-semibold text-xs text-zinc-850 dark:text-zinc-150 leading-tight block truncate pr-2">{prompt.label}</span>
-                          </div>
-                          <p className="text-[10px] text-zinc-500 dark:text-zinc-400 leading-normal leading-relaxed font-sans max-h-12 overflow-hidden text-ellipsis line-clamp-2">
-                            {prompt.detail}
-                          </p>
-                        </div>
-                        <span className="text-[9px] text-zinc-400 font-mono mt-1 w-full text-right block font-medium group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors">Select Prompt →</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : (
+                    {/* Main greeting line from mockup styled like ChatGPT */}
+                    <motion.div
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.7, delay: 0.2 }}
+                      className="text-center space-y-4 px-4 w-full max-w-2xl"
+                    >
+                      <h2 className="text-3xl md:text-5xl font-sans font-extrabold tracking-tight text-neutral-850 dark:text-neutral-50 px-2 leading-tight bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                        The mic is yours, {user?.name || "Yogesh"}
+                      </h2>
+                      <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
+                        Speak or type your app idea to instantly build and run it live!
+                      </p>
+                    </motion.div>
+                    
+                  </div>
+                ) : (
               
               /* Messages thread stack list */
               <div id="messages-list-wrapper" className="space-y-6">
@@ -1311,9 +1892,7 @@ export default function App() {
                             U
                           </div>
                         ) : (
-                          <div className="w-8 h-8 rounded-full bg-linear-to-tr from-blue-600 to-purple-500 text-white flex items-center justify-center font-bold shadow-xs">
-                            <Sparkles size={14} className="animate-spin-slow" />
-                          </div>
+                          <ChatGPTLogo className="w-6 h-6 text-neutral-800 dark:text-neutral-100 shrink-0 select-none mt-1" fill="currentColor" />
                         )}
                       </div>
 
@@ -1321,7 +1900,8 @@ export default function App() {
                       <div className={`flex flex-col max-w-[85%] space-y-1 ${isUser ? "items-end" : "items-start"}`}>
                         
                         {/* Speaker identification bar */}
-                        <div className="flex items-center gap-2 text-xxs font-mono text-zinc-400 dark:text-zinc-500">
+                        <div className="flex items-center gap-1.5 text-xxs font-mono text-zinc-400 dark:text-zinc-500">
+                          {!isUser && <ChatGPTLogo className="w-3.5 h-3.5 text-neutral-800 dark:text-neutral-100 shrink-0 inline-block align-middle select-none" fill="currentColor" />}
                           <span>{isUser ? "You" : `${activeModelOption.name}`}</span>
                           <span>•</span>
                           <span>{new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
@@ -1355,6 +1935,25 @@ export default function App() {
                                 <ReactMarkdown
                                   remarkPlugins={[remarkGfm]}
                                   components={{
+                                    img: ({ src, alt }) => (
+                                      <div 
+                                        onClick={() => src && setLightboxImage(src)}
+                                        className="relative my-3 max-w-[280px] sm:max-w-[320px] aspect-square overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md group bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center cursor-zoom-in group transition-all"
+                                        title="Click to view full screen"
+                                      >
+                                        <img
+                                          src={src}
+                                          alt={alt || "Generated Image"}
+                                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                                          referrerPolicy="no-referrer"
+                                        />
+                                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                                          <div className="bg-black/75 backdrop-blur-md text-white border border-white/10 px-3 py-1.5 rounded-full text-[10px] font-semibold tracking-wider font-mono uppercase shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                                            🔍 click for full screen
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ),
                                     p: ({ children }) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
                                     ul: ({ children }) => <ul className="list-disc pl-5 mb-2 space-y-1">{children}</ul>,
                                     ol: ({ children }) => <ol className="list-decimal pl-5 mb-2 space-y-1">{children}</ol>,
@@ -1380,29 +1979,220 @@ export default function App() {
 
                                       // Ref key identifier
                                       const refKey = `${msg.id}_${idx}_code`;
+                                      const isRenderable = match && (match[1] === "html" || match[1] === "xml" || match[1] === "svg" || codeStr.includes("<!DOCTYPE") || (codeStr.includes("<html") && codeStr.includes("</html>")) || (codeStr.includes("<div") && (codeStr.includes("</div>") || codeStr.includes("class="))));
+                                      
+                                      const isPhotoOrVideo = codeStr.includes("PHOTO GENERATOR") || codeStr.includes("gen-image") || codeStr.includes("Generated Photo") || codeStr.includes("cinema-player") || codeStr.includes("CINEMA PLAYER") || codeStr.includes("cinema-screen") || codeStr.includes("Cinema Player") || codeStr.includes("unsplash") || codeStr.includes("Save 4K Photo");
+                                      const activePreviewMode = codePreviewMode[refKey] || "expanded";
+                                      const zoomVal = previewZoom[refKey] || 1.0;
+                                      const showPreview = isRenderable && activePreviewMode !== "code";
 
                                       return (
-                                        <div className="my-3 overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-sm">
-                                          <div className="flex items-center justify-between bg-zinc-100 dark:bg-[#1e1e1e] px-4 py-1.5 text-[10px] text-zinc-650 dark:text-zinc-400 font-mono border-b border-zinc-200 dark:border-zinc-800">
-                                            <span>{match ? match[1] : "code"}</span>
-                                            <button
-                                              id={`copy-code-btn-${refKey}`}
-                                              onClick={() => handleCopyText(codeStr, refKey)}
-                                              className="flex items-center gap-1 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
-                                            >
-                                              {copyCodeState[refKey] ? (
-                                                <Check size={11} className="text-green-500 animate-bounce" />
-                                              ) : (
-                                                <Copy size={11} />
+                                        <div className="my-3 overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-lg flex flex-col bg-white dark:bg-[#1a1a1f] max-w-full">
+                                          {/* Codeblock header control bar */}
+                                          <div className="flex items-center justify-between bg-zinc-150/90 dark:bg-[#1f1f23] px-4 py-2 text-[10px] text-zinc-650 dark:text-zinc-400 font-mono border-b border-zinc-200 dark:border-zinc-800">
+                                            <div className="flex items-center gap-2">
+                                              <span className="capitalize font-bold text-zinc-850 dark:text-zinc-300">{match ? match[1] : "code"}</span>
+                                              {isRenderable && (
+                                                <div className="flex items-center gap-1 bg-emerald-500/10 dark:bg-emerald-500/20 px-1.5 py-0.5 rounded text-[9px] text-[#10b981] font-bold tracking-wider">
+                                                  <div className="w-1.5 h-1.5 bg-[#10b981] rounded-full animate-pulse" />
+                                                  <span>SIMULATOR LIVE</span>
+                                                </div>
                                               )}
-                                              <span>{copyCodeState[refKey] ? "Copied" : "Copy code"}</span>
-                                            </button>
+                                            </div>
+                                            
+                                            <div className="flex items-center gap-3">
+                                              {isRenderable && (
+                                                <div className="flex items-center bg-zinc-200 dark:bg-zinc-800 p-0.5 rounded-lg text-[9px] border border-zinc-300 dark:border-zinc-700">
+                                                  <button
+                                                    onClick={() => {
+                                                      setCodePreviewMode((prev) => ({ ...prev, [refKey]: "code" }));
+                                                    }}
+                                                    className={`px-2 py-0.5 rounded-sm transition-all cursor-pointer ${activePreviewMode === "code" ? "bg-white dark:bg-zinc-900 text-black dark:text-white font-bold shadow-xs" : "hover:text-black dark:hover:text-white"}`}
+                                                  >
+                                                    Code
+                                                  </button>
+                                                  <button
+                                                    onClick={() => {
+                                                      setCodePreviewMode((prev) => ({ ...prev, [refKey]: "mobile" }));
+                                                    }}
+                                                    className={`px-2 py-0.5 rounded-sm transition-all cursor-pointer ${activePreviewMode === "mobile" ? "bg-white dark:bg-zinc-900 text-black dark:text-white font-bold shadow-xs" : "hover:text-black dark:hover:text-white"}`}
+                                                  >
+                                                    📱 Mobile
+                                                  </button>
+                                                  <button
+                                                    onClick={() => {
+                                                      setCodePreviewMode((prev) => ({ ...prev, [refKey]: "expanded" }));
+                                                    }}
+                                                    className={`px-2 py-0.5 rounded-sm transition-all cursor-pointer flex items-center gap-0.5 ${activePreviewMode === "expanded" ? "bg-gradient-to-r from-teal-500 to-indigo-600 text-white font-bold shadow-xs" : "hover:text-black dark:hover:text-white"}`}
+                                                  >
+                                                    <span>✨ Canvas (ChatGPT)</span>
+                                                  </button>
+                                                </div>
+                                              )}
+
+                                              {isRenderable && activePreviewMode !== "code" && (
+                                                <div className="flex items-center bg-zinc-200 dark:bg-zinc-800 p-0.5 rounded-lg text-[9px] border border-zinc-200 dark:border-zinc-700/80 shrink-0">
+                                                  <span className="px-1.5 text-[8px] uppercase tracking-wider font-bold text-zinc-500 dark:text-zinc-400">Zoom:</span>
+                                                  <button
+                                                    onClick={() => setPreviewZoom((prev) => ({ ...prev, [refKey]: 1.0 }))}
+                                                    className={`px-1.5 py-0.5 rounded-sm transition-all cursor-pointer ${(previewZoom[refKey] || 1.0) === 1.0 ? "bg-white dark:bg-zinc-900 text-black dark:text-white font-bold shadow-xs" : "text-zinc-500 hover:text-black dark:hover:text-white"}`}
+                                                  >
+                                                    100%
+                                                   </button>
+                                                  <button
+                                                    onClick={() => setPreviewZoom((prev) => ({ ...prev, [refKey]: 0.85 }))}
+                                                    className={`px-1.5 py-0.5 rounded-sm transition-all cursor-pointer ${(previewZoom[refKey] || 1.0) === 0.85 ? "bg-white dark:bg-zinc-900 text-black dark:text-white font-bold shadow-xs" : "text-zinc-500 hover:text-black dark:hover:text-white"}`}
+                                                  >
+                                                    85%
+                                                  </button>
+                                                  <button
+                                                    onClick={() => setPreviewZoom((prev) => ({ ...prev, [refKey]: 0.70 }))}
+                                                    className={`px-1.5 py-0.5 rounded-sm transition-all cursor-pointer ${(previewZoom[refKey] || 1.0) === 0.70 ? "bg-white dark:bg-zinc-900 text-black dark:text-white font-bold shadow-xs" : "text-zinc-500 hover:text-black dark:hover:text-white"}`}
+                                                  >
+                                                    70%
+                                                  </button>
+                                                  <button
+                                                    onClick={() => setPreviewZoom((prev) => ({ ...prev, [refKey]: 0.50 }))}
+                                                    className={`px-1.5 py-0.5 rounded-sm transition-all cursor-pointer ${(previewZoom[refKey] || 1.0) === 0.50 ? "bg-white dark:bg-zinc-900 text-black dark:text-white font-bold shadow-xs" : "text-zinc-500 hover:text-black dark:hover:text-white"}`}
+                                                  >
+                                                    50%
+                                                  </button>
+                                                </div>
+                                              )}
+
+                                              <button
+                                                id={`copy-code-btn-${refKey}`}
+                                                onClick={() => handleCopyText(codeStr, refKey)}
+                                                className="flex items-center gap-1 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
+                                              >
+                                                {copyCodeState[refKey] ? (
+                                                  <Check size={11} className="text-green-500 animate-bounce" />
+                                                ) : (
+                                                  <Copy size={11} />
+                                                )}
+                                                <span>{copyCodeState[refKey] ? "Copied" : "Copy"}</span>
+                                              </button>
+                                            </div>
                                           </div>
-                                          <pre className="p-3.5 overflow-x-auto bg-[#0d0d0d] font-mono text-xs text-zinc-100 select-all leading-normal">
-                                            <code className={className} {...props}>
-                                              {children}
-                                            </code>
-                                          </pre>
+
+                                          {/* Body content rendering inside either plain scrollable code block, sleek responsive smartphone simulator or premium ChatGPT expanded canvas */}
+                                          {showPreview ? (
+                                            <div className="bg-zinc-100 dark:bg-zinc-950 p-4 sm:p-6 flex flex-col items-center justify-center border-b border-zinc-200 dark:border-zinc-850">
+                                              {activePreviewMode === "mobile" ? (
+                                                <div className="w-full max-w-[310px] bg-black rounded-[42px] p-3.5 shadow-2xl border-4 border-zinc-800 relative select-none">
+                                                  {/* Top dynamic punch hole / speaker cut */}
+                                                  <div className="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-4 bg-zinc-900 rounded-full z-20 flex items-center justify-center gap-1.5 px-3">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500/80 animate-pulse" />
+                                                    <div className="w-8 h-1 bg-zinc-700 rounded-full" />
+                                                  </div>
+                                                  
+                                                  {/* Simulated Screen Container Frame */}
+                                                  <div className="bg-white rounded-[32px] overflow-hidden w-full h-[440px] border border-zinc-800 relative z-10 text-black">
+                                                    <iframe
+                                                      title="Holographic App Simulator Sandbox"
+                                                      srcDoc={
+                                                        codeStr.includes("<html") && codeStr.includes("<head>") 
+                                                        ? codeStr 
+                                                        : `<!DOCTYPE html>
+                                                           <html lang="en">
+                                                           <head>
+                                                             <meta charset="UTF-8">
+                                                             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                                             <script src="https://cdn.tailwindcss.com"></script>
+                                                             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                                                             <style>
+                                                               body {
+                                                                 font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                                                                 margin: 0;
+                                                                 padding: 12px;
+                                                                 background: #fafafa;
+                                                                 min-height: 100vh;
+                                                               }
+                                                             </style>
+                                                           </head>
+                                                           <body class="p-2.5 antialiased">
+                                                             ${codeStr}
+                                                           </body>
+                                                           </html>`
+                                                      }
+                                                      className="w-full h-full border-0 bg-white"
+                                                      style={zoomVal !== 1.0 ? {
+                                                        transform: `scale(${zoomVal})`,
+                                                        transformOrigin: 'top left',
+                                                        width: `${100 / zoomVal}%`,
+                                                        height: `${100 / zoomVal}%`
+                                                      } : undefined}
+                                                      sandbox="allow-scripts"
+                                                    />
+                                                  </div>
+
+                                                  {/* Bottom home search horizontal pill indicator */}
+                                                  <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 w-28 h-1 bg-zinc-700 rounded-full z-20" />
+                                                </div>
+                                              ) : (
+                                                /* EXPANDED LANDSCAPE CANVAS - CHATGPT STYLE DIRECT CARD PREVIEW */
+                                                <div className={`w-full bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden p-2.5 shadow-xl border border-zinc-200 dark:border-zinc-800 relative select-text ${isPhotoOrVideo ? 'max-w-md' : 'max-w-5xl'}`}>
+                                                  {/* Top Title/status info strip styled with elegant fonts */}
+                                                  <div className="flex items-center justify-between px-3 py-1.5 mb-1.5 bg-zinc-50 dark:bg-zinc-850 rounded-xl border border-zinc-200/50 dark:border-zinc-800/40">
+                                                    <div className="flex items-center gap-2">
+                                                      <span className="w-22 px-2 py-0.5 rounded-full text-[8px] bg-gradient-to-r from-teal-400 to-indigo-500 text-white font-bold tracking-wider text-center uppercase">PREVIEW STUDIO</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-3">
+                                                      <span className="text-[9px] font-mono text-zinc-400 capitalize">
+                                                        {isPhotoOrVideo ? "💻 Direct UltraHD View" : "🖥️ Expanded Workspace"}
+                                                      </span>
+                                                    </div>
+                                                  </div>
+
+                                                   <div className={`bg-zinc-50 dark:bg-zinc-950 rounded-xl overflow-hidden w-full border border-zinc-150 dark:border-zinc-800 relative text-black ${isPhotoOrVideo ? 'h-[280px] sm:h-[350px] aspect-square' : 'h-[600px]'}`}>
+                                                     <iframe
+                                                       title="Expanded Canvas Mode"
+                                                       srcDoc={
+                                                         codeStr.includes("<html") && codeStr.includes("<head>") 
+                                                         ? codeStr 
+                                                         : `<!DOCTYPE html>
+                                                            <html lang="en">
+                                                            <head>
+                                                              <meta charset="UTF-8">
+                                                              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                                              <script src="https://cdn.tailwindcss.com"></script>
+                                                              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                                                              <style>
+                                                                body {
+                                                                  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                                                                  margin: 0;
+                                                                  padding: 16px;
+                                                                  background: ${isPhotoOrVideo ? '#0f172a' : '#fafafa'};
+                                                                  color: ${isPhotoOrVideo ? '#f8fafc' : '#1e293b'};
+                                                                  min-height: 100vh;
+                                                                }
+                                                              </style>
+                                                            </head>
+                                                            <body class="antialiased w-full">
+                                                              ${codeStr}
+                                                            </body>
+                                                            </html>`
+                                                       }
+                                                       className={`w-full h-full border-0 ${isPhotoOrVideo ? 'bg-[#0f172a]' : 'bg-[#fafafa]'}`}
+                                                       style={zoomVal !== 1.0 ? {
+                                                         transform: `scale(${zoomVal})`,
+                                                         transformOrigin: 'top left',
+                                                         width: `${100 / zoomVal}%`,
+                                                         height: `${100 / zoomVal}%`
+                                                       } : undefined}
+                                                       sandbox="allow-scripts"
+                                                     />
+                                                   </div>
+                                                </div>
+                                              )}
+                                            </div>
+                                          ) : (
+                                            <pre className="p-3.5 overflow-x-auto bg-[#0d0d0d] font-mono text-xs text-zinc-100 select-all leading-normal">
+                                              <code className={className} {...props}>
+                                                {children}
+                                              </code>
+                                            </pre>
+                                          )}
                                         </div>
                                       );
                                     }
@@ -1410,75 +2200,64 @@ export default function App() {
                                 >
                                   {msg.text}
                                 </ReactMarkdown>
-                              ) : (
-                                <div className="flex items-center gap-2 py-1 select-none">
-                                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                                  <div className="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                                  <div className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-                                </div>
-                              )}
+                              ) : (() => {
+                                const prevMsg = idx > 0 ? activeChat.messages[idx - 1] : null;
+                                const isImageGenerationRequest = prevMsg && prevMsg.role === "user" && (
+                                  prevMsg.text.toLowerCase().match(/(banao|generate|photo|image|picture|तस्वीर|चित्र|फोटो|पेंट)/i) !== null ||
+                                  activeSearchTab === "Images"
+                                );
+                                if (isImageGenerationRequest) {
+                                  return (
+                                    <div className="flex flex-col gap-1.5 py-1.5 select-none min-w-[200px]">
+                                      <div className="flex items-center gap-2">
+                                        <span className="relative flex h-2 w-2">
+                                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                        </span>
+                                        <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 animate-pulse font-mono uppercase tracking-wider">
+                                          creating image...
+                                        </span>
+                                      </div>
+                                      <p className="text-[11px] text-zinc-450 dark:text-zinc-500 leading-normal font-sans italic">
+                                        Blending artistic prompts with high fidelity layers...
+                                      </p>
+                                    </div>
+                                  );
+                                }
+                                return (
+                                  <div className="flex items-center gap-2 py-1 select-none">
+                                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                                    <div className="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                                    <div className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                                  </div>
+                                );
+                              })()}
                             </div>
                           )}
                         </div>
 
                         {/* Custom Error Assistance Widget */}
                         {!isUser && msg.error && (
-                          <div className="w-full max-w-lg mt-2.5 p-4 rounded-xl border border-rose-500/20 dark:border-rose-500/30 bg-rose-50/5 dark:bg-rose-950/5 space-y-3.5 shadow-xs shrink-0 font-sans">
+                          <div className="w-full max-w-sm mt-2 p-3.5 rounded-xl border border-rose-500/20 bg-rose-500/5 space-y-2.5 shrink-0 font-sans">
                             <div className="flex items-start gap-2.5 text-rose-600 dark:text-rose-450">
-                              <AlertTriangle size={18} className="shrink-0 mt-0.5 animate-pulse" />
+                              <AlertTriangle size={15} className="shrink-0 mt-0.5 animate-pulse" />
                               <div className="space-y-1">
-                                <h4 className="font-semibold text-xs uppercase tracking-wider font-mono text-rose-600 dark:text-rose-400">
-                                  {msg.error.code === 429 || String(msg.error.message).toLowerCase().includes("quota") || String(msg.error.message).toLowerCase().includes("limit")
-                                    ? "Shared Rate Limit Reached / कोटा समाप्त हुआ"
-                                    : "Intelligence Engine Alert / एरर सुचना"}
+                                <h4 className="font-bold text-xs uppercase text-rose-600 dark:text-rose-400">
+                                  System Busy
                                 </h4>
-                                
-                                <div className="space-y-3 mt-1.5 text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans">
-                                  {/* Error Explanation in Hindi & English */}
-                                  <div className="border-l-2 border-emerald-500 pl-2.5 space-y-1 bg-emerald-500/5 p-1.5 rounded-r-lg">
-                                    <p className="font-semibold text-emerald-600 dark:text-emerald-400 text-xxs uppercase tracking-wider">❓ यह एरर क्यों दिख रहा है?</p>
-                                    <p className="text-[11px] leading-relaxed">
-                                      यह ऐप Google AI Studio free tier API key का उपयोग करता है। जब बहुत सारे लोग एक साथ किसी भी शहर, राज्य या गाँव (जैसे लखनऊ, दिल्ली, वाराणसी या ग्रामीण ब्लॉक्स) का ताज़ा मौसम सर्च करते हैं, तो Google का दैनिक कोटा लिमिट समाप्त हो जाता है। यह प्रति मिनट या थोड़े समय में ऑटोमैटिकली रीसेट हो जाता है।
-                                    </p>
-                                  </div>
-
-                                  <div className="border-l-2 border-indigo-500 pl-2.5 space-y-1 bg-indigo-500/5 p-1.5 rounded-r-lg">
-                                    <p className="font-semibold text-indigo-600 dark:text-indigo-400 text-xxs uppercase tracking-wider">🌦️ Weather Search Power</p>
-                                    <p className="text-[11px] leading-relaxed">
-                                      Brainix के पास <strong>Google Search Grounding</strong> का लाइव एक्सेस है। आप यहाँ किसी भी गाँव (village), कस्बे या शहर का नाम लिख कर <em>"current weather in Lucknow"</em> या <em>"weather in my village Uttar Pradesh"</em> पूछेंगे तो यह लाइव वेब सर्च करके आपको सटीक तापमान, हवा और बारिश की ताज़ा रिपोर्ट देता है।
-                                    </p>
-                                  </div>
-
-                                  <div className="border-l-2 border-amber-550 pl-2.5 space-y-1 bg-amber-500/5 p-1.5 rounded-r-lg">
-                                    <p className="font-semibold text-amber-600 dark:text-amber-400 text-xxs uppercase tracking-wider">⚡ Solution / क्या करें?</p>
-                                    <p className="text-[11px] leading-relaxed">
-                                      1. कृपया 15 से 30 सेकंड प्रतीक्षा करें और पुनः अपना मैसेज भेजें।<br />
-                                      2. नीचे दिए गए <strong>Switch to Turbo (Free)</strong> बटन पर क्लिक करके त्वरित रीसेट करें!
-                                    </p>
-                                  </div>
-
-                                  <p className="text-[10px] font-mono text-zinc-500 dark:text-zinc-500">
-                                    Technical Code: {msg.error.code || "429"} | Resource: {msg.error.modelTried || "Brainix Engine"}
-                                  </p>
-                                </div>
+                                <p className="text-xs text-zinc-750 dark:text-zinc-300">
+                                  There was an issue loading the response. Please try sending your question again or clicking the retry button below.
+                                </p>
                               </div>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-1 font-sans">
+                            <div className="flex items-center gap-2 pt-1">
                               <button
-                                id={`switch-flash-btn-${msg.id}`}
-                                onClick={() => handleSwitchAndRetry(activeChat!.id)}
-                                className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer active:scale-95 transition-all text-center shadow-xs"
-                              >
-                                <Sparkles size={11} className="text-white font-sans animate-bounce" />
-                                <span>Switch to Turbo & Retry</span>
-                              </button>
-                              
-                              <button
+                                id={`retry-last-btn-err-${msg.id}`}
                                 onClick={() => handleRetryLast(activeChat!.id)}
-                                className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 cursor-pointer active:scale-95 transition-all text-center"
+                                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white cursor-pointer active:scale-95 transition-all text-center shadow-xs"
                               >
-                                <span>Retry Last Msg 🔄</span>
+                                <span>Retry Msg 🔄</span>
                               </button>
                             </div>
                           </div>
@@ -1524,9 +2303,49 @@ export default function App() {
         </div>
 
         {/* 5. Prompt Floating Entry Input Area (Brainix AI Footer style) */}
-        <footer id="prompt-bar" className="bg-linear-to-t from-white via-white to-transparent dark:from-[#171717] dark:via-[#171717] dark:to-transparent pt-3 pb-6 px-4 z-20">
-          <div className="w-full max-w-4xl mx-auto space-y-2">
+        <footer id="prompt-bar" className="bg-linear-to-t from-white via-white to-transparent dark:from-[#171717] dark:via-[#171717] dark:to-transparent pt-0 pb-1 px-1.5 sm:px-3 z-20">
+          <div className="w-full max-w-xl mx-auto space-y-1.5">
             
+            {/* Iframe dynamic Microphone Guidance Helper bar */}
+            <AnimatePresence>
+              {showMicIframeHelper && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="p-4 rounded-2xl bg-gradient-to-r from-blue-500/15 via-purple-500/10 to-emerald-500/15 border border-blue-500/40 shadow-xl backdrop-blur-md flex flex-col gap-3 relative overflow-hidden text-left"
+                >
+                  <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-blue-500/10 rounded-full blur-xl" />
+                  <div className="flex items-start gap-2.5 select-none animate-pulse">
+                    <span className="text-xl">🎙️</span>
+                    <div className="flex-1 space-y-1 text-xs">
+                      <p className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">🎙️ माइक काम नहीं कर रहा? (Microphone Support)</p>
+                      <p className="text-zinc-800 dark:text-zinc-200 leading-relaxed font-sans font-medium">
+                        यदि माइक न्यू टैब में भी काम नहीं कर रहा, तो अपने ब्राउज़र के ऊपरी हिस्से में <b>एड्रेस बार (Address Bar) / सर्च बार</b> के पास दिख रहे <b>Secure 🛡️</b> या <b>कैमरा/माइक</b> आइकॉन पर क्लिक करके "हमेशा अनुमति दें (Always Allow)" चुनें।
+                      </p>
+                      <p className="text-zinc-650 dark:text-zinc-400 leading-relaxed font-sans text-[11px]">
+                        Or, if you are browsing in a sandbox frame, click the button below to launch in a raw new tab for 100% full native voice recognition.
+                      </p>
+                    </div>
+                    <button 
+                      onClick={() => setShowMicIframeHelper(false)}
+                      className="text-zinc-400 hover:text-zinc-600 dark:hover:text-white p-1 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <a
+                    href={window.location.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full text-center py-2 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold text-xs transition-transform active:scale-95 flex items-center justify-center gap-1.5 shadow-[0_4px_12px_rgba(59,130,246,0.3)] cursor-pointer select-none"
+                  >
+                    🚀 Open in New Tab & Enable Mic (न्यू टैब में खोलें)
+                  </a>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {/* File upload previews panel drawer */}
             <AnimatePresence>
               {attachedImage && (
@@ -1535,7 +2354,7 @@ export default function App() {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 15 }}
-                  className="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl max-w-sm"
+                  className="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-805 rounded-xl max-w-sm"
                 >
                   <div className="w-12 h-12 rounded-lg overflow-hidden border border-zinc-300 dark:border-zinc-700 relative shrink-0">
                     <img src={attachedImage.previewUrl} alt="Thumbnail preview" className="w-full h-full object-cover" />
@@ -1547,7 +2366,8 @@ export default function App() {
                   <button
                     id="remove-attached-image-btn"
                     onClick={() => setAttachedImage(null)}
-                    className="p-1 rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-red-500 dark:hover:text-red-400 cursor-pointer"
+                    type="button"
+                    className="p-1 rounded-full bg-zinc-200 dark:bg-zinc-850 text-zinc-600 dark:text-zinc-400 hover:text-red-500 dark:hover:text-red-400 cursor-pointer"
                     title="Remove attachment"
                   >
                     <X size={13} />
@@ -1556,34 +2376,12 @@ export default function App() {
               )}
             </AnimatePresence>
 
-            {/* Quick controls bar: Live Web Search Grounding Toggle, Auto-Resilience status */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1 text-xs pb-1 select-none">
-              <div id="live-search-controls-row" className="flex flex-wrap items-center gap-2.5">
-                <button
-                  id="toggle-live-search-btn"
-                  onClick={() => setIsLiveSearchEnabled(!isLiveSearchEnabled)}
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-medium cursor-pointer transition-all duration-150 ${
-                    isLiveSearchEnabled
-                      ? "bg-emerald-500/10 dark:bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-semibold shadow-xs"
-                      : "bg-zinc-150 dark:bg-zinc-800/60 border-zinc-200 dark:border-zinc-850 text-zinc-500 dark:text-zinc-500 font-normal"
-                  }`}
-                  title={isLiveSearchEnabled ? "Live web search (Google Search) is ON. Any question will use Google's live indexes." : "Click to connect Google Search live"}
-                >
-                  <div className={`w-1.5 h-1.5 rounded-full ${isLiveSearchEnabled ? "bg-emerald-500 animate-pulse" : "bg-zinc-450 dark:bg-zinc-600"}`} />
-                  <span>🌐 Live Search (Google Search): <strong className="uppercase">{isLiveSearchEnabled ? "ON" : "OFF"}</strong></span>
-                </button>
-                
-                <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono text-zinc-500 dark:text-zinc-500 select-none bg-zinc-100 dark:bg-zinc-800/40 px-2 py-0.5 rounded border border-zinc-200/40 dark:border-zinc-800/40">
-                  ⚡ Anti-Quota Fallback Active
-                </span>
-              </div>
-              
-              <div id="additional-metadata-badge" className="flex items-center gap-2 text-[10px] font-mono text-zinc-400 dark:text-zinc-505">
-                <span>Temp: <strong>{temperature}</strong></span>
-              </div>
-            </div>
-
-            <div className="relative flex items-center bg-zinc-100 dark:bg-[#2f2f2f] border border-zinc-200/50 dark:border-zinc-800 rounded-2xl p-2 shadow-xs group focus-within:ring-1 focus-within:ring-zinc-400 dark:focus-within:ring-zinc-600 transition-all duration-150">
+            {/* The Capsule Bar inspired by Gemini Mobile layout */}
+            <div className={`relative flex items-center rounded-full px-2 py-1.5 shadow-[0_12px_45px_rgba(0,0,0,0.06)] border transition-all duration-300 ${
+              isListeningActive
+                ? "bg-blue-50/25 dark:bg-blue-955/10 border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)] ring-2 ring-blue-500/10 animate-pulse"
+                : "bg-white dark:bg-[#202025] border-zinc-200/60 dark:border-zinc-800 focus-within:border-blue-500/50 focus-within:shadow-[0_12px_45px_rgba(59,130,246,0.12)]"
+            }`}>
               
               {/* Attachment selector hidden input triggers */}
               <input
@@ -1604,91 +2402,191 @@ export default function App() {
                 id="hidden-camera-input"
               />
 
-              {/* Clip Image attachment toggle button */}
-              <button
-                id="upload-attachment-trigger-btn"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isGenerating}
-                className="p-2 ml-1 rounded-xl text-zinc-500 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-black dark:hover:text-white cursor-pointer active:scale-95 disabled:opacity-50 transition-colors shrink-0"
-                title="Attach file / image"
-              >
-                <ImageIcon size={18} />
-              </button>
-              
-              {/* Camera capture trigger button */}
-              <button
-                id="camera-capture-trigger-btn"
-                onClick={handleCameraCapture}
-                disabled={isGenerating}
-                className="p-2 rounded-xl text-zinc-500 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-black dark:hover:text-white cursor-pointer active:scale-95 disabled:opacity-50 transition-colors shrink-0"
-                title="Camera capture"
-              >
-                <div className="w-5 h-5 flex items-center justify-center font-bold">📷</div>
-              </button>
+              {/* Plus Button inside the capsule on the left */}
+              <div className="relative shrink-0 flex items-center justify-center">
+                <button
+                  id="capsule-plus-btn"
+                  onClick={() => setIsPlusMenuOpen(!isPlusMenuOpen)}
+                  disabled={isGenerating}
+                  className="w-10 h-10 rounded-full flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-205 dark:hover:bg-zinc-700 text-zinc-750 dark:text-zinc-250 cursor-pointer transition-all duration-150 active:scale-90 disabled:opacity-50"
+                  type="button"
+                  title="Attachment Options"
+                >
+                  <Plus size={20} className={`transition-transform duration-200 ${isPlusMenuOpen ? "rotate-45" : ""}`} />
+                </button>
 
-              {/* Mic / Live Voice Mode Companion Button */}
-              <button
-                id="mic-voice-companion-trigger-btn"
-                onClick={() => {
-                  setIsVoiceCompanionOpen(true);
-                  startVoiceListening();
-                }}
-                disabled={isGenerating}
-                className="p-2 rounded-xl text-zinc-500 dark:text-zinc-405 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-emerald-500 dark:hover:text-emerald-400 cursor-pointer active:scale-95 disabled:opacity-50 transition-colors shrink-0 animate-pulse"
-                title="Start Voice Talking Mode"
-              >
-                <Mic size={18} />
-              </button>
+                {/* Floating Plus Popover Drop-Up Options Menu */}
+                <AnimatePresence>
+                  {isPlusMenuOpen && (
+                    <>
+                      <div className="fixed inset-0 z-40" onClick={() => setIsPlusMenuOpen(false)} />
+                      <motion.div
+                        initial={{ opacity: 0, y: -12, scale: 0.95 }}
+                        animate={{ opacity: 1, y: -8, scale: 1 }}
+                        exit={{ opacity: 0, y: -12, scale: 0.95 }}
+                        className="absolute bottom-12 left-0 w-52 bg-white dark:bg-[#1a1a1e] border border-zinc-100 dark:border-zinc-805 rounded-2xl shadow-xl p-2.5 z-50 space-y-1 block"
+                      >
+                        <div className="px-2 py-1 text-[9px] font-bold text-zinc-400 uppercase tracking-widest border-b border-zinc-100 dark:border-zinc-805 pb-1.5 mb-1 font-mono">
+                          Attachment Menu
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsPlusMenuOpen(false);
+                            fileInputRef.current?.click();
+                          }}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-105 dark:hover:bg-zinc-800/60 text-left transition-colors cursor-pointer"
+                        >
+                          <div className="text-sm">🖼️</div>
+                          <span>Choose from Gallery</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsPlusMenuOpen(false);
+                            handleCameraCapture();
+                          }}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-105 dark:hover:bg-zinc-800/60 text-left transition-colors cursor-pointer"
+                        >
+                          <div className="text-sm">📷</div>
+                          <span>Take Photo of Weather</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsPlusMenuOpen(false);
+                            setInput("");
+                            setAttachedImage(null);
+                          }}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 text-left transition-colors cursor-pointer"
+                        >
+                          <div className="text-sm">🧹</div>
+                          <span>Clear Search Input</span>
+                        </button>
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
 
-              {/* Actual Chat Prompt entry textbox */}
-              <textarea
-                id="prompt-entry-textarea"
-                ref={textareaRef}
-                rows={1}
-                value={input}
-                onKeyDown={handleKeyDown}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Message Brainix AI..."
-                disabled={isGenerating}
-                className="flex-1 max-h-[200px] resize-none overflow-y-auto bg-transparent border-0 outline-hidden pl-2.5 pr-12 py-2 text-sm text-black dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:ring-0 leading-normal"
-                style={{ height: "auto" }}
-              />
+              {/* 
+                Center Section of the Capsule. 
+                If isListeningActive is active, show the 7 animated dots from the screenshot!
+              */}
+              <div className="flex-1 flex items-center min-w-0 px-2 lg:px-3">
+                {/* Standard Search typing bar is ALWAYS visible so users can see, type or edit speech input continuously! */}
+                <div className="flex-1 flex items-center relative min-w-0 font-sans">
+                   <textarea
+                    id="prompt-entry-textarea"
+                    ref={textareaRef}
+                    rows={1}
+                    value={input}
+                    onKeyDown={handleKeyDown}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder={
+                      isListeningActive
+                        ? "🎙️ बोलिए, मैं सुन रहा हूँ... (Explain your question...)"
+                        : "Ask Brainix"
+                    }
+                    disabled={isGenerating}
+                    className="flex-1 max-h-[140px] pr-20 resize-none overflow-y-auto bg-transparent border-0 outline-none py-1.5 px-2 text-base text-black dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:ring-0 leading-normal font-medium tracking-tight"
+                    style={{ height: "36px" }}
+                  />
 
-              {/* Submit prompt button trigger floating right */}
-              <div className="absolute right-2 bottom-2">
-                {isGenerating ? (
-                    <button
-                        id="stop-generation-btn"
-                        onClick={() => abortControllerRef.current?.abort()}
-                        className="p-2 rounded-xl flex items-center justify-center transition-all bg-red-500/10 text-red-500 hover:bg-red-500/20 cursor-pointer shrink-0"
-                        title="Stop generation"
-                    >
-                        <X size={15} />
-                    </button>
+                  {/* Elegant floating Siri/Gemini active dots shown inside the search bar when listening! */}
+                  {isListeningActive && (
+                    <div className="absolute right-1 flex items-center gap-1.5 px-2 py-1.5 bg-zinc-100/90 dark:bg-zinc-800/90 rounded-full shrink-0 select-none shadow-xs backdrop-blur-md">
+                      <div className="flex items-center gap-0.5 sm:gap-1 shrink-0">
+                        <motion.span animate={{ scale: [1, 1.4, 1], y: [0, -2, 0] }} transition={{ repeat: Infinity, duration: 0.8, delay: 0 }} className="w-2 h-2 rounded-full bg-[#4285F4] shadow-xs shadow-blue-500/40"></motion.span>
+                        <motion.span animate={{ scale: [1, 1.4, 1], y: [0, -3, 0] }} transition={{ repeat: Infinity, duration: 0.8, delay: 0.12 }} className="w-2 h-2 rounded-full bg-[#EA4335] shadow-xs shadow-red-500/40"></motion.span>
+                        <motion.span animate={{ scale: [1, 1.4, 1], y: [0, -1.5, 0] }} transition={{ repeat: Infinity, duration: 0.8, delay: 0.24 }} className="w-2 h-2 rounded-full bg-[#FBBC05] shadow-xs shadow-yellow-500/40"></motion.span>
+                        <motion.span animate={{ scale: [1, 1.4, 1], y: [0, -3, 0] }} transition={{ repeat: Infinity, duration: 0.8, delay: 0.36 }} className="w-2 h-2 rounded-full bg-[#34A853] shadow-xs shadow-green-500/40"></motion.span>
+                        <motion.span animate={{ scale: [1, 1.4, 1], y: [0, -2, 0] }} transition={{ repeat: Infinity, duration: 0.8, delay: 0.48 }} className="w-2 h-2 rounded-full bg-[#9c27b0] shadow-xs shadow-purple-500/40"></motion.span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Action Buttons Right of the Capsule */}
+              <div className="flex items-center gap-1.5 shrink-0 ml-1">
+                {isListeningActive ? (
+                  /* Stop Recording/Listening button (Shown only when listening) */
+                  <button
+                    id="stop-listening-bubble-btn"
+                    type="button"
+                    onClick={stopVoiceListening}
+                    className="w-10 h-10 rounded-full flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 hover:bg-red-500/10 hover:text-red-500 text-zinc-650 dark:text-zinc-350 cursor-pointer transition-all duration-150 active:scale-95"
+                    title="Stop listening"
+                  >
+                    <Square size={14} fill="currentColor" className="text-zinc-500 dark:text-zinc-400" />
+                  </button>
+                ) : isGenerating ? (
+                  /* Stop generation button */
+                  <button
+                    id="stop-generation-btn"
+                    type="button"
+                    onClick={() => abortControllerRef.current?.abort()}
+                    className="w-10 h-10 rounded-full flex items-center justify-center bg-zinc-150 dark:bg-zinc-850 hover:bg-red-500/10 hover:text-red-500 text-red-500 cursor-pointer transition-all duration-150 active:scale-95 animate-pulse"
+                    title="Stop generator"
+                  >
+                    <X size={16} />
+                  </button>
                 ) : (
-                    <button
+                  /* Mic + Sliders waveform action block when empty, Send button when text exists */
+                  <div className="flex items-center gap-1">
+                    {!input.trim() && !attachedImage ? (
+                      <>
+                        <button
+                          id="capsule-microphone-btn"
+                          type="button"
+                          onClick={isListeningActive ? stopVoiceListening : startVoiceListening}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-all duration-150 active:scale-90 ${
+                            isListeningActive 
+                              ? "text-red-500 bg-red-500/10 hover:bg-red-500/20 shadow-[0_0_12px_rgba(239,68,68,0.2)] animate-pulse" 
+                              : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-blue-500"
+                          }`}
+                          title={isListeningActive ? "Tap to stop listening" : "Tap to speak"}
+                        >
+                          {isListeningActive ? <MicOff size={20} className="text-red-500" /> : <Mic size={20} />}
+                        </button>
+
+                        <button
+                          id="capsule-live-voice-session-btn"
+                          type="button"
+                          onClick={() => {
+                            setIsVoiceCompanionOpen(true);
+                            setContinuousVoiceMode(true);
+                            setTimeout(() => {
+                              startVoiceListening();
+                            }, 450);
+                          }}
+                          className="w-10 h-10 rounded-full flex items-center justify-center text-zinc-650 dark:text-zinc-350 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-purple-500 transition-all duration-150 cursor-pointer active:scale-90"
+                          title="Start real-time voice conversation (Gemini Live)"
+                        >
+                          <AudioLines size={18} className="text-zinc-650 dark:text-zinc-350 hover:text-purple-500 cursor-pointer" />
+                        </button>
+                      </>
+                    ) : (
+                      <button
                         id="submit-prompt-btn"
+                        type="button"
                         onClick={() => handleSubmitMessage()}
-                        disabled={!input.trim() && !attachedImage}
-                        className={`p-2 rounded-xl flex items-center justify-center transition-all ${
-                            (input.trim() || attachedImage)
-                            ? "bg-black dark:bg-white text-white dark:text-black hover:opacity-90 cursor-pointer shrink-0"
-                            : "text-zinc-400 dark:text-zinc-600 cursor-not-allowed shrink-0"
-                        }`}
+                        className="w-10 h-10 rounded-full flex items-center justify-center bg-blue-500 hover:bg-blue-600 active:scale-90 text-white cursor-pointer shadow-[0_4px_12px_rgba(59,130,246,0.25)]"
                         title="Send message"
-                    >
-                        <Send size={15} />
-                    </button>
+                      >
+                        <ArrowUp size={18} strokeWidth={3} />
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
-            </div>
 
-            {/* Disclaimer caption footer */}
-            <div className="text-center font-sans select-none text-[10px] text-zinc-400 dark:text-zinc-600 px-4">
-              <span>Brainix AI can make mistakes. Consider checking important information against reputable sources. Developed by Pranav Chaturvedi.</span>
             </div>
           </div>
         </footer>
+          </>
+        )}
       </main>
 
       {/* 6. System Persona Instructions Dialog Modal Overlay */}
@@ -1824,144 +2722,317 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* 7. Live Voice Companion Mode Fullscreen/Bottom Sheet Overlay (Siri/ChatGPT style) */}
+      {/* 7. Live Voice Companion Mode Fullscreen/Bottom Sheet Overlay (Immersive ChatGPT style) */}
       <AnimatePresence>
         {isVoiceCompanionOpen && (
-          <div id="voice-companion-overlay" className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center items-center p-4 bg-black/95 backdrop-blur-md">
-            <div className="w-full max-w-lg bg-[#18181b] border border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-8 shadow-2xl relative flex flex-col items-center justify-between min-h-[485px]">
-              
-              {/* Header toolbar */}
-              <div className="w-full flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping" />
-                  <span className="text-xxs font-bold font-mono text-zinc-400 uppercase tracking-widest">Brainix Voice Companion</span>
-                </div>
+          <motion.div
+            id="voice-companion-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className={`fixed inset-0 z-[100] flex flex-col justify-between items-center p-6 ${
+              theme === "dark" ? "bg-[#0b0c10] text-zinc-50" : "bg-white text-zinc-900"
+            }`}
+          >
+            {/* Ambient Background Glow matching cloud colors */}
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[450px] h-[450px] bg-sky-400/10 dark:bg-sky-500/5 rounded-full blur-3xl pointer-events-none" />
+
+            {/* A. Top bar block exactly matching ChatGPT mockup */}
+            <header className="w-full max-w-lg flex items-center justify-between select-none relative z-20 mt-2">
+              {/* Menu button */}
+              <div className="relative">
                 <button
-                  onClick={() => {
-                    stopVoiceListening();
-                    window.speechSynthesis.cancel();
-                    setIsVoiceCompanionOpen(false);
-                  }}
-                  className="p-1 px-2.5 rounded-lg border border-zinc-800 bg-zinc-900 text-xs text-zinc-400 hover:text-white hover:bg-zinc-800 cursor-pointer active:scale-95 transition-all flex items-center gap-1"
+                  type="button"
+                  onClick={() => setIsVoiceMenuOpen(!isVoiceMenuOpen)}
+                  className={`w-11 h-11 rounded-full flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer border ${
+                    theme === "dark" 
+                      ? "bg-[#181a20] border-zinc-800 text-zinc-300 hover:bg-zinc-800" 
+                      : "bg-white border-zinc-200/60 text-zinc-700 hover:bg-zinc-50 shadow-xs"
+                  }`}
+                  title="Menu Options"
                 >
-                  <span>Close Live Mode</span>
-                  <X size={14} />
+                  <div className="w-4 h-0.5 bg-current rounded-full" />
+                  <div className="w-6 h-0.5 bg-current rounded-full" />
                 </button>
-              </div>
 
-              {/* Dynamic Holographic Audio Waveform Visualizer */}
-              <div className="flex flex-col items-center justify-center space-y-4 my-4 w-full">
-                <div className="h-28 flex items-center justify-center gap-1.5 px-4 w-full">
-                  {/* 15 dynamic scale wave bars */}
-                  {[...Array(15)].map((_, i) => {
-                    const delays = [0.1, 0.4, 0.2, 0.6, 0.3, 0.8, 0.5, 0.7, 0.2, 0.9, 0.4, 0.6, 0.1, 0.5, 0.3];
-                    return (
-                      <motion.div
-                        key={i}
-                        animate={{
-                          height: isListeningActive 
-                            ? ["15px", "82px", "20px", "65px", "15px"] 
-                            : voiceActiveId 
-                            ? ["15px", "45px", "10px", "35px", "15px"]
-                            : "12px"
-                        }}
-                        transition={{
-                          repeat: Infinity,
-                          duration: isListeningActive ? 0.82 : 1.25,
-                          delay: delays[i] * 0.4,
-                          ease: "easeInOut"
-                        }}
-                        className={`w-1.5 rounded-full ${
-                          isListeningActive 
-                            ? "bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.4)]" 
-                            : voiceActiveId 
-                            ? "bg-purple-400 shadow-[0_0_12px_rgba(192,132,252,0.4)]"
-                            : "bg-zinc-700"
-                        }`}
-                      />
-                    );
-                  })}
-                </div>
-                <span className="text-xxs font-mono text-zinc-400 dark:text-zinc-500 uppercase tracking-widest text-center">
-                  {isListeningActive 
-                    ? "Listening to your speech..." 
-                    : voiceActiveId 
-                    ? "Brainix speaking out loud..." 
-                    : "Tap mic or say anything..."}
-                </span>
-              </div>
-
-              {/* Live transcribing text display board */}
-              <div className="w-full bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-4 min-h-[100px] flex items-center justify-center text-center">
-                <p className="text-sm font-sans text-zinc-100 leading-relaxed max-w-sm">
-                  {recognitionTranscript || "“Tell me the weather in Mumbai and Delhi right now.”"}
-                </p>
-              </div>
-
-              {/* Active controls footer block */}
-              <div className="w-full space-y-4">
-                <div className="grid grid-cols-2 gap-3.5">
-                  {/* Talkback setting button */}
-                  <button
-                    onClick={() => {
-                      setContinuousVoiceMode(!continuousVoiceMode);
-                      if (continuousVoiceMode) {
-                        window.speechSynthesis.cancel();
-                      }
-                    }}
-                    className={`p-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                      continuousVoiceMode
-                        ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
-                        : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white"
-                    }`}
-                  >
-                    <Volume2 size={14} className={continuousVoiceMode ? "animate-pulse" : ""} />
-                    <span>Auto Talkback: {continuousVoiceMode ? "ON" : "OFF"}</span>
-                  </button>
-
-                  {/* Voice select toggler split button */}
-                  <div className="flex bg-zinc-900 border border-zinc-800 rounded-xl p-1 shrink-0">
-                    {(["female", "male", "robot"] as const).map((gender) => (
+                {/* Dropdown menu for continuous speech */}
+                <AnimatePresence>
+                  {isVoiceMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="absolute left-0 mt-2 w-64 rounded-2xl p-4 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-xl space-y-3 font-sans text-xs"
+                    >
+                      <h4 className="font-extrabold text-[10px] text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">Brainix GPT Mode</h4>
+                      <p className="text-[11px] text-zinc-500 leading-relaxed">
+                        Automatic Talkback mode lets you converse hands-free with continuous audio feedback.
+                      </p>
+                      
                       <button
-                        key={gender}
-                        onClick={() => setVoiceType(gender)}
-                        className={`flex-1 text-[10px] font-bold capitalize py-1.5 rounded-lg transition-all cursor-pointer ${
-                          voiceType === gender
-                            ? "bg-zinc-800 text-white shadow-xs"
-                            : "text-zinc-500 hover:text-zinc-300"
+                        type="button"
+                        onClick={() => {
+                          setContinuousVoiceMode(!continuousVoiceMode);
+                          if (continuousVoiceMode) {
+                            window.speechSynthesis.cancel();
+                            stopVoiceListening();
+                          } else {
+                            startVoiceListening();
+                          }
+                        }}
+                        className={`w-full py-2.5 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                          continuousVoiceMode
+                            ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400"
+                            : "bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400"
                         }`}
                       >
-                        {gender}
+                        <Volume2 size={13} className={continuousVoiceMode ? "animate-pulse" : ""} />
+                        <span>Hands-Free Speech: {continuousVoiceMode ? "ON" : "OFF"}</span>
                       </button>
-                    ))}
-                  </div>
-                </div>
 
-                <div className="flex items-center justify-center gap-4">
-                  {/* Large center trigger mic circle */}
-                  <button
-                    onClick={() => {
-                      if (isListeningActive) {
-                        stopVoiceListening();
-                      } else {
-                        startVoiceListening();
-                      }
-                    }}
-                    className={`w-14 h-14 rounded-full flex items-center justify-center transition-all cursor-pointer ${
-                      isListeningActive
-                        ? "bg-red-500 text-white animate-pulse shadow-[0_0_20px_rgba(239,68,68,0.5)]"
-                        : "bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:scale-105 active:scale-95"
-                    }`}
-                  >
-                    {isListeningActive ? <MicOff size={22} /> : <Mic size={22} />}
-                  </button>
-                </div>
+                      <div className="text-[10px] text-zinc-400 italic text-center mt-1">
+                        Developer Credits: Pranav Chaturvedi
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
-            </div>
-          </div>
+              {/* Title Text */}
+              <h2 className="text-lg font-bold tracking-tight text-center font-sans">
+                Brainix GPT <span className="text-zinc-400 dark:text-zinc-500 font-normal">Voice</span>
+              </h2>
+
+              {/* Settings / Multi-Dot dropdown button */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setIsVoiceSettingsOpen(!isVoiceSettingsOpen)}
+                  className={`w-11 h-11 rounded-full flex items-center justify-center transition-all cursor-pointer border ${
+                    theme === "dark" 
+                      ? "bg-[#181a20] border-zinc-800 text-zinc-300 hover:bg-zinc-800" 
+                      : "bg-white border-zinc-200/60 text-zinc-700 hover:bg-zinc-50 shadow-xs"
+                  }`}
+                  title="Voice & Language Settings"
+                >
+                  <MoreVertical size={20} />
+                </button>
+
+                {/* Settings Dropdown block */}
+                <AnimatePresence>
+                  {isVoiceSettingsOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="absolute right-0 mt-2 w-56 rounded-2xl p-4 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-xl space-y-4 font-sans text-xs"
+                    >
+                      {/* Speaker Voice selector */}
+                      <div className="space-y-1.5">
+                        <label className="font-extrabold text-[10px] text-zinc-400 dark:text-zinc-500 uppercase tracking-widest block font-sans">Speaker Character</label>
+                        <div className="grid grid-cols-3 gap-1 bg-zinc-50 dark:bg-zinc-900 p-0.5 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                          {(["female", "male", "robot"] as const).map((gender) => (
+                            <button
+                              key={gender}
+                              type="button"
+                              onClick={() => {
+                                setVoiceType(gender);
+                                localStorage.setItem("brainix-voice-type", gender);
+                                setTimeout(() => {
+                                  handleToggleSpeech(
+                                    gender === "male" 
+                                      ? "Mera awaaj ab male character par set hai!" 
+                                      : gender === "robot" 
+                                      ? "Awaaj cyber robot character par set hai." 
+                                      : "Mera awaaj ab female character par set hai!", 
+                                    "voice_preview_type"
+                                  );
+                                }, 150);
+                              }}
+                              className={`text-[10px] font-bold capitalize py-1.5 rounded-lg transition-all cursor-pointer ${
+                                voiceType === gender
+                                  ? "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 shadow-xs border border-zinc-200 dark:border-zinc-700"
+                                  : "text-zinc-500 hover:text-zinc-700"
+                              }`}
+                            >
+                              {gender}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Language Selection */}
+                      <div className="space-y-1.5">
+                        <label className="font-extrabold text-[10px] text-zinc-400 dark:text-zinc-500 uppercase tracking-widest block font-sans">Mic Input Language</label>
+                        <select
+                          value={recognitionLang}
+                          onChange={(e) => {
+                            const newLang = e.target.value;
+                            setRecognitionLang(newLang);
+                            localStorage.setItem("brainix-mic-lang", newLang);
+                            // If actively listening, restart recognition seamlessly with the new language
+                            if (isListeningActive) {
+                              stopVoiceListening();
+                              setTimeout(() => {
+                                startVoiceListening();
+                              }, 350);
+                            }
+                          }}
+                          className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-2.5 text-xs text-zinc-700 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        >
+                          <option value="hi-IN">Hindi (हिंदी)</option>
+                          <option value="en-IN">Indian English</option>
+                          <option value="en-US">US English</option>
+                          <option value="mr-IN">Marathi (मराठी)</option>
+                          <option value="bn-IN">Bengali (বাংলা)</option>
+                        </select>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </header>
+
+            {/* B. Center piece: The gorgeous organic sky-blue watercolor cloud sphere */}
+            <main className="flex-1 w-full max-w-lg flex flex-col items-center justify-center space-y-12 py-10 relative">
+              
+              {/* Central beautiful logo brand engine replacing the morphing bubbles */}
+              <div 
+                onClick={() => {
+                  if (voiceActiveId) {
+                    window.speechSynthesis.cancel();
+                    setVoiceActiveId(null);
+                  } else {
+                    startVoiceListening();
+                  }
+                }}
+                className={`flex items-center justify-center relative transition-all duration-300 cursor-pointer active:scale-95 ${
+                  isListeningActive 
+                    ? "scale-110" 
+                    : voiceActiveId 
+                    ? "scale-105" 
+                    : "hover:scale-102"
+                }`}
+              >
+                {/* Glow backing */}
+                <div className={`absolute w-36 h-36 rounded-full transition-all duration-500 blur-3xl ${
+                  isListeningActive 
+                    ? "bg-sky-500/25 opacity-100" 
+                    : voiceActiveId 
+                    ? "bg-purple-500/25 opacity-100" 
+                    : "bg-blue-500/10 opacity-30"
+                }`} />
+
+                {/* Styled ChatGPT App Icon with no surrounding container shape */}
+                <ChatGPTLogo className={`w-28 h-28 origin-center relative z-10 text-zinc-950 dark:text-zinc-50 ${isListeningActive ? "animate-spin-slow" : ""}`} fill="currentColor" />
+
+                {/* Nice voice activity waves indicator overlaid at bottom of core */}
+                {voiceActiveId && (
+                  <div className="absolute bottom-5 inset-x-0 z-25 flex items-center justify-center gap-1">
+                    {[...Array(4)].map((_, idx) => (
+                      <div 
+                        key={idx}
+                        className="w-1 h-3 bg-white/80 rounded-full animate-bounce" 
+                        style={{ animationDelay: `${idx * 0.1}s`, animationDuration: "0.55s" }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Subtle status and live transcription feedback exactly matching Gemini Live style */}
+              <div className="text-center select-none z-10 px-6 max-w-sm min-h-[48px] flex flex-col justify-center items-center">
+                <p className="text-xs font-sans font-extrabold tracking-wider text-zinc-400 dark:text-zinc-500 animate-pulse transition-all uppercase">
+                  {isGenerating 
+                    ? "Thinking..." 
+                    : voiceActiveId 
+                    ? "Speaking..." 
+                    : isListeningActive 
+                    ? "Listening..." 
+                    : "Tap to Converse"}
+                </p>
+                {recognitionTranscript && isListeningActive && (
+                  <p className="text-xs font-sans font-semibold text-zinc-600 dark:text-zinc-300 mt-2 line-clamp-2 max-w-xs mx-auto text-center italic bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/50 px-3.5 py-1.5 rounded-full shadow-xs">
+                    "{recognitionTranscript}"
+                  </p>
+                )}
+              </div>
+
+              {/* Center spacer to ensure perfect central vertical alignment like the photo */}
+              <div className="h-2 select-none pointer-events-none" />
+            </main>
+
+            {/* C. Bottom bar block: Large centered Close button exactly like Gemini Live */}
+            <footer className="w-full max-w-lg mb-6 flex justify-center items-center relative z-20">
+              <button
+                type="button"
+                onClick={() => {
+                  stopVoiceListening();
+                  window.speechSynthesis.cancel();
+                  setIsVoiceCompanionOpen(false);
+                  setIsVoiceMenuOpen(false);
+                  setIsVoiceSettingsOpen(false);
+                }}
+                className="w-14 h-14 rounded-full flex items-center justify-center bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-90 transition-all shadow-xl border border-zinc-700/30 dark:border-zinc-300/30 cursor-pointer"
+                title="End Live Conversation Mode"
+              >
+                <X size={24} strokeWidth={2.5} />
+              </button>
+            </footer>
+
+          </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Dynamic Lightbox Modal for fullscreen image preview (ChatGPT Style) */}
+      <AnimatePresence>
+        {lightboxImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/95 p-4 sm:p-8 backdrop-blur-md select-none"
+            onClick={() => setLightboxImage(null)}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setLightboxImage(null)}
+              className="absolute top-4 right-4 text-white hover:text-zinc-300 bg-neutral-900/60 p-2.5 rounded-full border border-neutral-800 hover:scale-105 active:scale-95 transition-all cursor-pointer z-[10050]"
+            >
+              <X size={24} />
+            </button>
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative max-w-4xl max-h-[85vh] overflow-hidden rounded-3xl border border-neutral-800 bg-neutral-950 flex flex-col items-center shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={lightboxImage}
+                alt="Fullscreen Preview"
+                className="max-w-full max-h-[72vh] object-contain rounded-t-3xl"
+              />
+              <div className="w-full bg-neutral-900 px-6 py-4 flex items-center justify-between gap-4 border-t border-neutral-800 rounded-b-3xl">
+                <span className="text-xs font-mono text-neutral-400 truncate">Generated by Brainix Hub • HD Media</span>
+                <a
+                  href={lightboxImage}
+                  target="_blank"
+                  rel="noreferrer"
+                  download="brainix_image.jpg"
+                  className="bg-zinc-100 hover:bg-zinc-200 active:scale-95 text-neutral-950 text-xs font-bold py-2 px-4 rounded-xl cursor-pointer flex items-center gap-1.5 transition-all shadow-md font-sans"
+                >
+                  <Download size={14} strokeWidth={2.5} />
+                  Download
+                </a>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 }
+

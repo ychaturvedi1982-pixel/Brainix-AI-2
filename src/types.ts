@@ -37,14 +37,14 @@ export interface ModelOption {
 export const AVAILABLE_MODELS: ModelOption[] = [
   {
     id: "gemini-3.5-flash",
-    name: "Brainix 3.5 Turbo",
+    name: "Brainix GPT 3.5 Turbo",
     description: "Fast, intelligent, and live weather-grounded. Perfect for active day-to-day chats.",
     badge: "Turbo",
     badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
   },
   {
     id: "gemini-3.1-pro-preview",
-    name: "Brainix 3.1 Ultra",
+    name: "Brainix GPT 3.1 Ultra",
     description: "Advanced model for deep logical synthesis, complex programming, and research.",
     badge: "Ultra",
     badgeColor: "bg-purple-500/10 text-purple-400 border-purple-500/20"
