@@ -8,6 +8,12 @@ export interface Message {
     mimeType: string;   // e.g. "image/png"
     previewUrl: string; // Data URL for rendering directly in browser
   };
+  video?: {
+    data: string;       // Pure Base64 payload or mockup (for simulation)
+    name: string;       // e.g. "my_trip.mp4"
+    mimeType: string;   // e.g. "video/mp4"
+    previewUrl: string; // URL/objectUrl for local playback
+  };
   error?: {
     message: string;
     code?: number | string;

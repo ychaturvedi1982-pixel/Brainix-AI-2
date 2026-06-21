@@ -45,7 +45,8 @@ import {
   User,
   LogOut,
   MoreVertical,
-  Download
+  Download,
+  Play
 } from "lucide-react";
 import {
   Chat,
@@ -149,6 +150,12 @@ export default function App() {
     mimeType: string;
     previewUrl: string;
   } | null>(null);
+  const [attachedVideo, setAttachedVideo] = useState<{
+    data: string;
+    name: string;
+    mimeType: string;
+    previewUrl: string;
+  } | null>(null);
 
   // Streaming State & UI State
   const [showIntro, setShowIntro] = useState(true);
@@ -169,6 +176,7 @@ export default function App() {
   const [runLiveCode, setRunLiveCode] = useState<Record<string, boolean>>({});
   const [codePreviewMode, setCodePreviewMode] = useState<Record<string, "code" | "mobile" | "expanded">>({});
   const [previewZoom, setPreviewZoom] = useState<Record<string, number>>({});
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   // Brainix Cyber Premium States
   const [isVoiceCompanionOpen, setIsVoiceCompanionOpen] = useState(false);
@@ -205,6 +213,8 @@ export default function App() {
   const [voiceInputText, setVoiceInputText] = useState("");
   const [isVoiceMenuOpen, setIsVoiceMenuOpen] = useState(false);
   const [isVoiceSettingsOpen, setIsVoiceSettingsOpen] = useState(false);
+  const [isFloatingSandboxMinimised, setIsFloatingSandboxMinimised] = useState(false);
+  const [isFloatingSandboxClosed, setIsFloatingSandboxClosed] = useState(false);
 
   const [user, setUser] = useState<{ name: string; email: string } | null>(() => {
     const saved = localStorage.getItem("brainix-user");
@@ -230,6 +240,7 @@ export default function App() {
   const chatEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -440,6 +451,33 @@ export default function App() {
     e.target.value = ""; // Reset
   };
 
+  // Handle Video Upload Selection
+  const handleVideoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("video/")) {
+      alert("Please upload a video file.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      const parts = result.split(",");
+      const base64Data = parts[1] || "";
+      
+      setAttachedVideo({
+        data: base64Data,
+        name: file.name,
+        mimeType: file.type,
+        previewUrl: URL.createObjectURL(file)
+      });
+    };
+    reader.readAsDataURL(file);
+    e.target.value = ""; // Reset
+  };
+
   // Trigger Image/Camera Selection
   const handleCameraCapture = () => {
       cameraInputRef.current?.click();
@@ -595,18 +633,44 @@ export default function App() {
     voiceSpokenTextRef.current = "";
 
     const SpeechRec = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRec) {
-      console.log("Speech recognition not supported");
-      setIsListeningActive(true);
-      setRecognitionTranscript("⚠️ Speech Recognition is not supported in this browser. Please use Google Chrome or Microsoft Edge!");
-      setShowMicIframeHelper(true);
-      setTimeout(() => {
-        setIsListeningActive(false);
-      }, 7000);
-      return;
-    }
 
-    proceedWithSpeechRecognition(SpeechRec);
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then((stream) => {
+          (window as any).currentUserMicStream = stream;
+          if (!SpeechRec) {
+            console.log("Speech recognition not supported");
+            setIsListeningActive(true);
+            setRecognitionTranscript("⚠️ Speech Recognition is not supported in this browser. Please use Google Chrome or Microsoft Edge!");
+            setShowMicIframeHelper(true);
+            setTimeout(() => {
+              setIsListeningActive(false);
+            }, 7000);
+            return;
+          }
+          proceedWithSpeechRecognition(SpeechRec);
+        })
+        .catch((err) => {
+          console.log("Mic permission prompt error:", err);
+          setShowMicIframeHelper(true);
+          if (SpeechRec) {
+            proceedWithSpeechRecognition(SpeechRec);
+          } else {
+            setIsListeningActive(true);
+            setRecognitionTranscript("⚠️ Microphone Access Denied or Blocked. Please click address bar shield/site-settings icon, or open in new tab!");
+            setTimeout(() => setIsListeningActive(false), 8000);
+          }
+        });
+    } else {
+      if (!SpeechRec) {
+        setIsListeningActive(true);
+        setRecognitionTranscript("⚠️ Speech Recognition is not supported in this sandbox environment.");
+        setShowMicIframeHelper(true);
+        setTimeout(() => setIsListeningActive(false), 7050);
+        return;
+      }
+      proceedWithSpeechRecognition(SpeechRec);
+    }
   };
 
   const proceedWithSpeechRecognition = (SpeechRec: any) => {
@@ -707,8 +771,9 @@ export default function App() {
           const textToSend = voiceSpokenTextRef.current;
           voiceSpokenTextRef.current = ""; // Reset
           if (textToSend && textToSend.trim().length > 1) {
-            console.log("[Voice UpdateInput] Updating input bar with transcripts:", textToSend);
-            setInput(textToSend);
+            console.log("[Voice AutoSubmit] Automatically sending voice transcript:", textToSend);
+            setInput(""); // Clear input bar
+            handleSubmitMessage(textToSend);
           }
         }
       };
@@ -771,10 +836,17 @@ export default function App() {
   const handleSubmitMessage = async (
     overrideText?: string,
     overrideImg?: typeof attachedImage,
-    targetChat?: Chat | null
+    targetChat?: Chat | null,
+    overrideVid?: typeof attachedVideo
   ) => {
     const rawText = overrideText !== undefined ? overrideText : input;
     let adjustedText = rawText;
+
+    const isCreation = rawText.toLowerCase().match(/(app|game|website|tool|dashboard|clone|system|page|software|interface|html|css|js|gpt|ui|calculator|google|spotify|snake|flappy|tic tac|todo|clock|timer|weather|map|photo|image|picture|video|movie|bloom|flower|rose|balloon|quiz|paint|drawing|banao|banaen|generate|create)/i);
+    if (isCreation) {
+      setIsFloatingSandboxClosed(false);
+      setIsFloatingSandboxMinimised(false);
+    }
     
     // Auto-adjust prompt syntax based on Google search engine active tab
     if (activeSearchTab === "Images" && rawText.trim() && !rawText.toLowerCase().match(/(banao|generate|photo|image|picture|तस्वीर|चित्र|फोटो|पेंट)/)) {
@@ -833,14 +905,16 @@ export default function App() {
       : adjustedText;
 
     const imgToSend = overrideImg !== undefined ? overrideImg : attachedImage;
+    const vidToSend = overrideVid !== undefined ? overrideVid : attachedVideo;
 
-    if (!textToSend.trim() && !imgToSend) return;
+    if (!textToSend.trim() && !imgToSend && !vidToSend) return;
 
     let currentChat = targetChat !== undefined ? targetChat : activeChat;
 
     // Reset Input Box and attachments
     if (overrideText === undefined) setInput("");
     if (overrideImg === undefined) setAttachedImage(null);
+    if (overrideVid === undefined) setAttachedVideo(null);
 
     // Create a new chat on the fly if none is active
     if (!currentChat) {
@@ -888,6 +962,12 @@ export default function App() {
         data: imgToSend.data,
         mimeType: imgToSend.mimeType,
         previewUrl: imgToSend.previewUrl
+      } : undefined,
+      video: vidToSend ? {
+        data: vidToSend.data,
+        name: vidToSend.name,
+        mimeType: vidToSend.mimeType,
+        previewUrl: vidToSend.previewUrl
       } : undefined
     };
 
@@ -1226,6 +1306,23 @@ export default function App() {
   const handleSuggestedPromptClick = (prompt: SuggestedPrompt) => {
     setInput(prompt.promptText);
     textareaRef.current?.focus();
+  };
+
+  const getMostRecentHTMLCode = (): string | null => {
+    if (!activeChat) return null;
+    for (let i = activeChat.messages.length - 1; i >= 0; i--) {
+      const msg = activeChat.messages[i];
+      if (msg.role === "assistant" && msg.text) {
+        const match = msg.text.match(/```(?:html|xml|svg)?\s*([\s\S]*?)(?:```|$)/i);
+        if (match && match[1]) {
+          const code = match[1].trim();
+          if (code.includes("<html") || code.includes("<div") || code.includes("<!DOCTYPE") || code.includes("<script") || code.includes("<style")) {
+            return code;
+          }
+        }
+      }
+    }
+    return null;
   };
 
   const { pinned, today, yesterday, activeWeek, older } = getGroupedChats();
@@ -1615,11 +1712,11 @@ export default function App() {
                                 id={`pin-chat-btn-${chat.id}`}
                                 title={chat.isPinned ? "Unpin Chat" : "Pin Chat"}
                                 onClick={(e) => handleTogglePin(e, chat.id)}
-                                className={`p-1.5 rounded-md text-zinc-400 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-colors cursor-pointer ${
+                                className={`p-1.5 rounded-md text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:bg-zinc-300/60 dark:hover:bg-zinc-805 transition-all cursor-pointer ${
                                   chat.isPinned ? "text-amber-500 dark:text-amber-400 opacity-100" : ""
                                 }`}
                               >
-                                <Pin size={13} className={chat.isPinned ? "fill-amber-500 dark:fill-amber-400" : ""} />
+                                <Pin size={16} className={chat.isPinned ? "fill-amber-500 dark:fill-amber-400" : ""} />
                               </button>
 
                               {/* Rename Button */}
@@ -1627,9 +1724,22 @@ export default function App() {
                                 id={`rename-chat-btn-${chat.id}`}
                                 title="Rename Chat"
                                 onClick={(e) => handleStartRename(e, chat)}
-                                className="p-1.5 rounded-md text-zinc-400 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
+                                className="p-1.5 rounded-md text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:bg-zinc-300/60 dark:hover:bg-zinc-805 transition-all cursor-pointer"
                               >
-                                <Edit3 size={13} />
+                                <Edit3 size={16} />
+                              </button>
+
+                              {/* Delete Button */}
+                              <button
+                                id={`delete-chat-btn-${chat.id}`}
+                                title="Delete Chat"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setDeleteConfirmId(chat.id);
+                                }}
+                                className="p-2 rounded-xl text-zinc-500 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-100/80 dark:hover:bg-rose-950/50 hover:scale-110 active:scale-95 transition-all cursor-pointer shadow-xs"
+                              >
+                                <Trash2 size={18} />
                               </button>
                             </div>
                           )}
@@ -1838,7 +1948,7 @@ export default function App() {
             {/* 4. Active Chat Message Scroll Body */}
             <div id="messages-scroller" className="flex-1 overflow-y-auto bg-transparent transition-colors duration-200 scroll-smooth">
               
-              <div className="w-full max-w-4xl mx-auto px-4 pt-4 pb-28 md:pb-36">
+              <div className="w-full max-w-4xl mx-auto px-4 pt-4 pb-20 md:pb-24">
                 {!activeChat || activeChat.messages.length === 0 ? (
                   /* High-end minimalist empty state exactly matching the design requirements */
                   <div id="greeting-splash-container" className="pt-24 md:pt-36 pb-12 flex flex-col items-center justify-center min-h-[50vh]">
@@ -1923,6 +2033,18 @@ export default function App() {
                                 alt="User Upload Content"
                                 className="w-full h-auto object-contain max-h-[250px] bg-zinc-900/5"
                                 referrerPolicy="no-referrer"
+                              />
+                            </div>
+                          )}
+
+                          {/* Render user video if uploaded inside bubble */}
+                          {msg.video && (
+                            <div className="mb-3 max-w-sm rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-black">
+                              <video
+                                src={msg.video.previewUrl}
+                                className="w-full h-auto max-h-[250px]"
+                                controls
+                                playsInline
                               />
                             </div>
                           )}
@@ -2202,33 +2324,91 @@ export default function App() {
                                 </ReactMarkdown>
                               ) : (() => {
                                 const prevMsg = idx > 0 ? activeChat.messages[idx - 1] : null;
-                                const isImageGenerationRequest = prevMsg && prevMsg.role === "user" && (
-                                  prevMsg.text.toLowerCase().match(/(banao|generate|photo|image|picture|तस्वीर|चित्र|फोटो|पेंट)/i) !== null ||
-                                  activeSearchTab === "Images"
-                                );
-                                if (isImageGenerationRequest) {
+                                const query = prevMsg && prevMsg.text ? prevMsg.text.toLowerCase() : "";
+                                
+                                const isEditVideo = query.match(/(edit|filter|cut|crop|trim|professional|editor|effect|correction|vivid|collage|cinematic)/i) && query.match(/(video|film|movie|clip|motion)/i);
+                                const isBuildApp = !!query.match(/(app|game|website|tool|dashboard|clone|system|page|software|interface|html|css|js|gpt|ui|calculator|google|spotify)/i);
+                                const isCreateVideo = !isEditVideo && !!query.match(/(video|film|movie|clip|motion|animation|vhs|cinema)/i);
+                                const isCreateImage = !isBuildApp && !isEditVideo && !isCreateVideo && (query.match(/(image|photo|picture|paint|draw|flower|rose|phool|तस्वीर|चित्र|फोटो|गुलाब|कमल|सूरजमुखी)/i) || activeSearchTab === "Images");
+
+                                if (isBuildApp) {
                                   return (
-                                    <div className="flex flex-col gap-1.5 py-1.5 select-none min-w-[200px]">
-                                      <div className="flex items-center gap-2">
-                                        <span className="relative flex h-2 w-2">
-                                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                                        </span>
-                                        <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 animate-pulse font-mono uppercase tracking-wider">
-                                          creating image...
-                                        </span>
+                                    <div className="flex items-center gap-3 p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 rounded-2xl w-56 shadow-md select-none relative overflow-hidden transition-all duration-300">
+                                      <div className="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-500/20">
+                                        <Code size={18} className="text-blue-500 animate-pulse" />
                                       </div>
-                                      <p className="text-[11px] text-zinc-450 dark:text-zinc-500 leading-normal font-sans italic">
-                                        Blending artistic prompts with high fidelity layers...
-                                      </p>
+                                      <div className="flex-1 min-w-0 text-left">
+                                        <p className="text-[11px] font-extrabold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider font-sans">building app</p>
+                                        <p className="text-[10px] text-zinc-400 font-sans italic truncate">Compiling code...</p>
+                                      </div>
+                                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-150 dark:bg-zinc-800">
+                                        <div className="h-full bg-blue-500 animate-pulse w-2/3 animate-pulse" />
+                                      </div>
                                     </div>
                                   );
                                 }
+
+                                if (isEditVideo) {
+                                  return (
+                                    <div className="flex items-center gap-3 p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 rounded-2xl w-56 shadow-md select-none relative overflow-hidden transition-all duration-300">
+                                      <div className="w-11 h-11 rounded-xl bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/20">
+                                        <Sliders size={18} className="text-rose-500 animate-pulse" />
+                                      </div>
+                                      <div className="flex-1 min-w-0 text-left">
+                                        <p className="text-[11px] font-extrabold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider font-sans">editing video</p>
+                                        <p className="text-[10px] text-zinc-400 font-sans italic truncate">Applying filter...</p>
+                                      </div>
+                                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-150 dark:bg-zinc-800">
+                                        <div className="h-full bg-rose-500 animate-pulse w-1/2 animate-pulse" />
+                                      </div>
+                                    </div>
+                                  );
+                                }
+
+                                if (isCreateVideo) {
+                                  return (
+                                    <div className="flex items-center gap-3 p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 rounded-2xl w-56 shadow-md select-none relative overflow-hidden transition-all duration-300">
+                                      <div className="w-11 h-11 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20">
+                                        <AudioLines size={18} className="text-amber-500 animate-pulse" />
+                                      </div>
+                                      <div className="flex-1 min-w-0 text-left">
+                                        <p className="text-[11px] font-extrabold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider font-sans">creating video</p>
+                                        <p className="text-[10px] text-zinc-400 font-sans italic truncate">Generating streams...</p>
+                                      </div>
+                                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-150 dark:bg-zinc-800">
+                                        <div className="h-full bg-amber-500 animate-pulse w-3/5 animate-pulse" />
+                                      </div>
+                                    </div>
+                                  );
+                                }
+
+                                if (isCreateImage) {
+                                  return (
+                                    <div className="flex items-center gap-3 p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 rounded-2xl w-56 shadow-md select-none relative overflow-hidden transition-all duration-300">
+                                      <div className="w-11 h-11 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20">
+                                        <ImageIcon size={18} className="text-emerald-500 animate-pulse" />
+                                      </div>
+                                      <div className="flex-1 min-w-0 text-left">
+                                        <p className="text-[11px] font-extrabold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider font-sans">creating images</p>
+                                        <p className="text-[10px] text-zinc-400 font-sans italic truncate">Blending models...</p>
+                                      </div>
+                                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-150 dark:bg-zinc-800">
+                                        <div className="h-full bg-emerald-500 animate-pulse w-3/4 animate-pulse" />
+                                      </div>
+                                    </div>
+                                  );
+                                }
+
                                 return (
-                                  <div className="flex items-center gap-2 py-1 select-none">
-                                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                                    <div className="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                                    <div className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                                  <div className="flex flex-col gap-1.5 py-1 select-none min-w-[150px]">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                                      <div className="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                                      <div className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                                    </div>
+                                    <p className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 leading-none font-sans uppercase tracking-wider font-mono">
+                                      thinking...
+                                    </p>
                                   </div>
                                 );
                               })()}
@@ -2374,6 +2554,36 @@ export default function App() {
                   </button>
                 </motion.div>
               )}
+
+              {attachedVideo && (
+                <motion.div
+                  id="video-thumbnail-drawer"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 15 }}
+                  className="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 rounded-xl max-w-sm mt-1"
+                >
+                  <div className="w-12 h-12 rounded-lg overflow-hidden border border-zinc-300 dark:border-zinc-700 relative shrink-0 bg-black flex items-center justify-center">
+                    <video src={attachedVideo.previewUrl} className="w-full h-full object-cover" muted playsInline />
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                      <Play size={10} className="text-white fill-white" />
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0 text-left">
+                    <p className="text-xxs font-semibold text-zinc-650 dark:text-zinc-300 truncate">{attachedVideo.name}</p>
+                    <span className="text-[10px] text-zinc-500 uppercase">{attachedVideo.mimeType.split("/")[1] || "mp4"} video format</span>
+                  </div>
+                  <button
+                    id="remove-attached-video-btn"
+                    onClick={() => setAttachedVideo(null)}
+                    type="button"
+                    className="p-1 rounded-full bg-zinc-200 dark:bg-zinc-850 text-zinc-600 dark:text-zinc-400 hover:text-red-500 dark:hover:text-red-400 cursor-pointer"
+                    title="Remove attached video"
+                  >
+                    <X size={13} />
+                  </button>
+                </motion.div>
+              )}
             </AnimatePresence>
 
             {/* The Capsule Bar inspired by Gemini Mobile layout */}
@@ -2400,6 +2610,14 @@ export default function App() {
                 capture="environment"
                 className="hidden"
                 id="hidden-camera-input"
+              />
+              <input
+                type="file"
+                ref={videoInputRef}
+                onChange={handleVideoSelect}
+                accept="video/mp4, video/x-m4v, video/webm, video/*"
+                className="hidden"
+                id="hidden-video-input"
               />
 
               {/* Plus Button inside the capsule on the left */}
@@ -2444,6 +2662,17 @@ export default function App() {
                           type="button"
                           onClick={() => {
                             setIsPlusMenuOpen(false);
+                            videoInputRef.current?.click();
+                          }}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-105 dark:hover:bg-zinc-800/60 text-left transition-colors cursor-pointer"
+                        >
+                          <div className="text-sm">🎥</div>
+                          <span>Attach Video from Gallery</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsPlusMenuOpen(false);
                             handleCameraCapture();
                           }}
                           className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-105 dark:hover:bg-zinc-800/60 text-left transition-colors cursor-pointer"
@@ -2457,6 +2686,7 @@ export default function App() {
                             setIsPlusMenuOpen(false);
                             setInput("");
                             setAttachedImage(null);
+                            setAttachedVideo(null);
                           }}
                           className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 text-left transition-colors cursor-pointer"
                         >
@@ -2489,8 +2719,8 @@ export default function App() {
                         : "Ask Brainix"
                     }
                     disabled={isGenerating}
-                    className="flex-1 max-h-[140px] pr-20 resize-none overflow-y-auto bg-transparent border-0 outline-none py-1.5 px-2 text-base text-black dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:ring-0 leading-normal font-medium tracking-tight"
-                    style={{ height: "36px" }}
+                    className="flex-1 max-h-[140px] pr-20 resize-none overflow-y-auto bg-transparent border-0 outline-none py-1.5 px-2 text-sm text-black dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:ring-0 leading-normal font-medium tracking-tight"
+                    style={{ height: input.trim() ? "auto" : "32px", minHeight: "32px" }}
                   />
 
                   {/* Elegant floating Siri/Gemini active dots shown inside the search bar when listening! */}
@@ -2535,7 +2765,7 @@ export default function App() {
                 ) : (
                   /* Mic + Sliders waveform action block when empty, Send button when text exists */
                   <div className="flex items-center gap-1">
-                    {!input.trim() && !attachedImage ? (
+                    {!input.trim() && !attachedImage && !attachedVideo ? (
                       <>
                         <button
                           id="capsule-microphone-btn"
@@ -3028,6 +3258,174 @@ export default function App() {
                 </a>
               </div>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {/* Custom Delete Confirmation Modal */}
+        {deleteConfirmId && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-md z-[11000] flex items-center justify-center p-4 font-sans"
+            onClick={() => setDeleteConfirmId(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 15 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 15 }}
+              transition={{ type: "spring", damping: 25, stiffness: 350 }}
+              className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 max-w-sm w-full shadow-2xl flex flex-col gap-4 text-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-center">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 flex items-center justify-center text-rose-500 dark:text-rose-400 font-bold animate-bounce">
+                  <Trash2 size={24} />
+                </div>
+              </div>
+              
+              <div className="space-y-1">
+                <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                  क्या आप बातचीत हटाना चाहते हैं?
+                </h3>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  बचे हुए संदेश भी नष्ट हो जाएंगे। इस क्रिया को वापस नहीं लाया जा सकता।
+                </p>
+                <p className="text-[10px] text-zinc-400 dark:text-zinc-500 italic mt-1 bg-zinc-50 dark:bg-zinc-950/50 p-2 rounded-xl">
+                  (You are about to delete this discussion thread. This action is permanent and cannot be undone.)
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2.5 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setDeleteConfirmId(null)}
+                  className="flex-1 py-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl font-medium text-xs transition-colors cursor-pointer"
+                >
+                  रहने दें (Cancel)
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    handleDeleteChat(e as any, deleteConfirmId);
+                    setDeleteConfirmId(null);
+                  }}
+                  className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-700 dark:bg-rose-500 dark:hover:bg-rose-600 text-white rounded-xl font-medium text-xs transition-colors shadow-md shadow-rose-600/10 cursor-pointer"
+                >
+                  हाँ, हटाएँ (Delete)
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Creative Sandbox Companion Square */}
+      <AnimatePresence>
+        {!isFloatingSandboxClosed && activeChat && (getMostRecentHTMLCode() || (isGenerating && activeChat.messages.length > 0 && activeChat.messages[activeChat.messages.length - 1].role === "user" && activeChat.messages[activeChat.messages.length - 1].text.toLowerCase().match(/(app|game|website|tool|dashboard|clone|system|page|software|interface|html|css|js|gpt|ui|calculator|google|spotify|snake|flappy|tic tac|todo|clock|timer|weather|map|photo|image|picture|video|movie|bloom|flower|rose|balloon|quiz|paint|drawing|banao|banaen|generate|create)/i))) && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 30 }}
+            transition={{ type: "spring", stiffness: 260, damping: 25 }}
+            className={`fixed bottom-24 right-4 sm:bottom-24 sm:right-6 md:bottom-26 md:right-6 z-[80] flex flex-col rounded-3xl overflow-hidden shadow-2xl border transition-all duration-300 ${
+              isFloatingSandboxMinimised ? "w-48 h-12" : "w-[290px] h-[310px]"
+            } ${
+              theme === "dark" 
+                ? "bg-zinc-950/95 border-blue-500/30 text-white shadow-blue-500/5 ring-1 ring-blue-500/10" 
+                : "bg-white/95 border-blue-200/90 text-zinc-900 bg-white shadow-zinc-300/45"
+            }`}
+          >
+            {/* Header control line with gradient */}
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-3 py-2 flex items-center justify-between text-white select-none shrink-0">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <span className="text-xs">💻</span>
+                <span className="text-[10px] font-sans font-bold tracking-tight uppercase truncate">
+                  {isGenerating && !getMostRecentHTMLCode() ? "Creating App..." : "Sandbox Preview"}
+                </span>
+                {isGenerating && (
+                  <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shrink-0" />
+                )}
+              </div>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  onClick={() => setIsFloatingSandboxMinimised(!isFloatingSandboxMinimised)}
+                  className="hover:bg-white/15 p-1 rounded-md transition-all cursor-pointer text-[10px]"
+                  title={isFloatingSandboxMinimised ? "Expand Panel" : "Minimize Panel"}
+                  type="button"
+                >
+                  {isFloatingSandboxMinimised ? "▲" : "▼"}
+                </button>
+                <button
+                  onClick={() => setIsFloatingSandboxClosed(true)}
+                  className="hover:bg-white/15 p-1 rounded-md transition-all cursor-pointer text-[10px] font-bold"
+                  title="Close Companion"
+                  type="button"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            {/* Main Interactive Screen Segment */}
+            {!isFloatingSandboxMinimised && (
+              <div className="flex-1 min-h-0 bg-zinc-50 dark:bg-[#121214] flex flex-col relative">
+                {getMostRecentHTMLCode() ? (
+                  /* Live render of compiled frame inside the 280x280 box! */
+                  <div className="flex-1 min-h-0 relative select-text">
+                    <iframe
+                      title="Floating Companion Simulator Sandbox"
+                      srcDoc={getMostRecentHTMLCode()!}
+                      className="w-full h-full border-0 bg-white"
+                      sandbox="allow-scripts"
+                    />
+                    
+                    {/* Floating quick access button inside the frame to allow fullscreen / expanding to direct code viewer */}
+                    <button
+                      onClick={() => {
+                        setActiveMode("chat");
+                        const htmlMsg = activeChat.messages.find(m => m.role === "assistant" && m.text && m.text.includes("```html"));
+                        if (htmlMsg) {
+                          const element = document.getElementById(`message-bubble-${htmlMsg.id}`);
+                          if (element) {
+                            element.scrollIntoView({ behavior: "smooth" });
+                          }
+                        }
+                      }}
+                      className="absolute btn-glow bottom-2.5 right-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg px-2 py-1 text-[9px] font-bold shadow-md cursor-pointer flex items-center gap-1 active:scale-95 transition-all select-none"
+                      title="Scroll to full expanded workspace"
+                    >
+                      <span>Expand</span>
+                      <ExternalLink size={8} />
+                    </button>
+                  </div>
+                ) : (
+                  /* Loading / Compilation live state when creating / generating something but no html is streamed yet */
+                  <div className="flex-1 flex flex-col items-center justify-center p-4 text-center space-y-3.5">
+                    <div className="relative flex items-center justify-center">
+                      <div className="w-14 h-14 rounded-2xl border-2 border-t-blue-500 border-r-indigo-500 border-b-purple-500 border-l-transparent animate-spin flex items-center justify-center" />
+                      <span className="absolute text-base">🛠️</span>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs font-bold font-sans text-zinc-805 dark:text-zinc-200">
+                        Brainix System-Engine Loading
+                      </p>
+                      <p className="text-[10px] text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-[200px] mx-auto">
+                        Generating raw assets, wiring interactive JavaScript scripts & compiling high-fidelity components...
+                      </p>
+                    </div>
+                    
+                    {/* Cyber terminal mock loading text logs */}
+                    <div className="w-full max-w-[240px] bg-zinc-900 rounded-lg p-2 font-mono text-[9px] text-[#22c55e] text-left border border-zinc-800 space-y-0.5 overflow-hidden leading-tight h-14 select-none flex-col">
+                      <div className="animate-pulse">&gt; Initializing local canvas...</div>
+                      <div className="opacity-70">&gt; Building responsive CSS nodes...</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

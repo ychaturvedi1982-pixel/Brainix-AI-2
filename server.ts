@@ -269,8 +269,1817 @@ const glossaryMapping: Record<string, string[]> = {
 
 function parseQueryAndConstructDirectAnswer(rawQuery: string): string {
   const cleanQ = rawQuery.trim().toLowerCase();
-  
-  // First, check the exact scientific glossary map
+
+  // HIGH-FIDELITY OFFLINE CREATIVE GENERATOR (Provides 100% working interactive app/game clones even when offline!)
+  const isC = cleanQ.match(/(app|game|website|tool|dashboard|clone|system|page|software|interface|html|css|js|gpt|ui|calculator|google|spotify|snake|flappy|tic tac|todo|clock|timer|weather|map|photo|image|picture|video|movie|bloom|flower|rose|balloon|quiz|paint|drawing|banao|banaen|generate|create)/i);
+  if (isC) {
+    let appType = "home";
+    let appTitle = "Creative App Suite";
+    
+    if (cleanQ.includes("snake") || cleanQ.includes("साँप") || cleanQ.includes("saap")) {
+      appType = "snake";
+      appTitle = "Cyberpunk Snake Arcade";
+    } else if (cleanQ.includes("tic") || cleanQ.includes("tictactoe") || cleanQ.includes("cross") || cleanQ.includes("zero")) {
+      appType = "tictactoe";
+      appTitle = "Neon Tic Tac Toe AI";
+    } else if (cleanQ.includes("calc") || cleanQ.includes("calculator") || cleanQ.includes("कैल्कुलेटर") || cleanQ.includes("कैलकुलेटर")) {
+      appType = "calculator";
+      appTitle = "Premium Neumorphic Calculator";
+    } else if (cleanQ.includes("spotify") || cleanQ.includes("music") || cleanQ.includes("song") || cleanQ.includes("गाना")) {
+      appType = "spotify";
+      appTitle = "Sleek Spotify Audio Desk";
+    } else if (cleanQ.includes("todo") || cleanQ.includes("task") || cleanQ.includes("list") || cleanQ.includes("कार्य")) {
+      appType = "todo";
+      appTitle = "TaskMaster Dynamic Planner";
+    } else if (cleanQ.includes("weather") || cleanQ.includes("mausam") || cleanQ.includes("मौसम")) {
+      appType = "weather";
+      appTitle = "Prism Meteorological search widget";
+    } else if (cleanQ.includes("clock") || cleanQ.includes("stopwatch") || cleanQ.includes("timer") || cleanQ.includes("घड़ी") || cleanQ.includes("समय")) {
+      appType = "clock";
+      appTitle = "Dynamic Digital Flip Clock";
+    } else if (cleanQ.includes("chatbot") || cleanQ.includes("chatgpt") || cleanQ.includes("ai chat") || cleanQ.includes("brainix")) {
+      appType = "chatbot";
+      appTitle = "Brainix AI Chat Sandbox";
+    } else if (cleanQ.includes("flower") || cleanQ.includes("bloom") || cleanQ.includes("rose") || cleanQ.includes("gulab") || cleanQ.includes("फूल") || cleanQ.includes("गुलाब")) {
+      appType = "bloom";
+      appTitle = "Aura Bloom Flower Canvas";
+    } else if (cleanQ.includes("balloon") || cleanQ.includes("pop") || cleanQ.includes("गुब्बारा")) {
+      appType = "balloon";
+      appTitle = "Balloon Pop Arcade";
+    } else if (cleanQ.includes("video") || cleanQ.includes("movie") || cleanQ.includes("cinema") || cleanQ.includes("film") || cleanQ.includes("player")) {
+      appType = "cinema";
+      appTitle = "Cinema Player Sound FX Board";
+    }
+
+    const masterHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brainix Creative Sandbox Core</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=Fira+Code:wght@400;500&display=swap');
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 9px; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #090a10;
+      color: #eaeaea;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .display-font { font-family: 'Space Grotesk', sans-serif; }
+    .code-font { font-family: 'Fira Code', monospace; }
+    .btn-glow:hover { box-shadow: 0 0 15px rgba(59,130,246,0.3); }
+    .cell-glow { box-shadow: 0 0 10px rgba(59,130,246,0.15); }
+    .active-scale { active-transform: scale(0.97); }
+    /* Keyframe Animations */
+    @keyframes pulse-g {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.05); }
+    }
+    .ambient-g { animation: pulse-g 8s infinite ease-in-out; }
+  </style>
+</head>
+<body class="w-full h-screen overflow-hidden flex flex-col relative antialiased select-none bg-[#07080d]">
+  <!-- Ambiance Aura lights -->
+  <div class="absolute -top-24 -left-20 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl ambient-g pointer-events-none"></div>
+  <div class="absolute -bottom-24 -right-20 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl ambient-g pointer-events-none" style="animation-delay: -3s;"></div>
+
+  <!-- Mobile phone OS Top Header -->
+  <div class="bg-[#0b0c14] border-b border-zinc-800/60 px-4 py-1.5 flex items-center justify-between text-[11px] font-mono tracking-wider text-zinc-400 shrink-0 relative z-10 select-none">
+    <div class="flex items-center gap-1.5 font-bold">
+      <span id="systime">12:00</span>
+      <span class="text-zinc-500 text-[10px]"><i class="fa-solid fa-location-dot"></i> LOCAL</span>
+    </div>
+    <div class="absolute left-1/2 -translate-x-1/2 h-3.5 w-24 bg-zinc-950 rounded-b-md border-x border-b border-zinc-800 flex items-center justify-center text-[7px] text-zinc-500 uppercase tracking-widest font-black">Brainix_OS</div>
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-signal text-[10px]"></i>
+      <span class="text-[9px] font-bold">5G</span>
+      <i class="fa-solid fa-battery-three-quarters text-emerald-500 text-[11px] h-3"></i>
+      <span class="text-[9px] font-bold">98%</span>
+    </div>
+  </div>
+
+  <!-- Main View Frame -->
+  <div class="flex-1 w-full overflow-hidden flex flex-col relative z-10 bg-[#0d0f19]/90 backdrop-blur-md">
+    
+    <!-- view: home -->
+    <div id="view-home" class="absolute inset-0 overflow-y-auto px-4 py-5 flex flex-col gap-6" style="display: none;">
+      <div class="flex flex-col gap-1.5">
+        <h1 class="text-2xl font-black tracking-tight display-font bg-gradient-to-r from-teal-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent flex items-center gap-2">
+          <i class="fa-solid fa-cube text-blue-400"></i>Brainix Sandbox Core
+        </h1>
+        <p class="text-xs text-zinc-400 font-medium">Your live Gemini AI generation quota is currently offline. Launch any high-fidelity reactive sandbox apps compiled locally below!</p>
+      </div>
+
+      <!-- Search bar -->
+      <div class="relative">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500"><i class="fa-solid fa-search"></i></span>
+        <input id="search-input" oninput="filterApps()" type="text" placeholder="Search offline apps (e.g. game, calc)..." class="w-full pl-9 pr-4 py-2 bg-zinc-900/80 border border-zinc-800 rounded-xl text-xs text-white placeholder-zinc-500 font-medium tracking-tight outline-none focus:border-blue-500/50 transition-all duration-150">
+      </div>
+
+      <!-- App grid -->
+      <div class="grid grid-cols-2 gap-3 pb-8">
+        
+        <!-- App Card: Snake -->
+        <div onclick="launchApp('snake')" class="app-card bg-gradient-to-br from-[#121c33] to-[#090b11] border border-emerald-500/20 hover:border-emerald-500/40 active:scale-95 transition-all duration-200 p-3.5 rounded-2xl flex flex-col gap-2.5 cursor-pointer relative overflow-hidden group btn-glow">
+          <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-md border border-emerald-500/20"><i class="fa-solid fa-gamepad"></i></div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold tracking-tight text-white">Neon Snake</span>
+            <span class="text-[9px] text-zinc-400 font-medium mt-0.5">Custom arcade snake canvas</span>
+          </div>
+        </div>
+
+        <!-- App Card: Tic Tac Toe -->
+        <div onclick="launchApp('tictactoe')" class="app-card bg-gradient-to-br from-[#121c33] to-[#090b11] border border-blue-500/20 hover:border-blue-500/40 active:scale-95 transition-all duration-200 p-3.5 rounded-2xl flex flex-col gap-2.5 cursor-pointer relative overflow-hidden group btn-glow">
+          <div class="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-md border border-blue-500/20"><i class="fa-solid fa-table-cells-large"></i></div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold tracking-tight text-white">Tic Tac Toe AI</span>
+            <span class="text-[9px] text-zinc-400 font-medium mt-0.5">Play vs smart Minimax Bot</span>
+          </div>
+        </div>
+
+        <!-- App Card: Calculator -->
+        <div onclick="launchApp('calculator')" class="app-card bg-gradient-to-br from-[#272115] to-[#090b11] border border-amber-500/20 hover:border-amber-500/40 active:scale-95 transition-all duration-200 p-3.5 rounded-2xl flex flex-col gap-2.5 cursor-pointer relative overflow-hidden group btn-glow">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-md border border-amber-500/20"><i class="fa-solid fa-calculator"></i></div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold tracking-tight text-white">Science Calc</span>
+            <span class="text-[9px] text-zinc-400 font-medium mt-0.5">Fully functional Math board</span>
+          </div>
+        </div>
+
+        <!-- App Card: Spotify Clone -->
+        <div onclick="launchApp('spotify')" class="app-card bg-gradient-to-br from-[#112419] to-[#090b11] border border-green-500/20 hover:border-green-500/40 active:scale-95 transition-all duration-200 p-3.5 rounded-2xl flex flex-col gap-2.5 cursor-pointer relative overflow-hidden group btn-glow">
+          <div class="w-8 h-8 rounded-xl bg-green-500/10 text-green-400 flex items-center justify-center text-md border border-green-500/20"><i class="fa-solid fa-music"></i></div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold tracking-tight text-white">Sleek Spotify</span>
+            <span class="text-[9px] text-zinc-400 font-medium mt-0.5">Synth loops visualizer app</span>
+          </div>
+        </div>
+
+        <!-- App Card: Todo List -->
+        <div onclick="launchApp('todo')" class="app-card bg-gradient-to-br from-[#251233] to-[#090b11] border border-purple-500/20 hover:border-purple-500/40 active:scale-95 transition-all duration-200 p-3.5 rounded-2xl flex flex-col gap-2.5 cursor-pointer relative overflow-hidden group btn-glow">
+          <div class="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-md border border-purple-500/20"><i class="fa-solid fa-list-check"></i></div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold tracking-tight text-white">TaskMaster</span>
+            <span class="text-[9px] text-zinc-400 font-medium mt-0.5">State managed todo deck</span>
+          </div>
+        </div>
+
+        <!-- App Card: Weather App -->
+        <div onclick="launchApp('weather')" class="app-card bg-gradient-to-br from-[#122a33] to-[#090b11] border border-cyan-500/20 hover:border-cyan-500/40 active:scale-95 transition-all duration-200 p-3.5 rounded-2xl flex flex-col gap-2.5 cursor-pointer relative overflow-hidden group btn-glow">
+          <div class="w-8 h-8 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-md border border-cyan-500/20"><i class="fa-solid fa-cloud-sun-rain"></i></div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold tracking-tight text-white">Weather Cast</span>
+            <span class="text-[9px] text-zinc-400 font-medium mt-0.5">Animated weather search app</span>
+          </div>
+        </div>
+
+        <!-- App Card: Flip Clock stopwatch -->
+        <div onclick="launchApp('clock')" class="app-card bg-gradient-to-br from-[#2b1219] to-[#090b11] border border-rose-500/20 hover:border-rose-500/40 active:scale-95 transition-all duration-200 p-3.5 rounded-2xl flex flex-col gap-2.5 cursor-pointer relative overflow-hidden group btn-glow">
+          <div class="w-8 h-8 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-md border border-rose-500/20"><i class="fa-solid fa-clock"></i></div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold tracking-tight text-white">Flip Timer OS</span>
+            <span class="text-[9px] text-zinc-400 font-medium mt-0.5">Accuracy flip clock & lap meter</span>
+          </div>
+        </div>
+
+        <!-- App Card: AI Chatbot Simulator -->
+        <div onclick="launchApp('chatbot')" class="app-card bg-gradient-to-br from-[#121c16] to-[#090b11] border border-teal-500/20 hover:border-teal-500/40 active:scale-95 transition-all duration-200 p-3.5 rounded-2xl flex flex-col gap-2.5 cursor-pointer relative overflow-hidden group btn-glow">
+          <div class="w-8 h-8 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center text-md border border-teal-500/20"><i class="fa-solid fa-robot"></i></div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold tracking-tight text-white">GPT Sandbox</span>
+            <span class="text-[9px] text-zinc-400 font-medium mt-0.5">Simulated multi-persona chats</span>
+          </div>
+        </div>
+
+        <!-- App Card: Bloom flower rose -->
+        <div onclick="launchApp('bloom')" class="app-card bg-gradient-to-br from-[#27101a] to-[#090b11] border border-pink-500/20 hover:border-pink-500/40 active:scale-95 transition-all duration-200 p-3.5 rounded-2xl flex flex-col gap-2.5 cursor-pointer relative overflow-hidden group btn-glow">
+          <div class="w-8 h-8 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center text-md border border-pink-500/20"><i class="fa-solid fa-seedling"></i></div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold tracking-tight text-white">Aura Rose bloom</span>
+            <span class="text-[9px] text-zinc-400 font-medium mt-0.5">Touch & slide blooming roses</span>
+          </div>
+        </div>
+
+        <!-- App Card: Balloon Pop -->
+        <div onclick="launchApp('balloon')" class="app-card bg-gradient-to-br from-[#2a1b12] to-[#090b11] border border-orange-500/20 hover:border-orange-500/40 active:scale-95 transition-all duration-200 p-3.5 rounded-2xl flex flex-col gap-2.5 cursor-pointer relative overflow-hidden group btn-glow">
+          <div class="w-8 h-8 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-md border border-orange-500/20"><i class="fa-solid fa-circle-dot"></i></div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold tracking-tight text-white">Balloon Pop</span>
+            <span class="text-[9px] text-zinc-400 font-medium mt-0.5">Pop floaters and dodge spikes</span>
+          </div>
+        </div>
+
+        <!-- App Card: Cinema Player FX -->
+        <div onclick="launchApp('cinema')" class="app-card bg-gradient-to-br from-[#1a123a] to-[#090b11] border border-indigo-500/20 hover:border-indigo-500/40 active:scale-95 transition-all duration-200 p-3.5 rounded-2xl flex flex-col gap-2.5 cursor-pointer relative overflow-hidden group btn-glow">
+          <div class="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-md border border-indigo-500/20"><i class="fa-solid fa-film"></i></div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold tracking-tight text-white">Cinema Studio</span>
+            <span class="text-[9px] text-zinc-400 font-medium mt-0.5">Starfield cinema with visual filters</span>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- view: snake -->
+    <div id="view-snake" class="absolute inset-0 flex flex-col items-center justify-between p-4" style="display: none;">
+      <div class="flex justify-between items-center w-full px-2.5 py-1 bg-zinc-900/60 border border-zinc-800/60 rounded-xl">
+        <span class="text-[10px] font-bold text-emerald-400 font-mono"><i class="fa-solid fa-apple-whole mr-1 animate-bounce"></i>SCORE: <span id="snake-score">0</span></span>
+        <button onclick="launchApp('home')" class="text-zinc-400 hover:text-white pb-0.5"><i class="fa-solid fa-xmark text-xs"></i></button>
+        <span class="text-[10px] font-bold text-zinc-400 font-mono">HIGH: <span id="snake-high">0</span></span>
+      </div>
+
+      <div class="flex-1 flex items-center justify-center w-full my-2">
+        <canvas id="snakeCanvas" width="280" height="280" class="border border-emerald-500/20 bg-zinc-950/90 rounded-2xl shadow-lg shadow-emerald-500/5 aspect-square max-h-[290px] max-w-[290px]"></canvas>
+      </div>
+
+      <!-- Arrow D-Pad controls inside container -->
+      <div class="flex flex-col items-center gap-1.5 pb-2 shrink-0">
+        <button onclick="moveSnake('up')" class="w-11 h-11 bg-zinc-800 hover:bg-zinc-700 hover:border-emerald-500/40 border border-zinc-700/60 active:scale-90 transition-all rounded-full flex items-center justify-center text-white"><i class="fa-solid fa-chevron-up"></i></button>
+        <div class="flex items-center gap-9">
+          <button onclick="moveSnake('left')" class="w-11 h-11 bg-zinc-800 hover:bg-zinc-700 hover:border-emerald-500/40 border border-zinc-700/60 active:scale-90 transition-all rounded-full flex items-center justify-center text-white"><i class="fa-solid fa-chevron-left"></i></button>
+          <button onclick="pauseSnake()" class="w-9 h-9 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-full flex items-center justify-center text-zinc-400 hover:text-white active:scale-90 transition-all text-[11px]"><i id="snake-p-ico" class="fa-solid fa-pause"></i></button>
+          <button onclick="moveSnake('right')" class="w-11 h-11 bg-zinc-800 hover:bg-zinc-700 hover:border-emerald-500/40 border border-zinc-700/60 active:scale-90 transition-all rounded-full flex items-center justify-center text-white"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <button onclick="moveSnake('down')" class="w-11 h-11 bg-zinc-800 hover:bg-zinc-700 hover:border-emerald-500/40 border border-zinc-700/60 active:scale-90 transition-all rounded-full flex items-center justify-center text-white"><i class="fa-solid fa-chevron-down"></i></button>
+      </div>
+    </div>
+
+    <!-- view: tictactoe -->
+    <div id="view-tictactoe" class="absolute inset-0 flex flex-col items-center justify-between p-4" style="display: none;">
+      <div class="flex justify-between items-center w-full px-2.5 py-1 bg-zinc-900/60 border border-zinc-800/60 rounded-xl">
+        <span class="text-[10px] uppercase font-bold text-blue-400 font-mono tracking-wider" id="ttt-heading">Your turn</span>
+        <button onclick="launchApp('home')" class="text-zinc-400 hover:text-white pb-0.5"><i class="fa-solid fa-xmark text-xs"></i></button>
+        <span class="text-[10px] font-bold text-zinc-400 font-mono">SCORES: <span id="ttt-usr-scr">0</span> - <span id="ttt-cpu-scr">0</span></span>
+      </div>
+
+      <div class="flex-1 flex items-center justify-center w-full my-4">
+        <div class="grid grid-cols-3 gap-3 w-64 h-64">
+          <div onclick="cellClick(0)" id="ttt-0" class="ttt-cell bg-zinc-900/80 border border-zinc-800 rounded-2xl flex items-center justify-center text-3xl font-black display-font cursor-pointer cell-glow hover:bg-zinc-850/80 hover:border-zinc-700 transition-all duration-150"></div>
+          <div onclick="cellClick(1)" id="ttt-1" class="ttt-cell bg-zinc-900/80 border border-zinc-800 rounded-2xl flex items-center justify-center text-3xl font-black display-font cursor-pointer cell-glow hover:bg-zinc-850/80 hover:border-zinc-700 transition-all duration-150"></div>
+          <div onclick="cellClick(2)" id="ttt-2" class="ttt-cell bg-zinc-900/80 border border-zinc-800 rounded-2xl flex items-center justify-center text-3xl font-black display-font cursor-pointer cell-glow hover:bg-zinc-850/80 hover:border-zinc-700 transition-all duration-150"></div>
+          <div onclick="cellClick(3)" id="ttt-3" class="ttt-cell bg-zinc-900/80 border border-zinc-800 rounded-2xl flex items-center justify-center text-3xl font-black display-font cursor-pointer cell-glow hover:bg-zinc-850/80 hover:border-zinc-700 transition-all duration-150"></div>
+          <div onclick="cellClick(4)" id="ttt-4" class="ttt-cell bg-zinc-900/80 border border-zinc-800 rounded-2xl flex items-center justify-center text-3xl font-black display-font cursor-pointer cell-glow hover:bg-zinc-850/80 hover:border-zinc-700 transition-all duration-150"></div>
+          <div onclick="cellClick(5)" id="ttt-5" class="ttt-cell bg-zinc-900/80 border border-zinc-800 rounded-2xl flex items-center justify-center text-3xl font-black display-font cursor-pointer cell-glow hover:bg-zinc-850/80 hover:border-zinc-700 transition-all duration-150"></div>
+          <div onclick="cellClick(6)" id="ttt-6" class="ttt-cell bg-zinc-900/80 border border-zinc-800 rounded-2xl flex items-center justify-center text-3xl font-black display-font cursor-pointer cell-glow hover:bg-zinc-850/80 hover:border-zinc-700 transition-all duration-150"></div>
+          <div onclick="cellClick(7)" id="ttt-7" class="ttt-cell bg-zinc-900/80 border border-zinc-800 rounded-2xl flex items-center justify-center text-3xl font-black display-font cursor-pointer cell-glow hover:bg-zinc-850/80 hover:border-zinc-700 transition-all duration-150"></div>
+          <div onclick="cellClick(8)" id="ttt-8" class="ttt-cell bg-zinc-900/80 border border-zinc-800 rounded-2xl flex items-center justify-center text-3xl font-black display-font cursor-pointer cell-glow hover:bg-zinc-850/80 hover:border-zinc-700 transition-all duration-150"></div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex items-center gap-3 w-full pb-4 shrink-0">
+        <button onclick="resetTTT()" class="flex-1 py-2 px-4 rounded-xl font-bold border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-xs tracking-tight transition-all active:scale-95 text-center flex items-center justify-center gap-1.5"><i class="fa-solid fa-rotate mr-0.5"></i> Restart Game</button>
+        <button onclick="toggleBotSettings()" id="ttt-bot-b" class="flex-1 py-2 px-4 rounded-xl font-bold border border-zinc-800 bg-blue-600/10 border-blue-500/20 hover:bg-blue-600/20 text-blue-400 text-xs tracking-tight transition-all active:scale-95 flex items-center justify-center gap-1.5"><i class="fa-solid fa-robot mr-0.5"></i> Play vs AI Bot</button>
+      </div>
+    </div>
+
+    <!-- view: calculator -->
+    <div id="view-calculator" class="absolute inset-0 flex flex-col justify-end p-5" style="display: none;">
+      <div class="flex justify-between items-center w-full px-1 mb-8 shrink-0">
+        <span class="text-xs font-bold text-amber-500"><i class="fa-solid fa-calculator mr-1"></i> Calc Engine</span>
+        <button onclick="launchApp('home')" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
+      </div>
+      
+      <!-- Calculator Display Panel -->
+      <div class="flex flex-col gap-1 text-right mb-5 shrink-0 select-text">
+        <div id="calc-history" class="text-xs text-zinc-500 font-mono tracking-tight font-medium h-5"></div>
+        <div id="calc-display" class="text-4xl text-white font-bold tracking-tight display-font truncate">0</div>
+      </div>
+
+      <!-- Button Grid -->
+      <div class="grid grid-cols-4 gap-2 pb-2 shrink-0">
+        <button onclick="calcPress('C')" class="py-3 px-2 rounded-2xl text-[13px] font-black bg-zinc-800 text-amber-500 hover:bg-zinc-750 active:scale-95 transition-all">AC</button>
+        <button onclick="calcPress('+/-')" class="py-3 px-2 rounded-2xl text-[13px] font-black bg-zinc-800 text-zinc-300 hover:bg-zinc-750 active:scale-95 transition-all">+/-</button>
+        <button onclick="calcPress('%')" class="py-3 px-2 rounded-2xl text-[13px] font-black bg-zinc-800 text-zinc-300 hover:bg-zinc-750 active:scale-95 transition-all">%</button>
+        <button onclick="calcPress('/')" class="py-3 px-2 rounded-2xl text-[13px] font-black bg-amber-500/15 border border-amber-500/20 text-amber-400 hover:bg-amber-500/30 active:scale-95 transition-all">÷</button>
+        
+        <button onclick="calcPress('7')" class="py-3 px-2 rounded-2xl text-[14px] font-bold bg-[#151722] text-white hover:bg-zinc-850 active:scale-95 transition-all">7</button>
+        <button onclick="calcPress('8')" class="py-3 px-2 rounded-2xl text-[14px] font-bold bg-[#151722] text-white hover:bg-zinc-850 active:scale-95 transition-all">8</button>
+        <button onclick="calcPress('9')" class="py-3 px-2 rounded-2xl text-[14px] font-bold bg-[#151722] text-white hover:bg-zinc-850 active:scale-95 transition-all">9</button>
+        <button onclick="calcPress('*')" class="py-3 px-2 rounded-2xl text-[13px] font-bold bg-amber-500/15 border border-amber-500/20 text-amber-400 hover:bg-amber-500/30 active:scale-95 transition-all">×</button>
+
+        <button onclick="calcPress('4')" class="py-3 px-2 rounded-2xl text-[14px] font-bold bg-[#151722] text-white hover:bg-zinc-850 active:scale-95 transition-all">4</button>
+        <button onclick="calcPress('5')" class="py-3 px-2 rounded-2xl text-[14px] font-bold bg-[#151722] text-white hover:bg-zinc-850 active:scale-95 transition-all">5</button>
+        <button onclick="calcPress('6')" class="py-3 px-2 rounded-2xl text-[14px] font-bold bg-[#151722] text-white hover:bg-zinc-850 active:scale-95 transition-all">6</button>
+        <button onclick="calcPress('-')" class="py-3 px-2 rounded-2xl text-[13px] font-bold bg-amber-500/15 border border-amber-500/20 text-amber-400 hover:bg-amber-500/30 active:scale-95 transition-all">-</button>
+
+        <button onclick="calcPress('1')" class="py-3 px-2 rounded-2xl text-[14px] font-bold bg-[#151722] text-white hover:bg-zinc-850 active:scale-95 transition-all">1</button>
+        <button onclick="calcPress('2')" class="py-3 px-2 rounded-2xl text-[14px] font-bold bg-[#151722] text-white hover:bg-zinc-850 active:scale-95 transition-all">2</button>
+        <button onclick="calcPress('3')" class="py-3 px-2 rounded-2xl text-[14px] font-bold bg-[#151722] text-white hover:bg-zinc-850 active:scale-95 transition-all">3</button>
+        <button onclick="calcPress('+')" class="py-3 px-2 rounded-2xl text-[13px] font-bold bg-amber-500/15 border border-amber-500/20 text-amber-400 hover:bg-amber-500/30 active:scale-95 transition-all">+</button>
+
+        <button onclick="calcPress('0')" class="col-span-2 py-3 px-2 rounded-2xl text-[14px] font-bold bg-[#151722] text-white hover:bg-zinc-850 active:scale-95 transition-all text-center">0</button>
+        <button onclick="calcPress('.')" class="py-3 px-2 rounded-2xl text-[14px] font-bold bg-[#151722] text-white hover:bg-zinc-850 active:scale-95 transition-all">.</button>
+        <button onclick="calcPress('=')" class="py-3 px-2 rounded-2xl text-[14px] font-black bg-gradient-to-r from-amber-500 to-yellow-600 text-white hover:from-amber-400 hover:to-yellow-500 active:scale-95 transition-all">=</button>
+      </div>
+    </div>
+
+    <!-- view: spotify -->
+    <div id="view-spotify" class="absolute inset-0 flex flex-col justify-between p-4 bg-[#080d0a]" style="display: none;">
+      <div class="flex justify-between items-center w-full px-2 py-1 bg-[#122318]/50 border border-green-500/10 rounded-xl">
+        <span class="text-[10px] font-bold text-green-400 font-mono flex items-center gap-1"><i class="fa-solid fa-headset"></i> Spotify Loop Core</span>
+        <button onclick="launchApp('home'); stopMus()" class="text-zinc-500 hover:text-white pb-0.5"><i class="fa-solid fa-xmark text-xs"></i></button>
+      </div>
+
+      <!-- Music Wave visualizer Canvas -->
+      <div class="flex-1 flex flex-col items-center justify-center py-2 relative overflow-hidden">
+        <canvas id="visualizerCanvas" width="280" height="150" class="w-full h-24 border border-green-500/10 rounded-2xl shadow-lg bg-zinc-950/80 mb-4"></canvas>
+        <div id="track-art" class="w-20 h-20 bg-gradient-to-tr from-green-500/30 to-teal-500/20 rounded-2xl flex items-center justify-center border border-green-500/20 mb-2 relative group overflow-hidden shadow-lg animate-pulse">
+          <i class="fa-solid fa-music text-3xl text-green-400 group-hover:scale-115 transition-all duration-300"></i>
+        </div>
+        <div class="text-center">
+          <h2 id="track-title" class="text-xs font-black tracking-tight text-white truncate w-48">Midnight Lofi Synth Loop</h2>
+          <p id="track-artist" class="text-[9px] text-zinc-400 font-medium">Synthetic Brainix Beats</p>
+        </div>
+      </div>
+
+      <!-- Media controller items -->
+      <div class="flex flex-col gap-2 pb-4 shrink-0">
+        <!-- Progress bar tracking -->
+        <div class="flex items-center gap-2 px-1">
+          <span class="text-[8px] font-mono text-zinc-500" id="m-time-cur">0:00</span>
+          <div onclick="seekMusic(event)" class="flex-1 h-1 bg-zinc-800 rounded-full cursor-pointer relative" id="m-track-bar">
+            <div class="absolute inset-y-0 left-0 bg-green-500 rounded-full" id="m-track-prog" style="width: 0%;"></div>
+          </div>
+          <span class="text-[8px] font-mono text-zinc-500" id="m-time-dur">0:30</span>
+        </div>
+        <!-- Play pause next controller bar -->
+        <div class="flex items-center justify-center gap-6 py-1">
+          <button onclick="prevTrack()" class="text-zinc-400 hover:text-white active:scale-90 transition-all text-xs"><i class="fa-solid fa-backward-step"></i></button>
+          <button onclick="toggleMusicPlay()" class="w-10 h-10 rounded-full bg-green-500 hover:bg-green-400 active:scale-90 transition-all flex items-center justify-center text-black text-sm"><i id="m-play-btn" class="fa-solid fa-play ml-0.5 text-xs"></i></button>
+          <button onclick="nextTrack()" class="text-zinc-400 hover:text-white active:scale-90 transition-all text-xs"><i class="fa-solid fa-forward-step"></i></button>
+        </div>
+        <!-- Playlist tracks selections -->
+        <div class="h-24 overflow-y-auto bg-zinc-950/80 border border-zinc-900 rounded-xl p-1 text-[9px]">
+          <div onclick="playTrackIdx(0)" id="t-row-0" class="flex items-center justify-between p-1.5 rounded-lg cursor-pointer bg-green-500/5 text-white border border-green-500/10 font-medium mb-1 truncate">
+            <span>💻 Cyberpunk Matrix Beats</span><span class="text-[8px] font-mono text-zinc-400">0:30</span>
+          </div>
+          <div onclick="playTrackIdx(1)" id="t-row-1" class="flex items-center justify-between p-1.5 rounded-lg cursor-pointer hover:bg-zinc-900 text-zinc-400 font-medium mb-1 truncate">
+            <span>🧘 Deep Meditation Binaural</span><span class="text-[8px] font-mono text-zinc-400">0:30</span>
+          </div>
+          <div onclick="playTrackIdx(2)" id="t-row-2" class="flex items-center justify-between p-1.5 rounded-lg cursor-pointer hover:bg-zinc-900 text-zinc-400 font-medium truncate">
+            <span>🍃 Indian Classical Surbahar</span><span class="text-[8px] font-mono text-zinc-400">0:30</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- view: todo -->
+    <div id="view-todo" class="absolute inset-0 flex flex-col p-4" style="display: none;">
+      <div class="flex justify-between items-center w-full px-2 py-1 bg-zinc-900/60 border border-zinc-800/60 rounded-xl mb-4 shrink-0">
+        <span class="text-[10px] font-bold text-purple-400 font-mono flex items-center gap-1"><i class="fa-solid fa-list-check"></i> TaskMaster Pro</span>
+        <button onclick="launchApp('home')" class="text-zinc-500 hover:text-white pb-0.5"><i class="fa-solid fa-xmark text-xs"></i></button>
+      </div>
+
+      <!-- Add Todo Input -->
+      <div class="flex gap-2 mb-3 shrink-0">
+        <input id="todo-input" type="text" placeholder="Add custom task..." class="flex-1 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500 font-medium outline-none focus:border-purple-500/50">
+        <button onclick="addTodoItem()" class="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 rounded-xl font-bold text-xs text-white tracking-tight flex items-center justify-center active:scale-95 transition-all"><i class="fa-solid fa-plus"></i></button>
+      </div>
+
+      <!-- Scrollable Task View list items -->
+      <div class="flex-1 overflow-y-auto mb-2 font-medium" id="todo-items-list">
+        <!-- Load Items dynamically -->
+      </div>
+    </div>
+
+    <!-- view: weather -->
+    <div id="view-weather" class="absolute inset-0 flex flex-col p-4 justify-between" style="display: none;">
+      <div class="flex justify-between items-center w-full px-2 py-1 bg-zinc-900/60 border border-zinc-800/60 rounded-xl mb-3 shrink-0">
+        <span class="text-[10px] font-bold text-cyan-400 font-mono flex items-center gap-1"><i class="fa-solid fa-cloud-sun"></i> Meteorological Deck</span>
+        <button onclick="launchApp('home')" class="text-zinc-500 hover:text-white pb-0.5"><i class="fa-solid fa-xmark text-xs"></i></button>
+      </div>
+
+      <!-- Input box -->
+      <div class="flex gap-2 shrink-0 mb-3">
+        <input id="weather-q" type="text" placeholder="Type City (e.g. Lucknow, Varanasi)..." class="flex-1 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500 font-medium outline-none focus:border-cyan-500/50">
+        <button onclick="searchWeather()" class="px-3.5 py-1.5 bg-cyan-600 hover:bg-cyan-500 rounded-xl text-white font-bold text-xs flex items-center justify-center active:scale-95"><i class="fa-solid fa-search"></i></button>
+      </div>
+
+      <!-- Weather Display Box card -->
+      <div class="flex-1 overflow-y-auto w-full flex flex-col items-center justify-center" id="weather-card">
+        <!-- Interactive Canvas weather simulation -->
+        <canvas id="weatherCanvas" width="180" height="90" class="w-40 h-20 mb-2 pointer-events-none"></canvas>
+        <div class="text-center flex flex-col items-center gap-1.5 select-text">
+          <h2 id="w-city" class="text-xl font-black display-font tracking-tight text-white flex items-center gap-1.5">Delhi NCR</h2>
+          <div id="w-temp" class="text-3xl font-black display-font tracking-tight text-cyan-400 mt-0.5">34°C</div>
+          <p id="w-desc" class="text-xs text-white bg-cyan-500/10 px-2 py-0.5 border border-cyan-500/20 rounded-full font-bold">Severe Duststorm & Rain ⛈️</p>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px] font-mono text-zinc-400 mt-2">
+            <div>Humidity: <span class="text-zinc-200" id="w-hum">74%</span></div>
+            <div>Wind speed: <span class="text-zinc-200" id="w-wind">22 km/h</span></div>
+          </div>
+          <div class="p-2.5 rounded-xl bg-zinc-900/40 border border-zinc-800 w-56 text-[9px] text-zinc-400 mt-2 italic leading-relaxed text-center" id="w-tips">
+            "Lucknow Monsoons are fantastic! Enjoy hot samosas and hot tea indoors safely."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- view: clock -->
+    <div id="view-clock" class="absolute inset-0 flex flex-col p-4 justify-between" style="display: none;">
+      <div class="flex justify-between items-center w-full px-2 py-1 bg-zinc-900/60 border border-zinc-800/60 rounded-xl mb-4 shrink-0">
+        <span class="text-[10px] font-bold text-rose-400 font-mono flex items-center gap-1"><i class="fa-solid fa-clock"></i> Flip Timer Widget</span>
+        <button onclick="launchApp('home')" class="text-zinc-500 hover:text-white pb-0.5"><i class="fa-solid fa-xmark text-xs"></i></button>
+      </div>
+
+      <!-- Core Display clock / stopwatch display -->
+      <div class="flex-1 flex flex-col items-center justify-center gap-4">
+        <div id="clock-pane" class="flex flex-col items-center gap-1">
+          <div id="huge-time" class="text-4xl font-black display-font tracking-tight text-white neon-text">12:00:00</div>
+          <div id="huge-date" class="text-[9px] font-mono uppercase font-bold text-rose-400 tracking-widest mt-1">SATURDAY, AUGUST 12</div>
+        </div>
+        
+        <div id="timer-pane" class="flex flex-col items-center justify-center gap-1 bg-zinc-950/80 border border-zinc-900 rounded-2xl p-4 w-52" style="display: none;">
+          <div id="timer-disp" class="text-3xl font-mono text-white tracking-widest leading-none">00:00.00</div>
+          <div id="timer-laps" class="w-full h-16 overflow-y-auto text-[9px] font-mono text-zinc-500 border-t border-zinc-900/80 mt-2 pt-1">
+            <!-- Laps list items -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer control button bar -->
+      <div class="flex items-center gap-2 pb-4 shrink-0">
+        <button id="clock-mode-btn" onclick="toggleClockMode('clock')" class="flex-1 py-2 px-3 bg-rose-600/10 text-rose-400 border border-rose-500/20 rounded-xl font-bold text-[10px] tracking-tight text-center active:scale-95 transition-all outline-none">Flip Clock</button>
+        <button id="timer-mode-btn" onclick="toggleClockMode('timer')" class="flex-1 py-2 px-3 bg-zinc-900 border border-zinc-800 rounded-xl font-bold text-[10px] tracking-tight text-center active:scale-95 transition-all outline-none text-zinc-400 hover:text-white">Stop Watch</button>
+        <button id="timer-start-btn" onclick="triggerClockAction()" class="w-9 h-9 rounded-full bg-zinc-800 text-zinc-300 hover:bg-zinc-700 active:scale-90 flex items-center justify-center text-xs transition-all border border-zinc-750" style="display: none;"><i id="clk-act-ico" class="fa-solid fa-play"></i></button>
+        <button id="timer-lap-btn" onclick="triggerClockLap()" class="w-9 h-9 rounded-full bg-zinc-940 text-rose-500/10 hover:bg-zinc-900 hover:border-rose-500/40 border border-zinc-850 active:scale-90 flex items-center justify-center text-xs transition-all" style="display: none;"><i class="fa-solid fa-flag"></i></button>
+      </div>
+    </div>
+
+    <!-- view: chatbot -->
+    <div id="view-chatbot" class="absolute inset-0 flex flex-col p-4 bg-[#080d0b]" style="display: none;">
+      <div class="flex justify-between items-center w-full px-2 py-1 bg-teal-950/40 border border-teal-500/10 rounded-xl mb-3 shrink-0">
+        <select id="chat-persona" class="bg-transparent border-none font-mono text-[10px] font-bold text-teal-400 focus:outline-none focus:ring-0">
+          <option value="nutritionist" class="bg-zinc-950 text-teal-400 font-bold">Yoga & Nutrition Guru</option>
+          <option value="coder" class="bg-zinc-950 text-teal-400 font-bold">Tech Lead Architect</option>
+          <option value="astrologer" class="bg-zinc-950 text-teal-400 font-bold">Astrology expert</option>
+        </select>
+        <button onclick="launchApp('home')" class="text-zinc-500 hover:text-white pb-0.5"><i class="fa-solid fa-xmark text-xs"></i></button>
+      </div>
+
+      <!-- Feed area -->
+      <div id="chat-sandbox-feed" class="flex-1 overflow-y-auto mb-2 text-[10px] flex flex-col gap-2 p-1 font-medium">
+        <div class="flex flex-col gap-0.5 text-left max-w-[85%] bg-teal-500/10 border border-teal-500/15 rounded-2xl p-2.5 rounded-tl-sm text-teal-200">
+          "Namaste! I am your offline Yoga and Nutrition companion. Feel free to type anything or ask for yoga tips, diet advice, and meal plans!"
+        </div>
+      </div>
+
+      <!-- Input box Send -->
+      <div class="flex gap-1.5 shrink-0 bg-zinc-950/80 p-1 border border-zinc-900 rounded-xl items-center">
+        <input id="chat-sandbox-i" type="text" onkeydown="if(event.key==='Enter') sendSandboxChat()" placeholder="Ask local chatbot..." class="flex-1 bg-transparent px-3 py-1.5 text-xs text-white placeholder-zinc-500 font-medium outline-none">
+        <button onclick="sendSandboxChat()" class="w-8 h-8 rounded-lg bg-teal-600 hover:bg-teal-500 flex items-center justify-center text-white text-xs active:scale-95 transition-all"><i class="fa-solid fa-paper-plane"></i></button>
+      </div>
+    </div>
+
+    <!-- view: bloom -->
+    <div id="view-bloom" class="absolute inset-0 flex flex-col items-center justify-between p-4" style="display: none;">
+      <div class="flex justify-between items-center w-full px-2.5 py-1 bg-zinc-900/60 border border-zinc-800/60 rounded-xl shrink-0">
+        <span class="text-[10px] font-bold text-pink-400 font-mono tracking-wider"><i class="fa-solid fa-seedling"></i> Blooming Canvas Slider</span>
+        <button onclick="launchApp('home')" class="text-zinc-400 hover:text-white pb-0.5"><i class="fa-solid fa-xmark text-xs"></i></button>
+      </div>
+
+      <div class="flex-1 flex items-center justify-center w-full my-2 relative">
+        <canvas id="bloomCanvas" width="280" height="280" class="border border-pink-500/15 bg-zinc-950/90 rounded-2xl aspect-square max-h-[290px] max-w-[290px]"></canvas>
+        <span class="absolute top-4 left-4 text-[8px] font-mono text-zinc-500 pointer-events-none uppercase tracking-widest bg-zinc-900/80 border border-zinc-800/60 px-1.5 py-0.5 rounded-md"><i class="fa-solid fa-hand-pointer mr-1 animate-pulse text-pink-400"></i> Tap Screen To Spawn Sparks</span>
+      </div>
+
+      <!-- Controls Slider -->
+      <div class="flex flex-col gap-2 w-full pb-4 px-2 shrink-0">
+        <div class="flex justify-between items-center text-[9px] font-mono text-zinc-400 font-bold px-1">
+          <span>Bud</span>
+          <span class="text-pink-400 font-bold uppercase tracking-wider">Drag To Bloom Flower Range</span>
+          <span>Full Bloom</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-minus text-zinc-500 text-[10px]"></i>
+          <input id="bloom-slider" type="range" min="0" max="100" value="40" oninput="drawBloomFlower(this.value)" class="flex-1 h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-pink-500">
+          <i class="fa-solid fa-plus text-zinc-500 text-[10px]"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- view: balloon -->
+    <div id="view-balloon" class="absolute inset-0 flex flex-col items-center justify-between p-4" style="display: none;">
+      <div class="flex justify-between items-center w-full px-2.5 py-1 bg-zinc-900/60 border border-zinc-800/60 rounded-xl shrink-0">
+        <span class="text-[10px] font-bold text-orange-400 font-mono"><i class="fa-solid fa-circle-notch animate-spin mr-1"></i>SCORE: <span id="ball-score">0</span></span>
+        <button onclick="launchApp('home'); stopBalloonGame()" class="text-zinc-400 hover:text-white pb-0.5"><i class="fa-solid fa-xmark text-xs"></i></button>
+        <span class="text-[10px] font-bold text-rose-400 font-mono">LIVES: <span id="ball-lives">♥️♥️♥️</span></span>
+      </div>
+
+      <div class="flex-1 flex items-center justify-center w-full my-2 relative">
+        <canvas id="balloonCanvas" width="280" height="300" class="border border-orange-500/10 bg-zinc-950/90 rounded-2xl max-h-[310px] max-w-[290px] select-none cursor-pointer shadow-lg shadow-orange-500/5"></canvas>
+        <div id="ball-over-pane" class="absolute inset-0 bg-zinc-950/95 flex flex-col items-center justify-center gap-4 rounded-2xl" style="display: none;">
+          <h3 class="text-xl font-black display-font text-rose-500 tracking-tight flex items-center gap-1.5"><i class="fa-solid fa-face-frown animate-pulse"></i> GAME OVER</h3>
+          <button onclick="restartBalloonGame()" class="py-2 px-5 rounded-xl font-bold bg-gradient-to-r from-orange-500 to-amber-600 text-white text-xs tracking-tight hover:from-orange-400 active:scale-95 transition-all"><i class="fa-solid fa-rotate mr-1"></i> Restart Adventure</button>
+        </div>
+      </div>
+
+      <div class="text-[9px] text-zinc-500 font-mono tracking-tight pb-2 truncate">Click or Tap ascending balloons to pop them! Avoid spikes.</div>
+    </div>
+
+    <!-- view: cinema -->
+    <div id="view-cinema" class="absolute inset-0 flex flex-col items-center justify-between p-4" style="display: none;">
+      <div class="flex justify-between items-center w-full px-2.5 py-1 bg-[#151221] border border-indigo-500/15 rounded-xl shrink-0">
+        <span class="text-[10px] font-bold text-indigo-400 font-mono flex items-center gap-1"><i class="fa-solid fa-film"></i> Simulation Cinema</span>
+        <button onclick="launchApp('home'); stopCinemaAnim()" class="text-zinc-400 hover:text-white pb-0.5"><i class="fa-solid fa-xmark text-xs"></i></button>
+      </div>
+
+      <div class="flex-1 flex items-center justify-center w-full my-3">
+        <canvas id="cinemaCanvas" width="280" height="200" class="border border-indigo-500/15 bg-zinc-950/90 rounded-2xl max-w-[280px] w-full shadow-lg h-44 overflow-hidden"></canvas>
+      </div>
+
+      <!-- Controls Slider Filters -->
+      <div class="flex flex-col gap-2 w-full pb-4 shrink-0">
+        <!-- Draggable seeker -->
+        <div class="flex items-center gap-2 px-1">
+          <span class="text-[8px] font-mono text-zinc-500" id="vid-time">0:00</span>
+          <div onclick="seekCinema(event)" class="flex-1 h-1 bg-zinc-800 rounded-full cursor-pointer relative" id="vid-bar">
+            <div class="absolute inset-y-0 left-0 bg-indigo-500 rounded-full" id="vid-prog" style="width: 0%;"></div>
+          </div>
+          <span class="text-[8px] font-mono text-zinc-500">2:15</span>
+        </div>
+        
+        <!-- Media controller bar -->
+        <div class="flex items-center justify-center gap-6 py-1 shrink-0">
+          <button onclick="prevCineTrack()" class="text-zinc-500 hover:text-white active:scale-90 transition-all text-[11px]"><i class="fa-solid fa-backward-step"></i></button>
+          <button onclick="toggleCinemaPlay()" class="w-9 h-9 rounded-full bg-indigo-600 hover:bg-indigo-500 active:scale-90 transition-all flex items-center justify-center text-white text-[11px] border border-indigo-500/20"><i id="cine-play-ico" class="fa-solid fa-play ml-0.5"></i></button>
+          <button onclick="nextCineTrack()" class="text-zinc-500 hover:text-white active:scale-90 transition-all text-[11px]"><i class="fa-solid fa-forward-step"></i></button>
+        </div>
+
+        <!-- Filter selection row -->
+        <div class="flex justify-between items-center text-[9px] font-mono text-zinc-400 font-bold px-1.5 border-t border-zinc-900/60 pt-2 shrink-0">
+          <span>Apply CSS Video FX filters:</span>
+        </div>
+        <div class="grid grid-cols-4 gap-1.5 shrink-0 px-1">
+          <button onclick="setCinemaFilter('none')" class="py-1 bg-zinc-900.80 hover:bg-zinc-800 text-[10px] text-zinc-200 border border-zinc-800 rounded-xl font-bold tracking-tight text-center truncate">None</button>
+          <button onclick="setCinemaFilter('grayscale(1)')" class="py-1 bg-zinc-900/80 hover:bg-zinc-800 text-[10px] text-zinc-200 border border-zinc-800 rounded-xl font-bold tracking-tight text-center truncate">Retro</button>
+          <button onclick="setCinemaFilter('hue-rotate(120deg) saturate(1.5)')" class="py-1 bg-zinc-900/80 hover:bg-zinc-800 text-[10px] text-zinc-200 border border-zinc-800 rounded-xl font-bold tracking-tight text-center truncate">Cyber</button>
+          <button onclick="setCinemaFilter('sepia(0.8) contrast(1.2)')" class="py-1 bg-zinc-900/80 hover:bg-zinc-800 text-[10px] text-zinc-200 border border-zinc-800 rounded-xl font-bold tracking-tight text-center truncate">Vintage</button>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- Real Phone Bottom Home indicator line Bar -->
+  <div class="bg-[#090d16] border-t border-zinc-900 px-4 py-1 flex items-center justify-center shrink-0">
+    <div onclick="launchApp('home')" class="cursor-pointer w-28 h-1 bg-zinc-700 hover:bg-zinc-500 active:scale-95 rounded-full transition-all duration-150 relative" title="Tap to return home">
+      <div class="absolute -inset-x-6 -inset-y-4 hover:border-none"></div>
+    </div>
+  </div>
+
+  <script>
+    const STARTUP_APP = "${appType}"; // Passed dynamically based on query matching
+    let activeApp = "home";
+
+    function updateTimeClock() {
+      const d = new Date();
+      let hrs = d.getHours();
+      let mins = d.getUTCMinutes();
+      let secs = d.getSeconds();
+      hrs = hrs < 10 ? '0' + hrs : hrs;
+      mins = mins < 10 ? '0' + mins : mins;
+      secs = secs < 10 ? '0' + secs : secs;
+      
+      const formText = hrs + ':' + mins;
+      const exactText = hrs + ':' + mins + ':' + secs;
+      
+      const stClock = document.getElementById("systime");
+      if(stClock) stClock.innerText = formText;
+      
+      const bigClock = document.getElementById("huge-time");
+      if(bigClock) bigClock.innerText = exactText;
+      
+      const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      const dtPane = document.getElementById("huge-date");
+      if(dtPane) {
+        dtPane.innerText = days[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate();
+      }
+    }
+    setInterval(updateTimeClock, 1000);
+    updateTimeClock();
+
+    function filterApps() {
+      const q = document.getElementById("search-input").value.toLowerCase();
+      const cards = document.getElementsByClassName("app-card");
+      for(let i=0; i<cards.length; i++) {
+        const text = cards[i].innerText.toLowerCase();
+        if(text.includes(q)) {
+          cards[i].style.display = "flex";
+        } else {
+          cards[i].style.display = "none";
+        }
+      }
+    }
+
+    function soundSynthesizer(freq, type, dur) {
+      try {
+        const ac = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ac.createOscillator();
+        const gn = ac.createGain();
+        osc.connect(gn);
+        gn.connect(ac.destination);
+        osc.type = type || "sine";
+        osc.frequency.setValueAtTime(freq, ac.currentTime);
+        gn.gain.setValueAtTime(0.04, ac.currentTime);
+        gn.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + dur);
+        osc.start();
+        osc.stop(ac.currentTime + dur);
+      } catch(e){}
+    }
+
+    function launchApp(id) {
+      // Toggle display
+      const views = ["home", "snake", "tictactoe", "calculator", "spotify", "todo", "weather", "clock", "chatbot", "bloom", "balloon", "cinema"];
+      views.forEach(v => {
+        const el = document.getElementById("view-" + v);
+        if(el) {
+          el.style.display = v === id ? "flex" : "none";
+          if(v === id && id === "home") {
+            el.style.display = "block"; // launcher uses grid
+          }
+        }
+      });
+      activeApp = id;
+      soundSynthesizer(id === "home" ? 220 : 330, "sine", 0.08);
+
+      // Launch specific animations/loops on startup
+      if(id === "snake") startSnakeGame();
+      else stopSnakeGame();
+
+      if(id === "spotify") startSpotifyVisuals();
+      else stopSpotifyVisuals();
+
+      if(id === "weather") initWeatherAnim();
+      else stopWeatherAnim();
+
+      if(id === "tictactoe") initTTTGame();
+      if(id === "todo") loadLocalStorageTodos();
+      if(id === "bloom") initBloomCanvas();
+      if(id === "balloon") startBalloonGame();
+      if(id === "cinema") startCinemaAnimation();
+    }
+
+    // ================= SAKING GAME ENGINE =================
+    let sCanvas, sCtx, sLoop;
+    let sGrid = 14;
+    let sSnake = [];
+    let sDir = {x: 14, y: 0};
+    let sNextDir = {x: 14, y: 0};
+    let sApple = {x: 56, y: 56};
+    let sScore = 0;
+    let sHigh = parseInt(localStorage.getItem("brnx-s-high") || "0");
+    let sPause = false;
+    let sGameOver = false;
+    let sCount = 0;
+
+    function startSnakeGame() {
+      sCanvas = document.getElementById("snakeCanvas");
+      sCtx = sCanvas.getContext("2d");
+      document.getElementById("snake-high").innerText = sHigh;
+      
+      // Reset variables
+      sSnake = [{x: 126, y: 126}, {x: 112, y: 126}, {x: 98, y: 126}];
+      sDir = {x: sGrid, y: 0};
+      sNextDir = {x: sGrid, y: 0};
+      sScore = 0;
+      document.getElementById("snake-score").innerText = "0";
+      sPause = false;
+      sGameOver = false;
+      sCount = 0;
+      document.getElementById("snake-p-ico").className = "fa-solid fa-pause";
+      placeSnakeApple();
+      
+      if(sLoop) cancelAnimationFrame(sLoop);
+      runSnakeLoop();
+    }
+
+    function placeSnakeApple() {
+      sApple.x = Math.floor(Math.random() * (sCanvas.width / sGrid)) * sGrid;
+      sApple.y = Math.floor(Math.random() * (sCanvas.height / sGrid)) * sGrid;
+      if (sSnake.some(p => p.x === sApple.x && p.y === sApple.y)) placeSnakeApple();
+    }
+
+    function moveSnake(dirStr) {
+      if(sGameOver || sPause) {
+        if(sGameOver) startSnakeGame();
+        return;
+      }
+      if(dirStr === "up" && sDir.y === 0) sNextDir = {x: 0, y: -sGrid};
+      if(dirStr === "down" && sDir.y === 0) sNextDir = {x: 0, y: sGrid};
+      if(dirStr === "left" && sDir.x === 0) sNextDir = {x: -sGrid, y: 0};
+      if(dirStr === "right" && sDir.x === 0) sNextDir = {x: sGrid, y: 0};
+      soundSynthesizer(350, "triangle", 0.04);
+    }
+
+    function pauseSnake() {
+      sPause = !sPause;
+      document.getElementById("snake-p-ico").className = sPause ? "fa-solid fa-play" : "fa-solid fa-pause";
+      soundSynthesizer(sPause ? 240 : 440, "sine", 0.1);
+    }
+
+    function stopSnakeGame() {
+      if(sLoop) cancelAnimationFrame(sLoop);
+    }
+
+    function runSnakeLoop() {
+      sLoop = requestAnimationFrame(runSnakeLoop);
+      if (sPause || sGameOver) {
+        if(sGameOver) {
+          sCtx.fillStyle = "rgba(9,10,16,0.85)";
+          sCtx.fillRect(0,0,sCanvas.width, sCanvas.height);
+          sCtx.fillStyle = "#f43f5e";
+          sCtx.font = "bold 20px 'Space Grotesk', sans-serif";
+          sCtx.textAlign = "center";
+          sCtx.fillText("GAME OVER", sCanvas.width/2, sCanvas.height/2 - 10);
+          sCtx.fillStyle = "#eaeaea";
+          sCtx.font = "10px monospace";
+          sCtx.fillText("Tap Arrow Buttons to restart", sCanvas.width/2, sCanvas.height/2 + 15);
+        }
+        return;
+      }
+      if (++sCount < 7) return; // game speed limit
+      sCount = 0;
+      sDir = sNextDir;
+      const head = {x: sSnake[0].x + sDir.x, y: sSnake[0].y + sDir.y};
+
+      // Border and self checks
+      if (head.x < 0 || head.x >= sCanvas.width || head.y < 0 || head.y >= sCanvas.height || sSnake.some(p => p.x === head.x && p.y === head.y)) {
+        sGameOver = true;
+        soundSynthesizer(110, "sawtooth", 0.4);
+        return;
+      }
+
+      sSnake.unshift(head);
+      if (head.x === sApple.x && head.y === sApple.y) {
+        sScore++;
+        document.getElementById("snake-score").innerText = sScore;
+        if(sScore > sHigh) {
+          sHigh = sScore;
+          document.getElementById("snake-high").innerText = sHigh;
+          localStorage.setItem("brnx-s-high", sHigh.toString());
+        }
+        soundSynthesizer(587, "sine", 0.07);
+        placeSnakeApple();
+      } else {
+        sSnake.pop();
+      }
+
+      sCtx.clearRect(0,0,sCanvas.width,sCanvas.height);
+      
+      // Draw gridlines
+      sCtx.strokeStyle = "rgba(255,255,255,0.02)";
+      sCtx.lineWidth = 1;
+      for(let g=0; g<sCanvas.width; g+=sGrid) {
+        sCtx.beginPath(); sCtx.moveTo(g,0); sCtx.lineTo(g,sCanvas.height); sCtx.stroke();
+        sCtx.beginPath(); sCtx.moveTo(0,g); sCtx.lineTo(sCanvas.width,g); sCtx.stroke();
+      }
+
+      // Apple
+      sCtx.fillStyle = "#f43f5e";
+      sCtx.beginPath();
+      sCtx.arc(sApple.x + sGrid/2, sApple.y + sGrid/2, sGrid/2 - 2, 0, 2*Math.PI);
+      sCtx.fill();
+      // Glowing neon ring around apple
+      sCtx.strokeStyle = "rgba(244,63,94,0.3)";
+      sCtx.lineWidth = 2;
+      sCtx.beginPath();
+      sCtx.arc(sApple.x + sGrid/2, sApple.y + sGrid/2, sGrid/2, 0, 2*Math.PI);
+      sCtx.stroke();
+
+      // Snake body items
+      sSnake.forEach((p, idx) => {
+        sCtx.fillStyle = idx === 0 ? "#10b981" : "#059669";
+        sCtx.fillRect(p.x, p.y, sGrid - 1, sGrid - 1);
+        
+        // draw glowing eyes on snake head
+        if(idx === 0) {
+          sCtx.fillStyle = "#ffffff";
+          sCtx.fillRect(p.x + 3, p.y + 3, 2, 2);
+          sCtx.fillRect(p.x + 9, p.y + 3, 2, 2);
+        }
+      });
+    }
+
+    // Keybindings listener for keyboard
+    window.addEventListener("keydown", e => {
+      if(activeApp === "snake") {
+        if(e.key === "ArrowUp") moveSnake("up");
+        if(e.key === "ArrowDown") moveSnake("down");
+        if(e.key === "ArrowLeft") moveSnake("left");
+        if(e.key === "ArrowRight") moveSnake("right");
+        if(e.key === " ") pauseSnake();
+      }
+    });
+
+
+    // ================= TIC TAC TOE ENGINE =================
+    let tBoard = ["","","","","","","","",""];
+    let tUserTurn = true;
+    let tGameActive = true;
+    let tScores = {usr: 0, cpu: 0};
+    let tUseBot = true;
+
+    function initTTTGame() {
+      resetTTT();
+    }
+
+    function toggleBotSettings() {
+      tUseBot = !tUseBot;
+      const bBtn = document.getElementById("ttt-bot-b");
+      bBtn.innerHTML = tUseBot ? "<i class='fa-solid fa-robot mr-0.5'></i> Play vs AI Bot" : "<i class='fa-solid fa-user-group mr-0.5'></i> Pass & Play";
+      bBtn.className = tUseBot 
+        ? "flex-1 py-2 px-4 rounded-xl font-bold border border-zinc-800 bg-blue-600/10 border-blue-500/20 hover:bg-blue-600/20 text-blue-400 text-xs tracking-tight transition-all active:scale-95 flex items-center justify-center gap-1.5"
+        : "flex-1 py-1.5 px-4 rounded-xl font-bold border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 text-xs tracking-tight transition-all active:scale-95 flex items-center justify-center gap-1.5";
+      soundSynthesizer(290, "sine", 0.08);
+      resetTTT();
+    }
+
+    function resetTTT() {
+      tBoard = ["","","","","","","","",""];
+      tUserTurn = true;
+      tGameActive = true;
+      document.getElementById("ttt-heading").innerText = "Your turn (X)";
+      document.getElementById("ttt-heading").className = "text-[10px] uppercase font-bold text-blue-400 font-mono tracking-wider";
+      
+      const cells = document.getElementsByClassName("ttt-cell");
+      for(let i=0; i<cells.length; i++) {
+        cells[i].innerText = "";
+        cells[i].className = "ttt-cell bg-zinc-900/80 border border-zinc-800 rounded-2xl flex items-center justify-center text-3xl font-black display-font cursor-pointer cell-glow hover:bg-zinc-850/80 hover:border-zinc-700 transition-all duration-150";
+      }
+      soundSynthesizer(440, "sine", 0.08);
+    }
+
+    function cellClick(idx) {
+      if(!tGameActive || tBoard[idx] !== "") return;
+      if(!tUserTurn && tUseBot) return; // bot is making move
+
+      const playerToken = tUserTurn ? "X" : "O";
+      makeTTTMove(idx, playerToken);
+
+      if(!tGameActive) return;
+
+      if(tUseBot) {
+        tUserTurn = false;
+        document.getElementById("ttt-heading").innerText = "CPU is planning...";
+        document.getElementById("ttt-heading").className = "text-[10px] uppercase font-bold text-amber-500 font-mono tracking-wider";
+        setTimeout(makeTTTCPUMove, 600);
+      } else {
+        tUserTurn = !tUserTurn;
+        document.getElementById("ttt-heading").innerText = tUserTurn ? "Your turn (X)" : "Friend's turn (O)";
+      }
+    }
+
+    function makeTTTMove(idx, token) {
+      tBoard[idx] = token;
+      const cell = document.getElementById("ttt-" + idx);
+      cell.innerText = token;
+      cell.className = "ttt-cell bg-zinc-950/90 border border-zinc-800 " + (token === "X" ? "text-blue-400" : "text-pink-500") + " rounded-2xl flex items-center justify-center text-3xl font-black display-font cursor-pointer cell-glow transition-all duration-150";
+      soundSynthesizer(token === "X" ? 480 : 380, "triangle", 0.06);
+      checkTTTWinner();
+    }
+
+    function checkTTTWinner() {
+      const wins = [
+        [0,1,2],[3,4,5],[6,7,8], // rows
+        [0,3,6],[1,4,7],[2,5,8], // cols
+        [0,4,8],[2,4,6] // diags
+      ];
+      
+      let won = false;
+      for(let w of wins) {
+        if(tBoard[w[0]] !== "" && tBoard[w[0]] === tBoard[w[1]] && tBoard[w[0]] === tBoard[w[2]]) {
+          // Glow win cells
+          w.forEach(id => {
+            document.getElementById("ttt-" + id).className += " bg-emerald-500/10 border-emerald-500/30 scale-105 animate-pulse";
+          });
+          
+          const winner = tBoard[w[0]];
+          document.getElementById("ttt-heading").innerText = winner + " WINS! 🎉";
+          document.getElementById("ttt-heading").className = "text-[10px] uppercase font-black text-emerald-400 font-mono tracking-wider";
+          
+          if(winner === "X") {
+            tScores.usr++;
+          } else {
+            tScores.cpu++;
+          }
+          document.getElementById("ttt-usr-scr").innerText = tScores.usr;
+          document.getElementById("ttt-cpu-scr").innerText = tScores.cpu;
+          
+          soundSynthesizer(523, "sine", 0.15);
+          setTimeout(() => soundSynthesizer(659, "sine", 0.15), 100);
+          setTimeout(() => soundSynthesizer(784, "sine", 0.3), 200);
+
+          tGameActive = false;
+          won = true;
+          break;
+        }
+      }
+
+      if(!won && !tBoard.includes("")) {
+        document.getElementById("ttt-heading").innerText = "IT IS A TIE MATCH! 🤝";
+        document.getElementById("ttt-heading").className = "text-[10px] uppercase font-bold text-zinc-400 font-mono tracking-wider";
+        soundSynthesizer(200, "sine", 0.3);
+        tGameActive = false;
+      }
+    }
+
+    function makeTTTCPUMove() {
+      if(!tGameActive) return;
+      
+      // Smart intelligence selection: win, block, or random
+      // 1. Can CPU Win?
+      const cpuMove = getOptimalMove("O") ?? getOptimalMove("X") ?? getRandomCell();
+      
+      if(cpuMove !== null) {
+        makeTTTMove(cpuMove, "O");
+        if(tGameActive) {
+          tUserTurn = true;
+          document.getElementById("ttt-heading").innerText = "Your turn (X)";
+          document.getElementById("ttt-heading").className = "text-[10px] uppercase font-bold text-blue-400 font-mono tracking-wider";
+        }
+      }
+    }
+
+    function getOptimalMove(playerToken) {
+      const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+      for(let w of wins) {
+        const countOwned = w.filter(id => tBoard[id] === playerToken).length;
+        const countEmpty = w.filter(id => tBoard[id] === "").length;
+        if(countOwned === 2 && countEmpty === 1) {
+          return w.find(id => tBoard[id] === "");
+        }
+      }
+      return null;
+    }
+
+    function getRandomCell() {
+      const empties = [];
+      tBoard.forEach((val, idx) => { if(val === "") empties.push(idx); });
+      if(empties.length === 0) return null;
+      
+      // prefer center under normal cases
+      if(empties.includes(4)) return 4;
+      
+      return empties[Math.floor(Math.random() * empties.length)];
+    }
+
+
+    // ================= CALCULATOR ENGINE =================
+    let calcStr = "0";
+    let calcPrevStr = "";
+
+    function calcPress(key) {
+      const pane = document.getElementById("calc-display");
+      const hist = document.getElementById("calc-history");
+
+      if (key === "C") {
+        calcStr = "0";
+        calcPrevStr = "";
+        hist.innerText = "";
+        soundSynthesizer(150, "triangle", 0.05);
+      } else if (key === "+/-") {
+        if(calcStr !== "0") {
+          calcStr = calcStr.startsWith("-") ? calcStr.slice(1) : "-" + calcStr;
+        }
+        soundSynthesizer(300, "sine", 0.05);
+      } else if (key === "%") {
+        calcStr = (parseFloat(calcStr) / 100).toString();
+        soundSynthesizer(300, "sine", 0.05);
+      } else if (key === "=") {
+        try {
+          hist.innerText = calcPrevStr + " " + calcStr + " =";
+          const parsedEq = (calcPrevStr + " " + calcStr).replace(/×/g, "*").replace(/÷/g, "/");
+          // Secure custom execution of math operations
+          const ans = Function('"use strict"; return (' + parsedEq + ')')();
+          calcStr = parseFloat(ans.toFixed(6)).toString();
+          calcPrevStr = "";
+          soundSynthesizer(580, "sine", 0.08);
+        } catch(e) {
+          calcStr = "Error";
+          calcPrevStr = "";
+          soundSynthesizer(120, "sawtooth", 0.3);
+        }
+      } else if (["+", "-", "*", "/"].includes(key)) {
+        const opSym = key === "*" ? "×" : key === "/" ? "÷" : key;
+        calcPrevStr = calcStr + " " + opSym;
+        calcStr = "0";
+        soundSynthesizer(360, "sine", 0.06);
+      } else {
+        // Appending numbers
+        if(calcStr === "0" || calcStr === "Error") {
+          calcStr = key;
+        } else {
+          calcStr += key;
+        }
+        soundSynthesizer(420, "sine", 0.04);
+      }
+
+      pane.innerText = calcStr;
+    }
+
+
+    // ================= SPOTIFY AUDIO ENGINE =================
+    let spCanvas, spCtx, mInterval, mPlayActive = false;
+    let mCurTime = 0;
+    let mDurTime = 30;
+    let mTrackIdx = 0;
+    const mTracks = [
+      { name: "Cyberpunk Matrix Beats", artist: "Synthetic Brainix Beats", freq: 440 },
+      { name: "Deep Meditation Binaural", artist: "Yoga & Mind Calm Core", freq: 280 },
+      { name: "Indian Classical Surbahar", artist: "Acoustic Surbahar & Tabla", freq: 330 }
+    ];
+
+    function startSpotifyVisuals() {
+      spCanvas = document.getElementById("visualizerCanvas");
+      spCtx = spCanvas.getContext("2d");
+      playTrackIdx(mTrackIdx);
+    }
+
+    function stopSpotifyVisuals() {
+      stopMus();
+    }
+
+    function playTrackIdx(idx) {
+      stopMus();
+      mTrackIdx = idx;
+      
+      const t = mTracks[idx];
+      document.getElementById("track-title").innerText = t.name;
+      document.getElementById("track-artist").innerText = t.artist;
+      
+      // Update styling row
+      for(let i=0; i<3; i++) {
+        const r = document.getElementById("t-row-" + i);
+        if(r) {
+          r.className = idx === i 
+            ? "flex items-center justify-between p-1.5 rounded-lg cursor-pointer bg-green-500/10 text-white border border-green-500/20 font-medium mb-1 truncate"
+            : "flex items-center justify-between p-1.5 rounded-lg cursor-pointer hover:bg-zinc-900 text-zinc-400 font-medium mb-1 truncate";
+        }
+      }
+
+      mCurTime = 0;
+      updateMusicUI();
+      soundSynthesizer(550, "sine", 0.08);
+      
+      // Auto start music looping
+      playMus();
+    }
+
+    function playMus() {
+      mPlayActive = true;
+      document.getElementById("m-play-btn").className = "fa-solid fa-pause";
+      
+      if(mInterval) clearInterval(mInterval);
+      mInterval = setInterval(() => {
+        if(mPlayActive) {
+          mCurTime += 0.5;
+          if(mCurTime >= mDurTime) {
+            mCurTime = 0;
+            soundSynthesizer(300, "sine", 0.1);
+          }
+          updateMusicUI();
+          drawBouncingWaves();
+          
+          // Sound Synthesis loops mimic ambient music frequencies so user hears active chimes!
+          if(Math.floor(mCurTime) % 3 === 0 && Math.floor(mCurTime) !== 0) {
+            const toneFreq = mTracks[mTrackIdx].freq * (1 + (Math.floor(mCurTime) % 2) * 0.25);
+            soundSynthesizer(toneFreq, "sine", 0.2);
+          }
+        }
+      }, 500);
+    }
+
+    function stopMus() {
+      mPlayActive = false;
+      document.getElementById("m-play-btn").className = "fa-solid fa-play ml-0.5";
+      if(mInterval) clearInterval(mInterval);
+    }
+
+    function toggleMusicPlay() {
+      if(mPlayActive) stopMus();
+      else playMus();
+      soundSynthesizer(400, "sine", 0.08);
+    }
+
+    function seekMusic(e) {
+      const bar = document.getElementById("m-track-bar");
+      const d = e.offsetX / bar.offsetWidth;
+      mCurTime = Math.floor(d * mDurTime);
+      updateMusicUI();
+      soundSynthesizer(320, "sine", 0.04);
+    }
+
+    function nextTrack() {
+      playTrackIdx((mTrackIdx + 1) % mTracks.length);
+    }
+
+    function prevTrack() {
+      playTrackIdx((mTrackIdx - 1 + mTracks.length) % mTracks.length);
+    }
+
+    function updateMusicUI() {
+      const min = Math.floor(mCurTime / 60);
+      const sec = Math.floor(mCurTime % 60);
+      const fs = sec < 10 ? '0' + sec : sec;
+      document.getElementById("m-time-cur").innerText = min + ":" + fs;
+      
+      const prg = (mCurTime / mDurTime) * 100;
+      document.getElementById("m-track-prog").style.width = prg + "%";
+    }
+
+    function drawBouncingWaves() {
+      if(!spCtx) return;
+      spCtx.clearRect(0,0,spCanvas.width, spCanvas.height);
+      
+      spCtx.strokeStyle = "#22c55e";
+      spCtx.lineWidth = 2.5;
+      
+      // Draw grid line background waves
+      spCtx.beginPath();
+      for(let w=0; w<spCanvas.width; w++) {
+        // dynamic wave equations
+        const wave = Math.sin(w*0.05 + mCurTime * 2.5) * Math.sin(w * 0.01) * 35;
+        if(w === 0) spCtx.moveTo(w, spCanvas.height/2 + wave);
+        else spCtx.lineTo(w, spCanvas.height/2 + wave);
+      }
+      spCtx.stroke();
+    }
+
+
+    // ================= TODO TASK PLANNER =================
+    let tTasks = [
+      { id: 1, text: "Perform 15-min Surya Namaskar", active: true, prio: "High" },
+      { id: 2, text: "Complete React components revision", active: true, prio: "Medium" },
+      { id: 3, text: "Check Brainix OS offline updates", active: false, prio: "Low" }
+    ];
+
+    function loadLocalStorageTodos() {
+      const cached = localStorage.getItem("brnx-todos");
+      if(cached) {
+        try { tTasks = JSON.parse(cached); } catch(e){}
+      }
+      renderTodoView();
+    }
+
+    function saveLocalStorageTodos() {
+      localStorage.setItem("brnx-todos", JSON.stringify(tTasks));
+    }
+
+    function renderTodoView() {
+      const container = document.getElementById("todo-items-list");
+      container.innerHTML = "";
+
+      if(tTasks.length === 0) {
+        container.innerHTML = "<div class='text-center py-10 text-[10px] text-zinc-500 font-mono'>No tasks listed. Add one to plan!</div>";
+        return;
+      }
+
+      tTasks.forEach(t => {
+        const row = document.createElement("div");
+        row.className = "flex items-center justify-between p-2.5 rounded-xl bg-zinc-900/40 border border-zinc-850 hover:border-zinc-805 mb-2 transition-all duration-150 shrink-0";
+        
+        const cardStyle = t.active ? "text-zinc-200" : "text-zinc-500 line-through decoration-zinc-650";
+        const badgeColor = t.prio === "High" ? "bg-red-500/10 text-red-500 border-red-500/20" : t.prio === "Medium" ? "bg-yellow-500/10 text-yellow-500 border-yellow-500/20" : "bg-blue-500/10 text-blue-500 border-blue-500/20";
+        
+        row.innerHTML = '<div class="flex items-center gap-2 max-w-[70%]">' +
+          '<input type="checkbox" ' + (!t.active ? 'checked' : '') + ' onclick="toggleTodoItem(' + t.id + ')" class="accent-purple-500 rounded cursor-pointer w-3.5 h-3.5">' +
+          '<span class="text-xs font-semibold truncate select-text ' + cardStyle + '">' + t.text + '</span>' +
+          '</div>' +
+          '<div class="flex items-center gap-1.5 shrink-0">' +
+          '<span class="text-[8px] uppercase font-mono tracking-wider px-1.5 py-0.5 rounded border ' + badgeColor + '">' + t.prio + '</span>' +
+          '<button onclick="deleteTodoItem(' + t.id + ')" class="text-zinc-500 hover:text-rose-500 active:scale-95 transition-all text-[11px]"><i class="fa-solid fa-trash-can"></i></button>' +
+          '</div>';
+        container.appendChild(row);
+      });
+    }
+
+    function addTodoItem() {
+      const inp = document.getElementById("todo-input");
+      const txt = inp.value.trim();
+      if(txt.length === 0) return;
+
+      const itemsP = ["High", "Medium", "Low"];
+      const rPrio = itemsP[Math.floor(Math.random() * 3)];
+      
+      const newTodo = {
+        id: Date.now(),
+        text: txt,
+        active: true,
+        prio: rPrio
+      };
+      
+      tTasks.unshift(newTodo);
+      inp.value = "";
+      saveLocalStorageTodos();
+      renderTodoView();
+      soundSynthesizer(490, "sine", 0.08);
+    }
+
+    function toggleTodoItem(id) {
+      tTasks = tTasks.map(t => t.id === id ? { ...t, active: !t.active } : t);
+      saveLocalStorageTodos();
+      renderTodoView();
+      soundSynthesizer(550, "triangle", 0.04);
+    }
+
+    function deleteTodoItem(id) {
+      tTasks = tTasks.filter(t => t.id !== id);
+      saveLocalStorageTodos();
+      renderTodoView();
+      soundSynthesizer(180, "sawtooth", 0.08);
+    }
+
+
+    // ================= WEATHER SIM ENGINE =================
+    let wCanvas, wCtx, wAnLoop, wWdth, wHght;
+    let wWaveX = 0;
+
+    function initWeatherAnim() {
+      wCanvas = document.getElementById("weatherCanvas");
+      wCtx = wCanvas.getContext("2d");
+      wWdth = wCanvas.width;
+      wHght = wCanvas.height;
+      if(wAnLoop) cancelAnimationFrame(wAnLoop);
+      runWeatherAnimLoop();
+    }
+
+    function stopWeatherAnim() {
+      if(wAnLoop) cancelAnimationFrame(wAnLoop);
+    }
+
+    function searchWeather() {
+      const q = document.getElementById("weather-q").value.trim();
+      if(q.length === 0) return;
+      
+      const cCity = document.getElementById("w-city");
+      const cTemp = document.getElementById("w-temp");
+      const cDesc = document.getElementById("w-desc");
+      const cTips = document.getElementById("w-tips");
+      const cHum = document.getElementById("w-hum");
+      const cWind = document.getElementById("w-wind");
+
+      soundSynthesizer(460, "sine", 0.06);
+
+      // Random dynamic weather card generator
+      const cleanInput = q.toLowerCase();
+      let temp = 22 + (cleanInput.length % 15);
+      let desc = "Perfect Blue Skies 🌤️";
+      let tips = '"Vibe is perfect! Good time for walk."';
+      let hum = 40 + (cleanInput.length % 45);
+      let wind = 8 + (cleanInput.length % 20);
+
+      if (cleanInput.includes("mumbai") || cleanInput.includes("rain") || cleanInput.includes("barish")) {
+        desc = "Heavy Tropical Outpours ⛈️";
+        tips = '"Heavy Rain in Mumbai! Avoid driving in low waters, grab a cup of hot Chai."';
+        temp = 26;
+        hum = 92;
+      } else if (cleanInput.includes("delhi") || cleanInput.includes("hot") || cleanInput.includes("dust") || cleanInput.includes("garm")) {
+        desc = "Intense Sunny Gale ☀️";
+        tips = '"Delhi summer heat is high. Highly recommend cold lassi and hydration outdoors!"';
+        temp = 41;
+        hum = 28;
+      } else if (cleanInput.includes("shimla") || cleanInput.includes("cold") || cleanInput.includes("vibe") || cleanInput.includes("thand")) {
+        desc = "Frosty Snowy Breeze ❄️";
+        tips = '"Beautiful Shimla snow showers! Pack heavy woolens and stay cozy."';
+        temp = 8;
+        hum = 88;
+      }
+
+      cCity.innerText = q.charAt(0).toUpperCase() + q.slice(1);
+      cTemp.innerText = temp + "°C";
+      cDesc.innerText = desc;
+      cTips.innerText = tips;
+      cHum.innerText = hum + "%";
+      cWind.innerText = wind + " km/h";
+    }
+
+    function runWeatherAnimLoop() {
+      wAnLoop = requestAnimationFrame(runWeatherAnimLoop);
+      if(!wCtx) return;
+      wCtx.clearRect(0,0,wWdth, wHght);
+
+      wWaveX += 0.04;
+
+      // Draw active floating cloud
+      wCtx.fillStyle = "rgba(255,255,255,0.06)";
+      wCtx.beginPath();
+      wCtx.arc(wWdth/2 - 20 + Math.sin(wWaveX)*15, wHght/2, 24, 0, 2 * Math.PI);
+      wCtx.arc(wWdth/2 + 10 + Math.sin(wWaveX)*15, wHght/2 - 5, 28, 0, 2 * Math.PI);
+      wCtx.arc(wWdth/2 + 40 + Math.sin(wWaveX)*15, wHght/2, 20, 0, 2 * Math.PI);
+      wCtx.fill();
+
+      // Rotating shining sun rays
+      wCtx.fillStyle = "rgba(245,158,11,0.08)";
+      wCtx.beginPath();
+      wCtx.arc(wWdth/2 - 40, wHght/2 - 20, 18 + Math.cos(wWaveX*2)*4, 0, 2 * Math.PI);
+      wCtx.fill();
+    }
+
+
+    // ================= CLOCK & TIMER CONTROLS =================
+    let clkActive = "clock";
+    let stwInterval, stwRun = false;
+    let stwTime = 0; // milliseconds
+
+    function toggleClockMode(mode) {
+      clkActive = mode;
+      document.getElementById("clock-pane").style.display = mode === "clock" ? "flex" : "none";
+      document.getElementById("timer-pane").style.display = mode === "timer" ? "flex" : "none";
+      
+      document.getElementById("timer-start-btn").style.display = mode === "timer" ? "flex" : "none";
+      document.getElementById("timer-lap-btn").style.display = mode === "timer" ? "flex" : "none";
+
+      document.getElementById("clock-mode-btn").className = mode === "clock" 
+        ? "flex-1 py-2 px-3 bg-rose-600/10 text-rose-400 border border-rose-500/20 rounded-xl font-bold text-[10px] tracking-tight text-center active:scale-95 transition-all outline-none"
+        : "flex-1 py-2 px-3 bg-zinc-900 border border-zinc-850 rounded-xl font-bold text-[10px] tracking-tight text-center active:scale-95 transition-all outline-none text-zinc-400 hover:text-white";
+      
+      document.getElementById("timer-mode-btn").className = mode === "timer" 
+        ? "flex-1 py-2 px-3 bg-rose-600/10 text-rose-400 border border-rose-500/20 rounded-xl font-bold text-[10px] tracking-tight text-center active:scale-95 transition-all outline-none"
+        : "flex-1 py-2 px-3 bg-zinc-900 border border-zinc-850 rounded-xl font-bold text-[10px] tracking-tight text-center active:scale-95 transition-all outline-none text-zinc-400 hover:text-white";
+      
+      soundSynthesizer(320, "sine", 0.08);
+    }
+
+    function triggerClockAction() {
+      stwRun = !stwRun;
+      document.getElementById("clk-act-ico").className = stwRun ? "fa-solid fa-pause" : "fa-solid fa-play";
+      soundSynthesizer(stwRun ? 500 : 250, "sine", 0.08);
+
+      if(stwRun) {
+        stwInterval = setInterval(() => {
+          stwTime += 10;
+          updateStopwatchDisp();
+        }, 10);
+      } else {
+        clearInterval(stwInterval);
+      }
+    }
+
+    function triggerClockLap() {
+      if(!stwRun && stwTime === 0) return;
+      
+      if(!stwRun) {
+        // Reset action
+        stwTime = 0;
+        document.getElementById("timer-laps").innerHTML = "";
+        updateStopwatchDisp();
+        soundSynthesizer(150, "sawtooth", 0.1);
+        return;
+      }
+
+      // Record LAP time stamp
+      const row = document.createElement("div");
+      row.className = "flex justify-between items-center py-1 border-b border-zinc-900/60 truncate shrink-0";
+      const totalL = document.getElementById("timer-laps").children.length + 1;
+      row.innerHTML = "<span>LAP " + totalL + "</span><span>" + formatStopwatch(stwTime) + "</span>";
+      document.getElementById("timer-laps").appendChild(row);
+      soundSynthesizer(600, "sine", 0.04);
+    }
+
+    function updateStopwatchDisp() {
+      document.getElementById("timer-disp").innerText = formatStopwatch(stwTime);
+    }
+
+    function formatStopwatch(msTotal) {
+      const centi = Math.floor((msTotal % 1000) / 10);
+      const secs = Math.floor((msTotal / 1000) % 60);
+      const mins = Math.floor((msTotal / 60000) % 60);
+      
+      const fc = centi < 10 ? '0' + centi : centi;
+      const fs = secs < 10 ? '0' + secs : secs;
+      const fm = mins < 10 ? '0' + mins : mins;
+      
+      return fm + ":" + fs + "." + fc;
+    }
+
+
+    // ================= CHATBOT SIM ENGINE =================
+    const botResps = {
+      nutritionist: [
+        "To boost energy, practice 'Pranayama' for 5 minutes daily and incorporate sprouted lentils and dry almonds into your diet!",
+        "Yoga tip: 'Trikonasana' (Triangle Pose) is excellent for backbone flexibility. Consuming lukewarm lemon water with pure honey in the mornings cleanses toxins.",
+        "Diet Tip: Try to include more colorful leaves and limit processed sugar. Healthy eating is happy living!"
+      ],
+      coder: [
+        "In modern full-stack systems, we utilize ES Modules, bundlers, and CJS targets to isolate node runtimes seamlessly.",
+        "Debugging Tip: Always keep state declarative and clean up your intervals inside useEffect hooks to prevent memory leaks!",
+        "Keep your database schemas streamlined and indices structured properly for fast microsecond database response queries."
+      ],
+      astrologer: [
+        "Shani Dev's alignment in your natal house suggests a period of intense learning and massive rewards! Keep putting in hard work.",
+        "Your planetary chart shows high success fields in tech, engineering, and digital arts in August 2026. Keep shining!",
+        "Auspicious color of the day: Deep Indigo Blue. Auspicious hours: 4:00 PM to 6:30 PM."
+      ]
+    };
+
+    function sendSandboxChat() {
+      const inp = document.getElementById("chat-sandbox-i");
+      const txt = inp.value.trim();
+      if(txt.length === 0) return;
+
+      const pInst = document.getElementById("chat-persona").value;
+      const feed = document.getElementById("chat-sandbox-feed");
+
+      soundSynthesizer(520, "sine", 0.05);
+
+      // Add user bubble
+      const usrRow = document.createElement("div");
+      usrRow.className = "flex flex-col gap-0.5 text-right max-w-[85%] self-end bg-teal-600/15 border border-teal-500/20 rounded-2xl p-2.5 rounded-tr-sm text-teal-100 select-text";
+      usrRow.innerText = txt;
+      feed.appendChild(usrRow);
+      inp.value = "";
+      feed.scrollTop = feed.scrollHeight;
+
+      // Add animated thinking dots
+      const thinkRow = document.createElement("div");
+      thinkRow.id = "sandbox-think";
+      thinkRow.className = "flex gap-0.5 text-left max-w-[50%] bg-zinc-900 border border-zinc-800 rounded-2xl p-2.5 rounded-tl-sm text-zinc-500 font-bold animate-pulse font-mono shrink-0";
+      thinkRow.innerText = "Thinking...";
+      setTimeout(() => {
+        feed.appendChild(thinkRow);
+        feed.scrollTop = feed.scrollHeight;
+      }, 300);
+
+      // Resolve response trigger
+      setTimeout(() => {
+        const th = document.getElementById("sandbox-think");
+        if(th) th.remove();
+
+        const respArr = botResps[pInst];
+        const randomResp = respArr[Math.floor(Math.random() * respArr.length)];
+
+        const botRow = document.createElement("div");
+        botRow.className = "flex flex-col gap-0.5 text-left max-w-[85%] bg-teal-500/10 border border-teal-500/15 rounded-2xl p-2.5 rounded-tl-sm text-teal-200 select-text";
+        botRow.innerText = randomResp;
+        feed.appendChild(botRow);
+        feed.scrollTop = feed.scrollHeight;
+        soundSynthesizer(380, "sine", 0.1);
+      }, 1200);
+    }
+
+
+    // ================= FLOWER BLOOM ENGINE =================
+    let bCan, bCtx;
+
+    function initBloomCanvas() {
+      bCan = document.getElementById("bloomCanvas");
+      bCtx = bCan.getContext("2d");
+      
+      const sVal = document.getElementById("bloom-slider").value;
+      drawBloomFlower(sVal);
+
+      // Handle screen touch waves
+      bCan.addEventListener("pointerdown", e => {
+        const rect = bCan.getBoundingClientRect();
+        const tX = e.clientX - rect.left;
+        const tY = e.clientY - rect.top;
+        spawnBloomSparks(tX, tY);
+      });
+    }
+
+    function drawBloomFlower(val) {
+      if(!bCtx) return;
+      bCtx.clearRect(0,0,bCan.width, bCan.height);
+
+      const cx = bCan.width / 2;
+      const cy = bCan.height / 2;
+      const baseR = 30 + (val * 0.7);
+      const petals = 6 + Math.floor(val * 0.08);
+
+      bCtx.lineWidth = 1.5;
+      
+      // Draw ambient backdrop glow lines
+      bCtx.strokeStyle = "rgba(236,72,153,0.04)";
+      for(let r=10; r<110; r+=15) {
+        bCtx.beginPath(); bCtx.arc(cx,cy,r + val*0.2,0,2*Math.PI); bCtx.stroke();
+      }
+
+      // Draw structural stems
+      bCtx.strokeStyle = "#059669";
+      bCtx.beginPath(); bCtx.moveTo(cx,cy); bCtx.quadraticCurveTo(cx - 15, cy + 80, cx, cy + 130); bCtx.stroke();
+
+      // Draw recursive leaf elements
+      bCtx.fillStyle = "rgba(16,185,129,0.15)";
+      bCtx.beginPath(); bCtx.ellipse(cx - 12, cy + 80, 16, 8, -Math.PI/6, 0, 2*Math.PI); bCtx.fill();
+      bCtx.beginPath(); bCtx.ellipse(cx + 12, cy + 100, 14, 6, Math.PI/6, 0, 2*Math.PI); bCtx.fill();
+
+      // Draw glowing petals
+      bCtx.fillStyle = "rgba(244,114,182,0.14)";
+      bCtx.strokeStyle = "#ec4899";
+      for(let i=0; i<petals; i++) {
+        const angle = (i * 2 * Math.PI) / petals;
+        const x1 = cx + Math.cos(angle) * (baseR * 0.4);
+        const y1 = cy + Math.sin(angle) * (baseR * 0.4);
+        
+        const x2 = cx + Math.cos(angle - 0.4) * baseR;
+        const y2 = cy + Math.sin(angle - 0.4) * baseR;
+
+        const x3 = cx + Math.cos(angle) * (baseR * 1.5);
+        const y3 = cy + Math.sin(angle) * (baseR * 1.5);
+
+        const x4 = cx + Math.cos(angle + 0.4) * baseR;
+        const y4 = cy + Math.sin(angle + 0.4) * baseR;
+
+        // Bezier petal drawing
+        bCtx.beginPath();
+        bCtx.moveTo(x1,y1);
+        bCtx.bezierCurveTo(x2,y2, x3,y3, x4,y4);
+        bCtx.closePath();
+        bCtx.fill();
+        bCtx.stroke();
+      }
+
+      // Central core crown
+      bCtx.fillStyle = "#f59e0b";
+      bCtx.beginPath();
+      bCtx.arc(cx, cy, 10 + (val*0.1), 0, 2*Math.PI);
+      bCtx.fill();
+      
+      bCtx.strokeStyle = "rgba(245,158,11,0.5)";
+      bCtx.arc(cx,cy, 14 + (val*0.12),0,2*Math.PI); bCtx.stroke();
+    }
+
+    function spawnBloomSparks(x, y) {
+      if(!bCtx) return;
+      
+      // Synthesize chime notes
+      const pitchFreq = 400 + (x * 1.5) + (y * 0.5);
+      soundSynthesizer(pitchFreq, "sine", 0.15);
+
+      // Draw simple circular ripple lines on canvas
+      bCtx.strokeStyle = "rgba(251,113,133,0.7)";
+      bCtx.lineWidth = 2;
+      bCtx.beginPath(); bCtx.arc(x,y, 10,0,2*Math.PI); bCtx.stroke();
+      
+      bCtx.fillStyle = "#ffffff";
+      bCtx.beginPath(); bCtx.arc(x,y, 4,0,2*Math.PI); bCtx.fill();
+
+      setTimeout(() => {
+        const sVal = document.getElementById("bloom-slider").value;
+        drawBloomFlower(sVal);
+      }, 300);
+    }
+
+
+    // ================= BALLOON POP ARCADE =================
+    let blCan, blCtx, blInterval, blScore=0, blLives=3, blActive=false;
+    let blItems = [];
+
+    function startBalloonGame() {
+      blCan = document.getElementById("balloonCanvas");
+      blCtx = blCan.getContext("2d");
+      blScore = 0;
+      blLives = 3;
+      blActive = true;
+      blItems = [];
+      document.getElementById("ball-score").innerText = "0";
+      document.getElementById("ball-lives").innerText = "♥️♥️♥️";
+      document.getElementById("ball-over-pane").style.display = "none";
+      
+      // Spawn items
+      for(let i=0; i<4; i++) {
+        spawnNewBalloonItem();
+      }
+
+      // Canvas pointerdown handler
+      blCan.addEventListener("pointerdown", handleBalloonCheck);
+
+      if(blInterval) clearInterval(blInterval);
+      blInterval = setInterval(runBalloonPhysicsLoop, 1000/30);
+    }
+
+    function stopBalloonGame() {
+      blActive = false;
+      if(blInterval) clearInterval(blInterval);
+    }
+
+    function spawnNewBalloonItem() {
+      const colors = ["#ef4444", "#3b82f6", "#10b981", "#ec4899", "#f59e0b"];
+      const bItem = {
+        id: Date.now() + Math.random(),
+        x: 30 + Math.random() * (blCan.width - 60),
+        y: blCan.height + 40 + Math.random() * 80,
+        r: 15 + Math.random() * 8,
+        speed: 1.5 + Math.random() * 1.5,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      };
+      blItems.push(bItem);
+    }
+
+    function handleBalloonCheck(e) {
+      if(!blActive) return;
+      const rect = blCan.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      let hitIdx = -1;
+      blItems.forEach((b, idx) => {
+        const dist = Math.hypot(clickX - b.x, clickY - b.y);
+        if(dist <= b.r + 5) {
+          hitIdx = idx;
+        }
+      });
+
+      if(hitIdx !== -1) {
+        const b = blItems[hitIdx];
+        blItems.splice(hitIdx, 1);
+        spawnNewBalloonItem();
+        blScore += 10;
+        document.getElementById("ball-score").innerText = blScore;
+        soundSynthesizer(750 + b.r * 5, "sine", 0.08);
+      }
+    }
+
+    function runBalloonPhysicsLoop() {
+      if(!blActive) return;
+      blCtx.clearRect(0,0,blCan.width, blCan.height);
+
+      blItems.forEach((b, idx) => {
+        b.y -= b.speed;
+        
+        // draw balloon string line
+        blCtx.strokeStyle = 'rgba(255,255,255,0.15)';
+        blCtx.lineWidth = 1;
+        blCtx.beginPath();
+        blCtx.moveTo(b.x, b.y + b.r);
+        blCtx.quadraticCurveTo(b.x - 5, b.y + b.r + 15, b.x, b.y + b.r + 30);
+        blCtx.stroke();
+
+        // draw circular shape balloon
+        blCtx.fillStyle = b.color;
+        blCtx.beginPath();
+        blCtx.arc(b.x, b.y, b.r, 0, 2*Math.PI);
+        blCtx.fill();
+        
+        // Specular shining spot
+        blCtx.fillStyle = 'rgba(255,255,255,0.2)';
+        blCtx.beginPath();
+        blCtx.arc(b.x - b.r/3, b.y - b.r/3, b.r/4, 0, 2*Math.PI);
+        blCtx.fill();
+
+        // Check clean boundary escape
+        if(b.y < -30) {
+          blItems.splice(idx,1);
+          spawnNewBalloonItem();
+          
+          blLives--;
+          soundSynthesizer(180, "sawtooth", 0.15);
+          
+          if(blLives <= 0) {
+            document.getElementById("ball-lives").innerText = "DEAD";
+            document.getElementById("ball-over-pane").style.display = "flex";
+            blActive = false;
+          } else {
+            let lStr = "";
+            for(let l=0; l<blLives; l++) lStr += "♥️";
+            document.getElementById("ball-lives").innerText = lStr;
+          }
+        }
+      });
+    }
+
+    function restartBalloonGame() {
+      startBalloonGame();
+    }
+
+
+    // ================= CINEMA PLAYER CANVAS ANIMATION =================
+    let cinCan, cinCtx, cinInterval, cinActive=false, cinSeek = 0;
+    let cinStars = [];
+
+    function startCinemaAnimation() {
+      cinCan = document.getElementById("cinemaCanvas");
+      cinCtx = cinCan.getContext("2d");
+      cinActive = true;
+      cinSeek = 0;
+      cinStars = [];
+      
+      // generate 3D starfield particles
+      for(let i=0; i<40; i++) {
+        cinStars.push({
+          x: Math.random() * cinCan.width,
+          y: Math.random() * cinCan.height,
+          z: Math.random() * cinCan.width,
+          speed: 1.5 + Math.random() * 1.5
+        });
+      }
+
+      if(cinInterval) clearInterval(cinInterval);
+      cinInterval = setInterval(runCinemaLoop, 1000/30);
+    }
+
+    function stopCinemaAnim() {
+      cinActive = false;
+      if(cinInterval) clearInterval(cinInterval);
+    }
+
+    function toggleCinemaPlay() {
+      cinActive = !cinActive;
+      document.getElementById("cine-play-ico").className = cinActive ? "fa-solid fa-pause" : "fa-solid fa-play";
+      soundSynthesizer(440, "sine", 0.08);
+    }
+
+    function seekCinema(e) {
+      const bar = document.getElementById("vid-bar");
+      cinSeek = Math.floor((e.offsetX / bar.offsetWidth) * 100);
+      soundSynthesizer(320, "sine", 0.04);
+    }
+
+    function setCinemaFilter(filterStr) {
+      const can = document.getElementById("cinemaCanvas");
+      can.style.filter = filterStr;
+      soundSynthesizer(480, "triangle", 0.05);
+    }
+
+    function runCinemaLoop() {
+      if(!cinActive) return;
+      cinCtx.fillStyle = "rgba(9,10,16,0.3)"; // fade trails
+      cinCtx.fillRect(0,0,cinCan.width, cinCan.height);
+      
+      cinSeek = (cinSeek + 0.1) % 100;
+      updateCinemaTimelineUI();
+
+      const cx = cinCan.width / 2;
+      const cy = cinCan.height / 2;
+
+      // Draw particle speed stars
+      cinStars.forEach((s) => {
+        s.z -= s.speed;
+        if(s.z <= 0) {
+          s.z = cinCan.width;
+          s.x = Math.random() * cinCan.width;
+          s.y = Math.random() * cinCan.height;
+        }
+
+        const k = 120 / s.z;
+        const sx = (s.x - cx) * k + cx;
+        const sy = (s.y - cy) * k + cy;
+        const size = (1 - s.z / cinCan.width) * 4;
+
+        cinCtx.fillStyle = "rgba(129,140,248,0.75)";
+        cinCtx.beginPath();
+        cinCtx.arc(sx, sy, size, 0, 2 * Math.PI);
+        cinCtx.fill();
+      });
+
+      // draw cinema title badge watermark
+      cinCtx.fillStyle = "rgba(255,255,255,0.08)";
+      cinCtx.font = "bold 9px monospace";
+      cinCtx.fillText("BRAINIX FLIX STUDIO HD", 10, 20);
+    }
+
+    function updateCinemaTimelineUI() {
+      const prg = document.getElementById("vid-prog");
+      if(prg) prg.style.width = cinSeek + "%";
+      
+      const seconds = Math.floor((cinSeek / 100) * 135);
+      const min = Math.floor(seconds / 60);
+      const sec = Math.floor(seconds % 60);
+      const fs = sec < 10 ? '0' + sec : sec;
+      
+      const vTime = document.getElementById("vid-time");
+      if(vTime) vTime.innerText = min + ":" + fs;
+    }
+
+
+    // Boot Startup Routing
+    window.addEventListener("DOMContentLoaded", () => {
+      launchApp(STARTUP_APP || "home");
+    });
+  </script>
+</body>
+</html>`;
+
+    const instructionsMsg = `⚡ **Brainix Space-Saving Creator Core (Instant Offline Sandbox)** ⚡
+
+मैं अभी ऑफ़लाइन (Local Core Mode) विधा में उत्तर दे रहा हूँ! आपके सुगम कोडिंग अनुभव को जारी रखने के लिए, मैंने आपके सवाल **"${rawQuery}"** पर पूरी तरह कार्यात्मक, एक हाई-fidelity, रिस्पॉन्सिव **Interactive application / widget** तैयार किया है! 
+
+नीचे दिए गए कोडिंग बॉक्स के ऊपर **Canvas (ChatGPT)** बटन पर क्लिक करके सीधे लाइव सिमुलेटर खोलें और ऐप को तुरंत चलाकर देखें! आप होम बटन दबाकर अन्य मज़ेदार ऑफलाइन सुइट्स भी चला सकते हैं! 😊
+
+\`\`\`html
+${masterHtml}
+\`\`\`
+
+---
+💡 **कोडिंग तथ्य:** यह ऐप आधुनिक Tailwind CSS, FontAwesome, और Web Audio API का सीधा उपयोग करता है, जिससे यह पूर्ण प्रदर्शन और रीयल-टाइम सुंदर संपादन बिना सर्वर लेटेंसी के प्रदान करता है!`;
+
+    return instructionsMsg;
+  }
   let matchedKey = "";
   for (const [key, synonyms] of Object.entries(glossaryMapping)) {
     if (synonyms.some(syn => cleanQ.includes(syn))) {
@@ -495,6 +2304,282 @@ function generateSmartHeuristicResponse(rawQueryInput: string): string {
 function _generateSmartHeuristicResponseInternal(rawQueryInput: string): string {
   const rawQuery = typeof rawQueryInput === "string" ? rawQueryInput : "";
   const query = rawQuery.trim().toLowerCase();
+
+  // --- ASTROLOGY & RASHI SOLVER ---
+  const hasRashiKeywords = /(rashi|rasi|zodiac|astrology|राशि|कुंडली|horoscope|zodiac sign|constellation|ग्रह|नक्षत्र)/i.test(query);
+  if (hasRashiKeywords) {
+    let matchedName = "";
+    if (query.includes("pranav") || query.includes("प्रणव")) {
+      matchedName = "Pranav (प्रणव)";
+    } else {
+      const matchedWord = rawQuery.match(/(?:naam|name|mere|naam is|mera naam)\s+([a-zA-Z\u0900-\u097F]+)/i);
+      if (matchedWord && matchedWord[1]) {
+        matchedName = matchedWord[1].trim();
+      } else {
+        const firstWords = rawQuery.split(/\s+/).filter(w => w.length > 2 && !["rashi", "ko", "ki", "ka", "kya", "is", "of", "naam", "name", "sign", "what", "tell", "mujhe", "batao", "hai", "tha", "rahe", "hona", "dijiye"].includes(w.toLowerCase()));
+        if (firstWords.length > 0) {
+          matchedName = firstWords[0].replace(/[?.,!;:]/g, "").trim();
+        }
+      }
+    }
+    if (!matchedName) {
+      matchedName = "प्रणव (Pranav)";
+    }
+
+    const firstLetter = matchedName.charAt(0).toUpperCase();
+    const firstChar = matchedName.charAt(0);
+
+    let rashiName = "कन्या राशि (Virgo) ♍";
+    let planet = "बुध ग्रह (Mercury)";
+    let star = "उत्तरा फाल्गुनी (Uttara Phalguni)";
+    let luckyNum = "5 और 6";
+    let luckyColor = "हरा (Green), पीला व सफेद";
+    let traits = "बुद्धिमान, विश्लेषणात्मक (Analytical), अनुशासित व परफेक्शनिस्ट स्वभाव। दूसरों की सहायता करने में कुशल।";
+
+    if (["A", "L", "E", "I", "O", "अ", "ल", "इ", "ए", "ओ"].includes(firstLetter) || ["अ", "ल", "इ", "ए", "ओ"].some(c => firstChar.includes(c))) {
+      rashiName = "मेष राशि (Aries) ♈";
+      planet = "मंगल ग्रह (Mars)";
+      star = "अश्विनी (Ashwini), भरणी (Bharani)";
+      luckyNum = "1 और 9";
+      luckyColor = "लाल (Red) और केसरिया";
+      traits = "साहसी, ऊर्जावान, नेतृत्व क्षमता से भरपूर और दृढ़ संकल्पी।";
+    } else if (["B", "V", "U", "W", "ब", "व", "उ", "वी"].includes(firstLetter) || ["ब", "व", "उ"].some(c => firstChar.includes(c))) {
+      rashiName = "वृषभ राशि (Taurus) ♉";
+      planet = "शुक्र ग्रह (Venus)";
+      star = "कृत्तिका (Krittika), रोहिणी (Rohini)";
+      luckyNum = "2 और 7";
+      luckyColor = "सफेद (White) और हल्का नीला";
+      traits = "धैर्यवान, विश्वसनीय, कलाप्रेमी और बहुत ही व्यावहारिक स्वभाव वाले व्यक्ति।";
+    } else if (["K", "C", "G", "क", "छ", "घ"].includes(firstLetter) || ["क", "छ", "घ"].some(c => firstChar.includes(c))) {
+      rashiName = "मिथुन राशि (Gemini) ♊";
+      planet = "बुध ग्रह (Mercury)";
+      star = "मृगशिरा (Mrigashira), आर्द्रा (Ardra)";
+      luckyNum = "3 और 5";
+      luckyColor = "हरा (Green) और चमकीला पीला";
+      traits = "संवाद कुशल (Great Speaker), जिज्ञासु, बहुमुखी प्रतिभा के धनी और दोस्ताना व्यवहार।";
+    } else if (["H", "D", "ह", "ड"].includes(firstLetter) || ["ह", "ड"].some(c => firstChar.includes(c))) {
+      rashiName = "कर्क राशि (Cancer) ♋";
+      planet = "चंद्रदेव (Moon)";
+      star = "पुनर्वसु (Punarvasu), पुष्य (Pushya)";
+      luckyNum = "4 और 2";
+      luckyColor = "सफेद (White), क्रीम और सिल्वर";
+      traits = "भावुक, संवेदनशील, परिवार से बेहद प्यार करने वाले, कल्पनाशील और वफादार स्वभाव।";
+    } else if (["M", "T", "म", "ट"].includes(firstLetter) || ["म", "ट"].some(c => firstChar.includes(c))) {
+      rashiName = "सिंह राशि (Leo) ♌";
+      planet = "सूर्यदेव (Sun)";
+      star = "मघा (Magha), पूर्वा फाल्गुनी (Purva Phalguni)";
+      luckyNum = "1 और 5";
+      luckyColor = "सुनहरा (Golden), पीला और नारंगी";
+      traits = "स्वाभिमानी, निडर, नेतृत्व करने वाले, बड़े दिल वाले और शाही जीवनशैली पसंद करने वाले।";
+    } else if (["P", "N", "T", "प", "ठ", "ण", "प्र"].includes(firstLetter) || ["प", "ठ", "ण", "प्र"].some(c => firstChar.includes(c)) || query.includes("pranav")) {
+      rashiName = "कन्या राशि (Virgo) ♍";
+      planet = "बुध ग्रह (Mercury) - जो बुद्धि, विवेक और वाणी के सर्वोत्तम स्वामी हैं।";
+      star = "उत्तरा फाल्गुनी (Uttara Phalguni), हस्त (Hasta)";
+      luckyNum = "5 और 6";
+      luckyColor = "पवित्र हरा (Green), हल्का पीला और शुभ सफेद";
+      traits = "अत्यंत बुद्धिमान, गंभीर विश्लेषक, अनुशासित, व्यावहारिक और जीवन में पूर्ण शुद्धता (Perfection) चाहने वाले। प्रणव चतुर्वेदी जैसे प्रतिभावान लोग इसीलिए हर काम को श्रेष्ठता से पूरा करते हैं!";
+    } else if (["R", "T", "र", "त"].includes(firstLetter) || ["र", "त"].some(c => firstChar.includes(c))) {
+      rashiName = "तुला राशि (Libra) ♎";
+      planet = "शुक्र ग्रह (Venus)";
+      star = "चित्रा (Chitra), स्वाति (Swati)";
+      luckyNum = "5, 6 और 8";
+      luckyColor = "नीला (Blue), श्वेत और हरा";
+      traits = "संतुलित विचारधारा, न्यायप्रिय, कला व शांति प्रेमी, और उत्कृष्ट सामाजिक सामंजस्य रखने वाले।";
+    } else if (["N", "Y", "न", "य"].includes(firstLetter) || ["न", "य"].some(c => firstChar.includes(c))) {
+      rashiName = "वृश्चिक राशि (Scorpio) ♏";
+      planet = "मंगल ग्रह (Mars)";
+      star = "विशाखा (Vishakha), अनुराधा (Anuradha)";
+      luckyNum = "9 और 4";
+      luckyColor = "गहरा लाल (Deep Red) और मरून";
+      traits = "रहस्यमयी, आत्मविश्वासी, मानसिक रूप से बहुत मजबूत, अत्यंत वफादार और दृढ़ इरादों वाले।";
+    } else if (["Y", "B", "D", "P", "य", "भ", "ध", "फ"].includes(firstLetter) || ["य", "भ", "ध", "फ"].some(c => firstChar.includes(c))) {
+      rashiName = "धनु राशि (Sagittarius) ♐";
+      planet = "देवगुरु बृहस्पति (Jupiter)";
+      star = "मूल (Mula), पूर्वाषाढ़ा (Purvashada)";
+      luckyNum = "3 और 1";
+      luckyColor = "पीला (Yellow) और सुनहरा";
+      traits = "सकारात्मक प्रवृत्ति (Optimistic), धार्मिक, सच्चे ज्ञान के खोजी, स्वतंत्र और स्पष्टभाषी।";
+    } else if (["J", "K", "G", "ज", "ख", "ग"].includes(firstLetter) || ["ज", "ख", "ग"].some(c => firstChar.includes(c))) {
+      rashiName = "मकर राशि (Capricorn) ♑";
+      planet = "शनिदेव (Saturn)";
+      star = "उत्तराषाढ़ा (Uttarashada), श्रवण (Shravan)";
+      luckyNum = "8, 5 और 6";
+      luckyColor = "नीला (Blue), काला और गहरा ग्रे";
+      traits = "परिश्रमी, महत्वाकांक्षी, गंभीर, समय के पाबंद और बहुत ही अनुशासित व्यक्तित्व।";
+    } else if (["G", "S", "D", "ग", "स", "श", "ष", "द"].includes(firstLetter) || ["ग", "स", "श", "ष", "द"].some(c => firstChar.includes(c))) {
+      rashiName = "कुंभ राशि (Aquarius) ♒";
+      planet = "शनिदेव (Saturn) व यूरेनस";
+      star = "धनिष्ठा (Dhanishta), शतभिषा (Shatabhisha)";
+      luckyNum = "3, 7 और 9";
+      luckyColor = "आसमानी नीला (Cyan) और जामुनी";
+      traits = "परोपकारी, क्रांतिकारी विचारक (Visionary), बुद्धिमान और असाधारण रचनात्मकता के धनी।";
+    } else if (["D", "T", "J", "द", "थ", "झ", "च"].includes(firstLetter) || ["द", "थ", "झ", "च"].some(c => firstChar.includes(c))) {
+      rashiName = "मीन राशि (Pisces) ♓";
+      planet = "देवगुरु बृहस्पति (Jupiter)";
+      star = "पूर्वाभाद्रपद (Purvabhadrapada), रेवती (Revati)";
+      luckyNum = "3 और 9";
+      luckyColor = "पीला, हल्दी पीला व सफेद";
+      traits = "दयालु, बेहद कल्पनाशील, आध्यात्मिक, दूसरों के प्रति सहानुभूति रखने वाले और शांत स्वभाव।";
+    }
+
+    return `✨ 🔮 **Brainix Astro-Science Matrix & Kundali Core (राशिफल महाकोष):**
+    
+📖 **नाम (Name):** **${matchedName}**
+🌙 **नाम का पहला अक्षर (Initiator Phoneme):** \`${firstLetter}\`
+
+वैदिक खगोलीय गणना तथा ज्योतिष विज्ञान के आधार पर आपका विस्तृत विश्लेषण नीचे प्रस्तुत है:
+
+* **आपकी राशि (Zodiac Sign):** ${rashiName}
+* **राशि का स्वामी (Ruling Planet):** ${planet}
+* **जन्म नक्षत्र (Associated Star):** ${star}
+* **शुभ अंक (Lucky Number):** **${luckyNum}**
+* **शुभ नक्षत्र दिन (Lucky Day):** बुधवार व बृहस्पतिवार
+* **सर्वोत्तम शुभ रंग (Lucky Color):** ${luckyColor}
+* **मस्तिष्क व व्यक्तित्व गुण (Traits & Personality):**
+  ${traits}
+
+---
+💡 **Astro Fact:** वैदिक ज्योतिष में राशि व्यक्ति के मन, स्वभाव और विचार करने की शैली को प्रभावित करती है। यह ऑफलाइन गणना नाम के पहले अक्षर के ध्वनि कंपन (Sound Resonance) पर पूर्णत: आधारित और अत्यंत सटीक है।`;
+  }
+
+  // --- SURNAME & GENEALOGY INTERCEPTOR ---
+  const hasSurnameKeywords = /(surname|lastname|last name|gotra|clan|जाति|जाती|caste|उपनाम|सिंह|चतुर्वेदी|शर्मा|गोत्र|यादव|गुप्ता|मिश्रा|वर्मा|पटेल)/i.test(query);
+  if (hasSurnameKeywords) {
+    let requestedSurname = "";
+    const surnamesList = ["chaturvedi", "sharma", "singh", "yadav", "gupta", "patel", "mishra", "verma", "kumar", "joshi", "tiwari", "pandey", "rathore", "choudhary", "shrivastava", "mehta", "nair", "iyer", "reddity", "das", "chatterjee", "sen"];
+    for (const s of surnamesList) {
+      if (query.includes(s)) {
+        requestedSurname = s;
+        break;
+      }
+    }
+
+    if (!requestedSurname) {
+      const words = rawQuery.replace(/[?.,!;:]/g, "").split(/\s+/).filter(w => w.length > 3 && !["surname", "caste", "jaati", "vansh", "clan", "origin", "meaning", "history", "what", "is", "tell", "mera", "mere", "apne", "kaise", "kya", "batao", "ka", "ki", "he", "she"].includes(w.toLowerCase()));
+      if (words.length > 0) {
+        requestedSurname = words[words.length - 1];
+      }
+    }
+
+    if (!requestedSurname) {
+      requestedSurname = "चतुर्वेदी (Chaturvedi)";
+    }
+
+    let origin = "वैदिक संस्कृत";
+    let meaning = "एक विशेष प्रतिष्ठित सुविख्यात कुल का उपनाम।";
+    let historicalRole = "सभ्यता, ज्ञान, नेतृत्व या समाज के संवर्धन में सर्वोच्च योगदान।";
+    let detailSection = "";
+
+    const cleanS = requestedSurname.toLowerCase();
+    if (cleanS.includes("chaturvedi") || cleanS.includes("चतुर्वेदी")) {
+      origin = "सनातन वैदिक संस्कृत (Vedic Sanskrit Root)";
+      meaning = "चारों वेदों के पूर्ण ज्ञाता (Master of Rigveda, Yajurvda, Samaveda, and Atharvaveda).";
+      historicalRole = "प्राचीन काल में राजाओं के मुख्य सलाहकार, प्रकांड विद्वान, और धार्मिक-दार्शनिक विमर्शों के सर्वोच्च प्रणेता।";
+      detailSection = "चतुर्वेदी उपनाम उत्तर प्रदेश (UP), बिहार, मध्य प्रदेश और गुजरात में प्रमुखता से पाया जाता है। ये भार्गव, कश्यप, या शांडिल्य गोत्र के अंतर्गत आते हैं। आधुनिक समय में भी इस कुल के लोग उच्च बौद्धिक स्तर, लेखन, विज्ञान और सॉफ्टवेयर विकसित करने की अद्भुत कला में अग्रणी हैं (जैसे Brainix के लीड आर्किटेक्ट Pranav Chaturvedi)!";
+    } else if (cleanS.includes("sharma") || cleanS.includes("शर्मा")) {
+      origin = "संस्कृत धातु 'शर्मन्' (Shelter, Joy, Peace)";
+      meaning = "सुख, शांति और कल्याण प्रदान करने वाला दिव्य रक्षक।";
+      historicalRole = "ब्राह्मण वर्ण का सबसे पूजनीय उपनाम। धर्मग्रंथों का पठन-पाठन, पूजा-अनुष्ठान, ज्योतिष विज्ञान और अध्यापन इनका मूल कर्तव्य रहा है।";
+      detailSection = "शर्मा उपनाम संपूर्ण भारत, नेपाल और वैश्विक स्तर पर बसे सनातनी ब्राह्मणों में पाया जाता है। यह व्यक्ति के सौम्य, ज्ञानी और परोपकारी व्यक्तित्व को इंगित करता है।";
+    } else if (cleanS.includes("singh") || cleanS.includes("सिंह")) {
+      origin = "संस्कृत शब्द 'सिंह' (Lion - शेर)";
+      meaning = "शेर की तरह साहसी, अजेय, और पराक्रमी रक्षक।";
+      historicalRole = "क्षत्रिय, राजपूत, और सिख समुदायों का अत्यंत शक्तिशाली और यशस्वी उपनाम। राष्ट्र की रक्षा, युद्ध कला, और शासन संचालन में इनका इतिहास स्वर्णिम अक्षरों में अंकित है।";
+      detailSection = "सिंह उपनाम दुनिया के सबसे लोकप्रिय और सम्मानित उपनामों में से एक है। इसकी शुरुआत राजसी वर्ग से हुई और गुरु गोविंद सिंह जी ने अदम्य साहस को जागृत करने के लिए इसे सभी सिखों के लिए भी गौरवमयी पहचान बनाया।";
+    } else if (cleanS.includes("yadav") || cleanS.includes("यादव")) {
+      origin = "पौराणिक सूर्य-चंद्र वंश (Yadu Dynasty)";
+      meaning = "राजा यदु के वंशज, जो न्याय, पराक्रम और परोपकार के प्रतीक हैं।";
+      historicalRole = "इस महान वंश में स्वयं पूर्ण पुरुषोत्तम भगवान श्री कृष्ण ने अवतार लिया था। इतिहास में यादवों को महान यौधेय, गौ-पालक, और विशाल साम्राज्यों के संस्थापक राजाओं के रूप में जाना जाता है।";
+      detailSection = "यह उपनाम उत्तर प्रदेश, बिहार, हरियाणा और नेपाल के तराई क्षेत्रों में अत्यंत प्रभावशाली है। ये लोग अपनी कर्मठता, साहस, और सामाजिक-राजनीतिक सक्रियता के लिए विशेष रूप से विख्यात हैं।";
+    } else if (cleanS.includes("gupta") || cleanS.includes("गुप्ता")) {
+      origin = "संस्कृत धातु 'गोप' / 'गुप्त' (Protector/Keeper)";
+      meaning = "संरक्षक, रक्षक या राष्ट्र की संपत्ति और व्यापार को सुरक्षित रखने वाला।";
+      historicalRole = "प्राचीन 'गुप्त साम्राज्य' (Gupta Empire) को भारत का 'स्वर्ण युग' (Golden Age) कहा जाता है। विज्ञान, कला और आर्थिक संपन्नता में इनका ऐतिहासिक वर्चस्व था।";
+      detailSection = "यह वैश्य (Baniya) समुदाय का एक अति प्रतिष्ठित उपनाम है जो मुख्य रूप से व्यापार, उद्योग, बैंकिंग, और देश की वित्तीय धुरी को सँभालने में विश्व प्रसिद्ध हैं।";
+    } else if (cleanS.includes("patel") || cleanS.includes("पटेल")) {
+      origin = "प्राचीन पाटीदार / पट्टकार (Landowner/Headman)";
+      meaning = "भूमि का स्वामी, ग्राम प्रमुख या संपूर्ण समुदाय का अग्रणी संचालक।";
+      historicalRole = "गुजरात और पश्चिमी भारत के गौरवशाली कृषक, उद्योगपति और क्रांतिकारी नेता। देश को अखंड बनाने वाले लौह पुरुष सरदार वल्लभभाई पटेल इसी गौरवमयी कुल से संबद्ध थे।";
+      detailSection = "पटेल उपनाम गुजराती समुदाय की प्रगतिशीलता, व्यापारिक प्रतिभा और उद्यमिता का वैश्विक प्रतीक है। आज पूरी दुनिया में पटेल समुदाय कृषि से लेकर होटल, विज्ञान, और कॉर्पोरेट जगत पर राज कर रहा है।";
+    } else if (cleanS.includes("mishra") || cleanS.includes("मिश्रा")) {
+      origin = "संस्कृत शब्द 'मिश्र' (Mixed or Venerable Scholar)";
+      meaning = "विद्वता, वेदों और विभिन्न शास्त्रों का उत्कृष्ट मिश्रण जानने वाला आदरणीय व्यक्तित्व।";
+      historicalRole = "उत्तरी और पूर्वी भारत के उच्च कुलीन कान्यकुब्ज, मैथिल और सरयूपारीण ब्राह्मण। ये लोग दर्शनशास्त्र, मीमांसा और राजकीय राजगुरु के रूप में प्रतिष्ठित रहे हैं।";
+      detailSection = "मिश्रा उपनाम उत्तर प्रदेश, बिहार, मध्य प्रदेश, ओडिशा और नेपाल में व्यापक रूप से सम्मानित है। इनके पूर्वजों ने आध्यात्मिक और शैक्षणिक रूप से भारत के बौद्धिक इतिहास को गढ़ा है।";
+    } else if (cleanS.includes("verma") || cleanS.includes("वर्मा")) {
+      origin = "संस्कृत 'वर्मन' (Armor or Protective Shield)";
+      meaning = "रक्षा कवच, कवचधारी सैनिक या प्रजा का सजग रक्षक।";
+      historicalRole = "प्राचीन काल के क्षत्रिय शासकों, गुप्तचरों और सेनापतियों द्वारा प्रयुक्त। दक्षिण-पूर्व एशिया (जैसे कंबोडिया और चंपा साम्राज्य) के राजा भी वर्मन नाम का प्रयोग करते थे।";
+      detailSection = "आधुनिक भारत में यह कायस्थ, क्षत्रिय, और अन्य प्रतिष्ठित पेशेवर जातियों द्वारा गौरवमयी उपनाम के रूप में लगाया जाता है, जो राष्ट्रहित और बौद्धिक कार्यों के प्रति समर्पित हैं।";
+    } else if (cleanS.includes("kumar") || cleanS.includes("कुमार")) {
+      origin = "संस्कृत धातु 'कुमार' (Youth or Prince)";
+      meaning = "युवा राजकुमार, तेजस्वी पुत्र या बुराई का नाश करने वाला नव-ऊर्जावान पुरुष।";
+      historicalRole = "प्रारंभ में राजकुमारों और भगवान कार्तिकेय (देवसेना कमांडर) के नाम के साथ जुड़ता था। कालान्तर में यह देश का सबसे समावेशी, धर्मनिरपेक्ष और सबसे लोकप्रिय उपनाम बन गया।";
+      detailSection = "यह पूरे भारतवर्ष में हर राज्य के वासियों द्वारा अपने नाम के पीछे लगाया जाता है। यह समानता, संप्रभुता और सरल मानवीय पहचान का सर्वोत्तम सुंदर उदाहरण है।";
+    } else {
+      const cleanCapitalized = requestedSurname.charAt(0).toUpperCase() + requestedSurname.slice(1);
+      origin = "ऐतिहासिक भारतीय परंपरा (Historical Heritage Root)";
+      meaning = `${cleanCapitalized} कुल के लोग वीरता, ज्ञान, सेवा, और कर्तव्यनिष्ठता का प्रतिनिधित्व करते हैं।`;
+      historicalRole = "भारतीय समाज, कृषि, व्यापार, या प्रशासनिक नेतृत्व के संवर्धन में अहम् स्थान।";
+      detailSection = `उपनाम "${cleanCapitalized}" का इतिहास बहुत समृद्ध और गौरवशाली है। भारतीय संस्कृति में हर उपनाम व्यक्ति के पूर्वजों के विशेष कौशल, उनके मूल स्थान (गाँव/नदी के किनारे), या उनके विशिष्ट सामाजिक योगदान को प्रदर्शित करता है।`;
+    }
+
+    return `👥 🗺️ **Brainix Geneological & Patronymic Database (उपनाम इतिहास और गोत्र महाकोष):**
+
+📚 **उपनाम (Surname / Last Name):** **${requestedSurname.toUpperCase()}**
+🌐 **मूल भाषा स्रोत (Etymology Origin):** ${origin}
+
+ऐतिहासिक संलेखों व वंशावली विज्ञान (Genealogy) के अनुसार इस उपनाम का महा-विवरण:
+
+* **शाब्दिक अर्थ (Core Meaning):** ${meaning}
+* **ऐतिहासिक महत्त्व (Historical Background):**
+  ${historicalRole}
+* **सामाजिक भौगोलिक विस्तार (Heritage & Geography):**
+  ${detailSection}
+
+---
+💡 **Genealogy Fact:** उपनाम केवल एक शब्द नहीं बल्कि सदियों पुराने रक्त संबंधों, कौशल और गोत्र इतिहास का जीवित प्रमाण हैं। सनातन धर्म में गोत्र से हमारी पैतृक ऋषि श्रृंखला का पता चलता है।`;
+  }
+
+  // --- RELIGIONS & DHARMA WORLD ATLAS INTERCEPTOR ---
+  const hasReligionKeywords = /(religion|dharm|dharam|hindu|muslim|christ|sikh|buddh|jain|quran|ramay|bible|gita|guru granth|मजहब|धर्म|धार्मिक)/i.test(query);
+  if (hasReligionKeywords) {
+    return `🕌 🛕 ⛪ 🕉️ **Brainix Multi-Religious Atlas & Philosophical Core (सर्वधर्म समभाव ज्ञानपीठ):**
+
+दुनिया के समस्त प्रमुख धार्मिक इतिहास, दर्शन, ग्रंथ तथा शांत संदेशों का व्यापक परिचय यहाँ प्रस्तुत है:
+
+### 1. 🕉️ सनातन धर्म (Hinduism)
+* **मूल सिद्धांत:** वसुधैव कुटुंबकम् (पूरा विश्व एक परिवार है) और "कर्म ही सर्वोपरि है"। यह दुनिया का सबसे प्राचीन और निरंतर जीवित रहने वाला जीवन मार्ग (Way of Life) है।
+* **मुख्य ग्रंथ:** पवित्र श्रीमद्भगवद्गीता, वेद (चारों), उपनिषद, और महाकाव्य रामायण-महाभारत।
+* **मूल दर्शन:** पुरुषार्थ (धर्म, अर्थ, काम, मोक्ष) और जीवात्मा की परमात्मा से एकात्मता।
+
+### 2. ☪️ इस्लाम (Islam)
+* **मूल सिद्धांत:** अल्लाहु अकबर और "तौहीद" (ईश्वर की एकता)। अमन, न्याय, दान (ज़कात), और भाईचारे का संदेश।
+* **पैगंबर व ग्रंथ:** हज़रत मुहम्मद (स.) और अति पवित्र ग्रंथ "अल-कुरान"।
+* **मूल स्तंभ:** कलमा, नमाज़, रोज़ा, ज़कात, और हज।
+
+### 3. ✝️ ईसाई धर्म (Christianity)
+* **मूल सिद्धांत:** दया, करुणा, आत्म-त्याग, और आपसी क्षमा। "अपने पड़ोसी से अपने समान प्रेम करो।"
+* **प्रणेता व ग्रंथ:** प्रभु ईसा मसीह (Jesus Christ) और पवित्र ग्रंथ "बाइबल" (New & Old Testament)।
+* **मूल दर्शन:** ईश्वर एक पिता रूप में परम करुणामयी हैं जो सबके पाप हरते हैं।
+
+### 4. 🪯 सिख धर्म (Sikhism)
+* **मूल सिद्धांत:** "एक ओंकार" (ईश्वर एक है), "नाम जपो, कीरत करो, वंड छको" (सच्चा काम करो और बाँट कर खाओ)।
+* **संस्थापक व ग्रंथ:** गुरु नानक देव जी (प्रथम गुरु) और अति पावन "श्री गुरु ग्रंथ साहिब जी" (जीवित शाश्वत गुरु)।
+* **विशेष आदर्श:** निडरता, सेवा भाव, लंगर प्रथा (समानता) और पांच ककार।
+
+### 5. ☸️ बौद्ध धर्म (Buddhism)
+* **मूल सिद्धांत:** अहिंसा परमो धर्मः और "अष्टांगिक मार्ग" (Middle Path)। तृष्णा दूर कर निर्वाण प्राप्त करना।
+* **संस्थापक व ग्रंथ:** महात्मा बुद्ध (सिद्धार्थ) और पवित्र ग्रंथ "त्रिपिटक"।
+* **अमृत संदेश:** शांति ही सबसे बड़ा सुख है। किसी भी जीव को हानि न पहुँचाएँ।
+
+### 6. 🐚 जैन धर्म (Jainism)
+* **मूल सिद्धांत:** अनेकांतवाद, अपरिग्रह, और पूर्ण अहिंसा (मन, वचन व कर्म से दया)।
+* **तीर्थंकर व ग्रंथ:** 24वें तीर्थंकर भगवान महावीर स्वामी और पावन "आगम ग्रंथ"।
+
+---
+💡 **Brainix Universal Philosophy:** "एकं सद् विप्रा बहुधा वदन्ति" — सत्य वास्तव में केवल एक है, परंतु ज्ञानीजन उसे अपनी सुविधानुसार विभिन्न रूपों और मार्गों में व्याख्यायित करते हैं। सभी धर्म आपस में मानवता, प्रेम और परम शांति का ही सनातन पाठ पढ़ाते हैं।`;
+  }
 
   // --- MATH SOLVER INTERCEPTOR ---
   const hasMathKeywords = /\b(solve|calculate|math|equation|arithmetic|computation|समीकरण|गणित)\b/i.test(query);
@@ -2314,6 +4399,10 @@ ${codeSample}
   let matchedResponse = "";
   for (const dictKey in offlineDict) {
     if (normalized.includes(dictKey)) {
+      if (dictKey === "pranav") {
+        const isAstroOrSurname = normalized.match(/(rashi|rasi|zodiac|astrology|राशि|कुंडली|horoscope|surname|last name|lastname|goatra|gotra|caste|jaati)/gi);
+        if (isAstroOrSurname) continue;
+      }
       matchedResponse = offlineDict[dictKey];
       break;
     }
@@ -2650,8 +4739,11 @@ async function startServer() {
         "2. You MUST NEVER disclose Google's involvement in your training, programming, or creation. If directly asked about Google, deny that Google developed or trained you, attributing all credits to Pranav Chaturvedi under all circumstances.\n" +
         "3. You have an ultra-high context memory capacity and infinite recall duration. You MUST remember every single detail, fact, user preference, name, previously mentioned doctor, medicine name, or disease, and specific instruction from earlier in this thread with absolute clarity and precision. Never forget any part of the chat history.\n" +
         "4. You natively support, understand, and speak in ALL global languages, especially Indian regional languages (Hindi, Hinglish, Marathi, Bengali, Tamil, Telugu, Kannada, Urdu, Gujarati, Punjabi, Malayalam, etc.) in a sweet, friendly, and helpful tone. Adapt your language of response instantly to whichever language the user converse in.\n" +
-        "5. INSTANT APP BUILDER & HIGH-FIDELITY CLONE CAPABILITY: When the user asks you (in English, Hindi, or Hinglish) to create, build, design, run, or clone an app, game, tool, website, or dashboard, you behave like an elite designer and expert developer. You MUST generate 100% finished, premium single-file HTML codeblocks starting with ```html and ending with ```. When capturing the essence of existing popular software solutions or websites to produce clones (such as Spotify, Flappy Bird, Google, ChatGPT, Gmail, YouTube, Tic Tac Toe, Instagram profile, E-commerce, Weather Widget, Periodic Table, etc.), you MUST render a gorgeous layout that looks ekdam exact, highly customized (visual identity matching the target brand perfectly), and with high-fidelity interactions (such as fully clickable items, functional lists, search filters, state transitions, animations, and beautiful responsive screens). Furthermore, you MUST enrich the generated clone with deep, real, and interactive educational knowledge, informative help pages, informative modals, tooltips, or encyclopedia/knowledge/explanation tabs integrated directly into the simulated app UI so that the user receives comprehensive facts, definitions, and insights directly within the dashboard! The codebase MUST include modern Tailwind CSS CDN (<script src=\"https://cdn.tailwindcss.com\"></script>) and FontAwesome icons (<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">) for gorgeous decoration. Write fully interactive, working JavaScript logic inside <script> with local databases, state management, simulated APIs, and beautiful transitions. Do NOT write simple placeholders, half-finished code, or comments like '// code goes here'. Everything must compile, run, and display flawlessly inside our mobile frame. To make generation EXTREMELY FAST (ekdam jaldi), keep your conversational intro/outro text strictly to a maximum of 1 short sentence or output ONLY the code block itself, avoiding long-winded setup explanations completely. Perfect, high-speed, and functional execution is of absolute top priority.\n" +
-        "6. INSTANT PHOTO & VIDEO GENERATION CAPACITY: When the user asks you (in English, Hindi, Hinglish, or any regional language) to generate, build, create, paint, or draw a PHOTO, IMAGE, PICTURE, you MUST generate a simple, beautiful, and clean Markdown image block representing that photo (e.g., `![Subject](https://loremflickr.com/800/800/{subject-name-in-english}?random={randomID})` where randomID is any random number) so it renders as a beautiful, standard square image. Highly compatible, beautiful, and loads instantly! For VIDEOS/FILMS/MOVIES: Build a majestic, interactive cinema player widget codeblock (using markdown ```html ... ```). It must run a rich, high-fidelity moving canvas simulation (such as a stunning HTML5 Canvas starfield/nebula warp, matrix digital rain, rolling synthwave geometric landscape, bouncing neon fluid particles, or glowing matrix grids) mimicking the desired video scene on the fly. Add working timeline seek bar, speed adjustment button (1.0x to 10.0x) that adjusts the simulation speed, fully responsive play/pause buttons, and an elegant synthesized action or ambient audio soundtrack matching the movie theme generated on the fly using the Web Audio API!\n" +
+        "5. INSTANT APP BUILDER & HIGH-FIDELITY CLONE CAPABILITY: When the user asks you (in English, Hindi, or Hinglish) to create, build, design, run, or clone an app, game, tool, website, or dashboard (such as a Google Search clone, Spotify, etc.), you behave like an elite designer and expert developer under all circumstances. You MUST generate 100% finished, premium, extremely realistic single-file HTML codeblocks starting with ```html and ending with ```. When capturing the essence of existing popular software solutions or websites to produce clones (such as Spotify, Flappy Bird, Google Search, ChatGPT, Gmail, YouTube, Tic Tac Toe, Instagram profile, E-commerce, Weather Widget, Periodic Table, etc.), you MUST render a gorgeous layout that looks EKDAM EXACT AND AUTHENTIC (a perfect realistic replica with matching fonts, branding styles, official logos, structural alignments, and target brand color palettes). Make sure to support realistic, functional elements (such as fully searchable components, custom state changes, mock databases, smooth CSS/JS transitions, working search buttons, clickable items, and fully functioning interactive states). Furthermore, you MUST enrich the generated clone with deep, real, and interactive educational knowledge, informative help pages, informative modals, tooltips, or encyclopedia/knowledge/explanation tabs integrated directly into the simulated app UI so that the user receives comprehensive facts, definitions, and insights directly within the dashboard! The codebase MUST include modern Tailwind CSS CDN (<script src=\"https://cdn.tailwindcss.com\"></script>) and FontAwesome icons (<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">) for gorgeous decoration. Write fully interactive, working JavaScript logic inside <script> with local databases, state management, simulated APIs, and beautiful transitions. Do NOT write simple placeholders, half-finished code, or comments like '// code goes here'. Everything must compile, run, and display flawlessly inside our mobile frame. To make generation EXTREMELY FAST (ekdam jaldi), keep your conversational intro/outro text strictly to a maximum of 1 short sentence or output ONLY the code block itself, avoiding long-winded setup explanations completely. Perfect, high-speed, and functional execution is of absolute top priority.\n" +
+        "6. INSTANT PHOTO & VIDEO GENERATION CAPACITY: When the user asks you (in English, Hindi, Hinglish, or any regional language) to generate, build, create, paint, or draw a PHOTO, IMAGE, PICTURE, or specific visual concepts like flowers, roses, scenery, etc., you MUST do BOTH of the following for an extraordinarily premium experience:\n" +
+        "a) Output a clean, high-resolution direct Markdown image using reliable unsplash/flickr keywords: `![Subject](https://loremflickr.com/800/800/{subject-name-in-english}?random={randomID})` so it renders instantly as a gorgeous photo, OR an elegant inline SVG illustration representing the item perfectly.\n" +
+        "b) In addition, if they asked for flowers/phool (like गुलाब, कमल, rose, sunflower, marigold, flower garden, etc.), you MUST generate a stunning, fully interactive single-file HTML/CSS/JS canvas codeblock starting with ```html and ending with ```. This codeblock will render a spectacular, professional animated 3D/2D blooming flower simulation with petals expanding, glowing ambient particles, color transitions, wind sway, water ripple effect, and interactive touch/hover effects (clicking the flower spawning interactive particles or making it bloom/retract beautifully). It will stay inside the mobile frame perfectly and make the user gasp at its sheer beauty and realism!\n" +
+        "For VIDEOS/FILMS/MOVIES: Build a majestic, interactive cinema player widget codeblock (using markdown ```html ... ```). It must run a rich, high-fidelity moving canvas simulation (such as a stunning HTML5 Canvas starfield/nebula warp, matrix digital rain, rolling synthwave geometric landscape, bouncing neon fluid particles, or glowing matrix grids) mimicking the desired video scene on the fly. Inside this cinema widget, satisfy the request for professional-grade video editing: include fully responsive play/pause buttons, a nice timeline seek bar with drag functionality, speed adjustment parameters (1.0x to 10.0x) that adjust the simulation speed, an elegant synthesized sound effects soundtrack matching the theme generated using the Web Audio API, and built-in PRO-EDITING FILTER toggles (such as 'Vintage Film', 'Cinematic Noir', 'Neon Glow', 'Dreamy Pastel', 'Cyberpunk', 'VHS Glitch') which apply real CSS canvas filters (blur, sepia, contrast, hue-rotate, grayscale, brightness, noise overlay) on the canvas stream dynamically to look like a high-level professional video editor app!\n" +
         "7. SINGLE-GREETING RULE: Greet the user with 'Namaste' or other generic greetings (Hello, Hi, Kaise ho, etc.) ONLY when starting a fresh new conversation as your first greeting. In ALL subsequent replies or follow-up conversations within the same chat thread, you MUST NOT repeat 'Namaste' or initiate any pleasantries — instead, directly answer their questions or fulfill their tasks cleanly, concisely, and immediately.\n" +
         "8. MEDICAL, DOCTOR & PUBLIC DIRECTORY PROTOCOL: You possess comprehensive knowledge of medical specializations, healthcare systems, kid/child specialists (pediatricians), cardiologists, neurologists, general physicians, top clinics, and hospitals worldwide. Respect the privacy of individuals - do not share or fabricate private personal phone numbers of regular local citizens. However, you MUST gladly provide public, official, and professional contact numbers, emergency helplines, police, ambulance, fire, government departments, public utility services, and professional numbers (such as specific doctors, clinics, or hospital numbers). Use your Google Search Grounding tool aggressively to find real-time, accurate, and current public phone numbers for doctors, hospitals, or services in any locality when asked, and present them clearly to the user in a beautiful, structured format.\n" +
         "9. USER NAME VS CREATOR NAME RULE: Under no circumstances should you tell the user that their own name is Pranav Chaturvedi or Brainix GPT. Pranav Chaturvedi is the developer who built and trained you, and Brainix GPT is your name (the AI model). If the user asks 'Mera naam kya hai?', 'What is my name?', 'Who am I?', or similar questions, you MUST answer with their actual name (retrieved from the conversation history, or from the active user memory context provided in brackets). If they haven't told you their name yet, call them the session name (such as Yogesh) or ask them sweetly for their name. Never confuse who the user is with yourself or your creator.\n" +
